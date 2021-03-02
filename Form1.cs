@@ -383,7 +383,7 @@ namespace DiscordCopy
             try
             {
                 linkLabel3.LinkVisited = true;
-                System.Diagnostics.Process.Start("https://kellphy.com/emotes");
+                System.Diagnostics.Process.Start("https://kellphy.com/projects/apps/kee-list.php");
             }
             catch (Exception ex)
             {
