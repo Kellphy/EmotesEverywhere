@@ -6,6 +6,8 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -18,27 +20,66 @@ namespace DiscordCopy
         public Color textColor= Color.FromArgb(0,40,85);
         public List<Image> imagesList = new List<Image>();
         public List<Button> buttonList = new List<Button>();
-        string[] emoteString = new string[]{ "3head", "4head", "4shrug", "5head", "anele", "ayaya", "ayayaweird", "babyrage", "bagofmemes", "bcwarrior", "begwan", "biblethump", "biblethump2", "bigphish", "blessrng", "bloodtrail", "bogged", "boomer", "brainslug", "brokeback", "bruh", "carlsmile", "cheffrank", "cmonbruh", "coolcat", "coolstorybob", "dansgame", "darkmode", "datsheffy", "doritoschip", "dududu", "dxcat", "elegiggle", "ez", "facepalm", "failfish", "feelsamazingman", "feelsbadman", "feelsgoodman", "feelsmadman", "feelsokayman", "feelsstrongman", "feelsweirdman", "flipthis", "forsencd", "frankerz", "gachigasm", "gachihyper", "giveplz", "handsup", "heyguys", "hotpokket", "hswp", "hypers", "inuyoface", "jebaited", "kapow", "kapp", "kappa", "kappaclaus", "kappahd", "kappapride" , "kappaross", "kappawealth", "kappu", "keepo", "kekw", "kippa", "kkomrade", "kkona", "koncha", "kreygasm", "lul", "lulw", "mau5", "mcat", "mindmanners", "minglee", "minik", "monkah", "monkahmm", "monkas", "monkastop", "monkaswall", "monkathink", "monkaw", "mrdestructoid", "never", "nomnom", "nop", "notbad", "notlikepsy", "notlikethis", "ohmydog", "omegalul", "oof", "opieop", "osfrog", "oskomodo", "ossloth", "panicbasket", "peepoblush", "peepodetective", "peepohappy", "peepohug", "peepopoopoo", "peeposad", "peepospecial", "peepoweird", "peepowtf", "pepega", "pepegun", "pepehands", "pepejam", "pepelaugh", "pepelmao", "pepepoint", "pepesuspicious", "pepohmm", "pikachus", "pjsalt", "pjsugar", "pogchamp", "poggers", "poggies", "poogers", "punchtrees", "punoko", "residentsleeper", "ripepperonis", "sabaping", "sadcatw", "sadge", "scaredycat", "seemsgood", "smart", "smorc", "soon", "ssssss", "stinkycheese", "suchmeme", "takenrg", "tehepelo", "theilluminati", "trihard", "vaultboy", "vohiyo", "votenay", "voteyea", "widepeepohappy", "widepeeposad", "whatface", "wutface", "yaoming", "yep", "youdontsay" };
-
+        public List<string> emoteString = new List<string>();
         public Form1()
         {
             InitializeComponent();
         }
-
         private async void Form1_Load(object sender, EventArgs e)
         {
             label1.ForeColor = textColor;
-            await Task.Run(() => ImageLoading());
-            ShowImages();
-        }
+            try
+            {
+                ImageGetting();
+                await Task.Run(() => ImageLoading());
+                ShowImages();
+            }
+            catch (Exception ex)
+            {
+                label1.ForeColor = Color.DarkRed;
+                label1.Text = ex.Message.ToString();
+            }
 
+        }
+        public void ImageGetting()
+        {
+            string url = "http://kellphy.com/emotes/";
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            {
+                using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                {
+                    string html = reader.ReadToEnd();
+                    Regex regex = new Regex(GetDirectoryListingRegexForUrl(url));
+                    MatchCollection matches = regex.Matches(html);
+                    if (matches.Count > 0)
+                    {
+                        foreach (Match match in matches)
+                        {
+                            if (match.Success)
+                            {
+                                emoteString.Add(match.Groups["name"].ToString());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        public static string GetDirectoryListingRegexForUrl(string url)
+        {
+            if (url.Equals("http://kellphy.com/emotes/"))
+            {
+                return "<a href=\".*.png\">(?<name>.*).png</a>";
+            }
+            throw new NotSupportedException();
+        }
         public async Task ImageLoading()
         {
             int top = 10;
             int left = 400;
             foreach (string emoteName in emoteString)
             {
-                string link = $"https://kellphy.com/emotes/{emoteName}.png";
+                string link = $"http://kellphy.com/emotes/{emoteName}.png";
 
                 imagesList.Add(DownloadImage(link));
 
@@ -60,25 +101,38 @@ namespace DiscordCopy
             }
             await Task.CompletedTask;
         }
-
         public void ShowImages()
         {
+            label2.Text = $"{integer} Emotes";
             foreach (Button button in buttonList)
             {
                 flowLayoutPanel1.Controls.Add(button);
             }
         }
-
         private void buttonGenerated_Click(object sender, EventArgs e)
         {
+            try
+            {
                 Execution((sender as Button).Name);
+            }
+            catch (Exception ex)
+            {
+                label1.ForeColor = Color.DarkRed;
+                label1.Text = ex.Message.ToString();
+            }
         }
-
         private void button1_Click(object sender, EventArgs e)
         {
-            Execution();
+            try
+            {
+                Execution();
+            }
+            catch (Exception ex)
+            {
+                label1.ForeColor = Color.DarkRed;
+                label1.Text = ex.Message.ToString();
+            }
         }
-
         public void Execution(string emoteToSearch="")
         {
             //string outputFile = @"kee_temp.png";
@@ -92,7 +146,7 @@ namespace DiscordCopy
                 image_name = textBox1.Text.ToLower();
             }
 
-            string link = $"https://kellphy.com/emotes/{image_name}.png";
+            string link = $"http://kellphy.com/emotes/{image_name}.png";
 
             try
             {
@@ -115,19 +169,19 @@ namespace DiscordCopy
 
                         Bitmap tempImage = new Bitmap(blank);
                         blank.Dispose();
-                        i.Dispose();
 
                         Clipboard.SetImage(new Bitmap(tempImage));
                         tempImage.Dispose();
                         break;
                     case 2:
-                        i.Dispose();
-
                         //stackoverflow.com/questions/44177115/copying-from-and-to-clipboard-loses-image-transparency
                         SetClipboardImage(image, image, null);
 
                         DataObject retrievedData = Clipboard.GetDataObject() as DataObject;
                         GetClipboardImage(retrievedData);
+                        break;
+                    case 3:
+                        Clipboard.SetText(link);
                         break;
                     default:
                         break;
@@ -136,6 +190,7 @@ namespace DiscordCopy
 
                 textBox1.Text = "";
 
+                i.Dispose();
                 image.Dispose();
 
                 //File.Delete(outputFile);
@@ -344,20 +399,26 @@ namespace DiscordCopy
         {
             option = 1;
             label1.ForeColor = textColor;
-            label1.Text ="Now using Option 1";
+            label1.Text ="Now using the 1st Option";
         }
         private void button3_Click(object sender, EventArgs e)
         {
             option = 2;
             label1.ForeColor = textColor;
-            label1.Text = "Now using Option 2";
+            label1.Text = "Now using the 2nd Option";
+        }
+        private void button4_Click(object sender, EventArgs e)
+        {
+            option = 3;
+            label1.ForeColor = textColor;
+            label1.Text = "Now using the 3rd Option";
         }
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             try
             {
                 linkLabel1.LinkVisited = true;
-                System.Diagnostics.Process.Start("https://kellphy.com/");
+                System.Diagnostics.Process.Start("http://kellphy.com/");
             }
             catch (Exception ex)
             {
@@ -383,7 +444,7 @@ namespace DiscordCopy
             try
             {
                 linkLabel3.LinkVisited = true;
-                System.Diagnostics.Process.Start("https://kellphy.com/projects/apps/kee-list.php");
+                System.Diagnostics.Process.Start("http://kellphy.com/projects/apps/kee-list.php");
             }
             catch (Exception ex)
             {
@@ -391,14 +452,30 @@ namespace DiscordCopy
                 label1.Text = ex.Message.ToString();
             }
         }
+        private void linkLabel4_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
+                linkLabel3.LinkVisited = true;
+                System.Diagnostics.Process.Start("https://github.com/Kellphy/KEE/releases/");
+            }
+            catch (Exception ex)
+            {
+                label1.ForeColor = Color.Red;
+                label1.Text = ex.Message.ToString();
+            }
+        }
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.KeyCode == Keys.Enter)
+            if (e.KeyCode == Keys.Enter)
             {
                 Execution();
             }
         }
-
     }
     public class ArrayUtils
     {
