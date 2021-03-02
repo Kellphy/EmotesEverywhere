@@ -3,6 +3,6 @@
 - **Step 2:** Press **"Enter"** or the **"Get Emote By Name"** button. The emote will be copied to your clipboard.
 - **Step 3:** Paste *(Ctrl+V)* in the chat that you are using.
 
-If you wish to have a new emote added, press the "Request Emote" button, join the Discord Server, and contact me.
+If you wish to have a new emote added, press the **"Request Emote"** button, join the Discord Server, and contact me.
 
 [Discord Server](https://discord.gg/ycYmMmP/) | [kellphy.com](https://kellphy.com/)
