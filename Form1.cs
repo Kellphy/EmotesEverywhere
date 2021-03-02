@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DiscordCopy
@@ -11,16 +14,64 @@ namespace DiscordCopy
     public partial class Form1 : Form
     {
         public int option = 1;
-        public Color textColor=Color.Black;
+        public int integer = 0;
+        public Color textColor= Color.FromArgb(0,40,85);
+        public List<Image> imagesList = new List<Image>();
+        public List<Button> buttonList = new List<Button>();
+        string[] emoteString = new string[]{ "3head", "4head", "4shrug", "5head", "anele", "ayaya", "ayayaweird", "babyrage", "bagofmemes", "bcwarrior", "begwan", "biblethump", "biblethump2", "bigphish", "blessrng", "bloodtrail", "bogged", "boomer", "brainslug", "brokeback", "bruh", "carlsmile", "cheffrank", "cmonbruh", "coolcat", "coolstorybob", "dansgame", "darkmode", "datsheffy", "doritoschip", "dududu", "dxcat", "elegiggle", "ez", "facepalm", "failfish", "feelsamazingman", "feelsbadman", "feelsgoodman", "feelsmadman", "feelsokayman", "feelsstrongman", "feelsweirdman", "flipthis", "forsencd", "frankerz", "gachigasm", "gachihyper", "giveplz", "handsup", "heyguys", "hotpokket", "hswp", "hypers", "inuyoface", "jebaited", "kapow", "kapp", "kappa", "kappaclaus", "kappahd", "kappapride" , "kappaross", "kappawealth", "kappu", "keepo", "kekw", "kippa", "kkomrade", "kkona", "koncha", "kreygasm", "lul", "lulw", "mau5", "mcat", "mindmanners", "minglee", "minik", "monkah", "monkahmm", "monkas", "monkastop", "monkaswall", "monkathink", "monkaw", "mrdestructoid", "never", "nomnom", "nop", "notbad", "notlikepsy", "notlikethis", "ohmydog", "omegalul", "oof", "opieop", "osfrog", "oskomodo", "ossloth", "panicbasket", "peepoblush", "peepodetective", "peepohappy", "peepohug", "peepopoopoo", "peeposad", "peepospecial", "peepoweird", "peepowtf", "pepega", "pepegun", "pepehands", "pepejam", "pepelaugh", "pepelmao", "pepepoint", "pepesuspicious", "pepohmm", "pikachus", "pjsalt", "pjsugar", "pogchamp", "poggers", "poggies", "poogers", "punchtrees", "punoko", "residentsleeper", "ripepperonis", "sabaping", "sadcatw", "sadge", "scaredycat", "seemsgood", "smart", "smorc", "soon", "ssssss", "stinkycheese", "suchmeme", "takenrg", "tehepelo", "theilluminati", "trihard", "vaultboy", "vohiyo", "votenay", "voteyea", "widepeepohappy", "widepeeposad", "whatface", "wutface", "yaoming", "yep", "youdontsay" };
 
         public Form1()
         {
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private async void Form1_Load(object sender, EventArgs e)
         {
             label1.ForeColor = textColor;
+            await Task.Run(() => ImageLoading());
+            ShowImages();
+        }
+
+        public async Task ImageLoading()
+        {
+            int top = 10;
+            int left = 400;
+            foreach (string emoteName in emoteString)
+            {
+                string link = $"https://kellphy.com/emotes/{emoteName}.png";
+
+                imagesList.Add(DownloadImage(link));
+
+                Button button = new Button();
+                button.Name = emoteString[integer];
+                button.Left = left;
+                button.Top = top;
+                button.Image = imagesList.ElementAt(integer);
+                button.TabStop = false;
+                button.FlatStyle = FlatStyle.Flat;
+                button.FlatAppearance.BorderSize = 0;
+                button.Size = new Size(48, 48);
+                button.Click += this.buttonGenerated_Click;
+
+                buttonList.Add(button);
+
+                top += button.Height + 2;
+                integer++;
+            }
+            await Task.CompletedTask;
+        }
+
+        public void ShowImages()
+        {
+            foreach (Button button in buttonList)
+            {
+                flowLayoutPanel1.Controls.Add(button);
+            }
+        }
+
+        private void buttonGenerated_Click(object sender, EventArgs e)
+        {
+                Execution((sender as Button).Name);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -28,22 +79,30 @@ namespace DiscordCopy
             Execution();
         }
 
-        public void Execution()
+        public void Execution(string emoteToSearch="")
         {
-            string outputFile = @"kee_temp.png";
-            string image_name = textBox1.Text.ToLower();
+            //string outputFile = @"kee_temp.png";
+            string image_name;
+            if (emoteToSearch.Length > 1)
+            {
+                image_name = emoteToSearch;
+            }
+            else
+            {
+                image_name = textBox1.Text.ToLower();
+            }
 
             string link = $"https://kellphy.com/emotes/{image_name}.png";
 
             try
             {
-                using (WebClient client = new WebClient())
-                {
-                    client.DownloadFile(new Uri(link), outputFile);
-                    client.Dispose();
-                }
+                //using (WebClient client = new WebClient())
+                //{
+                //    client.DownloadFile(new Uri(link), outputFile);
+                //    client.Dispose();
+                //}
 
-                Image i = Image.FromFile(outputFile);
+                Image i = DownloadImage(link);
                 Bitmap image = new Bitmap(i);
 
                 switch (option)
@@ -79,7 +138,7 @@ namespace DiscordCopy
 
                 image.Dispose();
 
-                File.Delete(outputFile);
+                //File.Delete(outputFile);
 
                 label1.ForeColor = Color.LightGreen;
                 label1.Text = $"{image_name} - Copied to clipboard!";
@@ -88,6 +147,16 @@ namespace DiscordCopy
             {
                 label1.ForeColor = Color.DarkRed;
                 label1.Text = ex.Message.ToString();
+            }
+        }
+        public Image DownloadImage(string fromUrl)
+        {
+            using (WebClient webClient = new WebClient())
+            {
+                using (Stream stream = webClient.OpenRead(fromUrl))
+                {
+                    return Image.FromStream(stream);
+                }
             }
         }
         public static Bitmap GetClipboardImage(DataObject retrievedData)
@@ -263,17 +332,7 @@ namespace DiscordCopy
             Array.Copy(bm32bData, 0, fullImage, hdrSize + 12, bm32bData.Length);
             return fullImage;
         }
-        public Image DownloadImage(string fromUrl)
-        {
-            using (System.Net.WebClient webClient = new System.Net.WebClient())
-            {
-                using (Stream stream = webClient.OpenRead(fromUrl))
-                {
-                    return Image.FromStream(stream);
-                }
-            }
-        }
-        public byte[] ImageToByteArray(System.Drawing.Image imageIn)
+        public byte[] ImageToByteArray(Image imageIn)
         {
             using (MemoryStream ms = new MemoryStream())
             {
@@ -281,21 +340,18 @@ namespace DiscordCopy
                 return ms.ToArray();
             }
         }
-
         private void button2_Click(object sender, EventArgs e)
         {
             option = 1;
             label1.ForeColor = textColor;
             label1.Text ="Now using Option 1";
         }
-
         private void button3_Click(object sender, EventArgs e)
         {
             option = 2;
             label1.ForeColor = textColor;
             label1.Text = "Now using Option 2";
         }
-
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             try
@@ -309,7 +365,6 @@ namespace DiscordCopy
                 label1.Text = ex.Message.ToString();
             }
         }
-
         private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             try
@@ -323,7 +378,6 @@ namespace DiscordCopy
                 label1.Text = ex.Message.ToString();
             }
         }
-
         private void linkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             try
@@ -337,7 +391,6 @@ namespace DiscordCopy
                 label1.Text = ex.Message.ToString();
             }
         }
-
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
             if(e.KeyCode == Keys.Enter)
