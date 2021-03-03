@@ -83,24 +83,11 @@ namespace DiscordCopy
                 label1.Text = ex.Message.ToString();
             }
         }
-        private void linkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            try
-            {
-                linkLabel3.LinkVisited = true;
-                System.Diagnostics.Process.Start("http://kellphy.com/projects/apps/kee-list.php");
-            }
-            catch (Exception ex)
-            {
-                label1.ForeColor = Color.Red;
-                label1.Text = ex.Message.ToString();
-            }
-        }
         private void linkLabel4_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             try
             {
-                linkLabel3.LinkVisited = true;
+                linkLabel4.LinkVisited = true;
                 System.Diagnostics.Process.Start("https://github.com/Kellphy/KEE/releases/");
             }
             catch (Exception ex)
