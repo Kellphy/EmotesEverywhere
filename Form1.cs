@@ -4,7 +4,6 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -21,7 +20,6 @@ namespace DiscordCopy
 
         public Color textColor= Color.FromArgb(0, 48, 102);
         public Color nonTextColor = Color.FromArgb(92, 103, 125);
-        public Color darkBorders = Color.FromArgb(91, 98, 113);
 
         public List<Image> imagesList;
         public List<Button> buttonList;
@@ -33,13 +31,6 @@ namespace DiscordCopy
         public Form1()
         {
             InitializeComponent();
-
-            //button1.FlatAppearance.BorderSize = 2;
-            //button2.FlatAppearance.BorderSize = 2;
-            //button3.FlatAppearance.BorderSize = 2;
-            //button4.FlatAppearance.BorderSize = 2;
-            //button5.FlatAppearance.BorderSize = 2;
-
         }
         private void Form1_Load(object sender, EventArgs e)
         {
