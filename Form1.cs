@@ -347,7 +347,7 @@ namespace DiscordCopy
         }
         public void ShowImages(int x, int division, int max)
         {
-            label2.Text = $"{integer} Emotes";
+            label2.Text = $"{integer} / {emoteString.Count} Emotes";
             for (int y = x * division; y < max; y++)
             {
                 flowLayoutPanel1.Controls.Add(buttonList[y]);
