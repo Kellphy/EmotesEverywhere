@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -14,9 +15,13 @@ namespace DiscordCopy
     {
         public int option = 1;
         public int integer;
-        public int division = 12;
+        public int division = 16;
+        public string searchEmotes = "Search For Emotes";
+        public string getEmotes = "Get Emotes By Name";
 
-        public Color textColor= Color.FromArgb(0,40,85);
+        public Color textColor= Color.FromArgb(0, 48, 102);
+        public Color nonTextColor = Color.FromArgb(92, 103, 125);
+        public Color darkBorders = Color.FromArgb(91, 98, 113);
 
         public List<Image> imagesList;
         public List<Button> buttonList;
@@ -28,9 +33,21 @@ namespace DiscordCopy
         public Form1()
         {
             InitializeComponent();
+
+            //button1.FlatAppearance.BorderSize = 2;
+            //button2.FlatAppearance.BorderSize = 2;
+            //button3.FlatAppearance.BorderSize = 2;
+            //button4.FlatAppearance.BorderSize = 2;
+            //button5.FlatAppearance.BorderSize = 2;
+
         }
         private void Form1_Load(object sender, EventArgs e)
         {
+            button1.Select();
+            textBox1.ForeColor = nonTextColor;
+            textBox2.ForeColor = nonTextColor;
+            textBox1.Text = getEmotes;
+            textBox2.Text = searchEmotes;
             label1.ForeColor = textColor;
             ImageFilter();
         }
@@ -52,9 +69,6 @@ namespace DiscordCopy
             option = 3;
             label1.ForeColor = textColor;
             label1.Text = "Now using the 3rd Option";
-
-                label1.Text = $"{processStop} {processStopped}";
-
         }
         //Links
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -346,6 +360,38 @@ namespace DiscordCopy
             for (int y = x * division; y < max; y++)
             {
                 flowLayoutPanel1.Controls.Add(buttonList[y]);
+            }
+        }
+        private void textBox1_Enter(object sender, EventArgs e)
+        {
+            if (textBox1.Text == getEmotes)
+            {
+                textBox1.ForeColor = textColor;
+                textBox1.Text = "";
+            }
+        }
+        private void textBox1_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(textBox1.Text))
+            {
+                textBox1.ForeColor = nonTextColor;
+                textBox1.Text = getEmotes;
+            }
+        }
+        private void textBox2_Enter(object sender, EventArgs e)
+        {
+            if (textBox2.Text == searchEmotes)
+            {
+                textBox2.ForeColor = textColor;
+                textBox2.Text = "";
+            }
+        }
+        private void textBox2_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(textBox2.Text))
+            {
+                textBox2.ForeColor = nonTextColor;
+                textBox2.Text = searchEmotes;
             }
         }
     }
