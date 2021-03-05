@@ -101,7 +101,6 @@ namespace DiscordCopy
         {
             try
             {
-                if (textBox1.Text == getEmotes) return;
                 //string outputFile = @"kee_temp.png";
                 string image_name;
                 if (emoteToSearch.Length > 0)
@@ -110,6 +109,7 @@ namespace DiscordCopy
                 }
                 else
                 {
+                    if (textBox1.Text == getEmotes) return;
                     image_name = textBox1.Text.ToLower();
                 }
                 string link = $"http://kellphy.com/emotes/{image_name}.png";
