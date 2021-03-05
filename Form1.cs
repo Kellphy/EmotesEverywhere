@@ -87,7 +87,6 @@ namespace DiscordCopy
         private void button1_Click(object sender, EventArgs e)
         {
             Execution(true);
-            TextColor(textBox1, getEmotes, "", nonTextColor);
         }
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
@@ -145,7 +144,9 @@ namespace DiscordCopy
                     default:
                         break;
                 }
-                textBox1.Text = "";
+
+                if (!button) textBox1.Text = ""; else TextColor(textBox1, getEmotes, "", nonTextColor, true);
+
                 i.Dispose();
                 image.Dispose();
                 //File.Delete(outputFile);
@@ -180,8 +181,8 @@ namespace DiscordCopy
                 {
                     ImageFilter(textBox2.Text);
                 }
-                textBox2.Text = "";
-                if (button) TextColor(textBox2, searchEmotes, "", nonTextColor);
+
+                if (!button) textBox2.Text = ""; else TextColor(textBox2, searchEmotes, "", nonTextColor, true);
             }
             catch (Exception ex) { SendErrorMessage(ex.Message.ToString()); }
         }
@@ -289,7 +290,7 @@ namespace DiscordCopy
         {
             try
             {
-                Execution(false, (sender as Button).Name);
+                Execution(true, (sender as Button).Name);
             }
             catch (Exception ex) { SendErrorMessage(ex.Message.ToString()); }
         }
@@ -321,9 +322,9 @@ namespace DiscordCopy
         {
             TextColor(textBox2, searchEmotes, "", nonTextColor);
         }
-        public void TextColor(TextBox textBox, string text, string reqText, Color color)
+        public void TextColor(TextBox textBox, string text, string reqText, Color color, bool forcedReplace = false)
         {
-            if (textBox.Text == reqText)
+            if (textBox.Text == reqText || forcedReplace)
             {
                 textBox.ForeColor = color;
                 textBox.Text = text;
