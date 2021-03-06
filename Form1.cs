@@ -13,13 +13,15 @@ namespace DiscordCopy
     public partial class Form1 : Form
     {
         public int option, integer, division, page, paging;
-        public string searchEmotes, getEmotes;
+        public string searchEmotes, firstLabel;
         public Color textColor, nonTextColor;
         public bool processStop, processStopped;
 
         public List<Image> imagesList;
         public List<Button> buttonList;
         public List<string> emoteString;
+
+        MatchCollection matches;
 
         public Form1()
         {
@@ -31,8 +33,8 @@ namespace DiscordCopy
             division = 10;
             page = 0;
             paging = division * 100;
-            searchEmotes = "Search For Emotes";
-            getEmotes = "Get Emotes By Name";
+            searchEmotes = "Emote to Search";
+            firstLabel = "Click the info button in the bottom right corner for tips.";
 
             processStop = false;
             processStopped = true;
@@ -40,32 +42,56 @@ namespace DiscordCopy
             textColor = Color.FromArgb(0, 48, 102);
             nonTextColor = Color.FromArgb(92, 103, 125);
 
-            button1.Select();
-            textBox1.ForeColor = nonTextColor;
+            label1.Text = firstLabel;
             textBox2.ForeColor = nonTextColor;
-            textBox1.Text = getEmotes;
             textBox2.Text = searchEmotes;
             label1.ForeColor = textColor;
+
+            ImageFirstGetting();
             ImageFilter();
+        }
+        //First Get
+        public void ImageFirstGetting()
+        {
+            emoteString = new List<string>();
+            string url = "http://kellphy.com/emotes/";
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            {
+                using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                {
+                    string html = reader.ReadToEnd();
+                    Regex regex = new Regex(GetDirectoryListingRegexForUrl(url));
+                    matches = regex.Matches(html);
+                }
+            }
+        }
+        public static string GetDirectoryListingRegexForUrl(string url)
+        {
+            if (url.Equals("http://kellphy.com/emotes/"))
+            {
+                return "<a href=\".*.png\">(?<name>.*).png</a>";
+            }
+            throw new NotSupportedException();
         }
         //Options
         private void button2_Click(object sender, EventArgs e)
         {
             option = 1;
             label1.ForeColor = textColor;
-            label1.Text = "Now using the 1st Option";
+            label1.Text = "Now using the 1st Option.";
         }
         private void button3_Click(object sender, EventArgs e)
         {
             option = 2;
             label1.ForeColor = textColor;
-            label1.Text = "Now using the 2nd Option";
+            label1.Text = "Now using the 2nd Option.";
         }
         private void button4_Click(object sender, EventArgs e)
         {
             option = 3;
             label1.ForeColor = textColor;
-            label1.Text = "Now using the 3rd Option";
+            label1.Text = "Now using the 3rd Option.";
         }
         //Links
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -89,72 +115,6 @@ namespace DiscordCopy
             }
             catch (Exception ex) { SendErrorMessage(ex.Message.ToString()); }
         }
-        //Get Emote
-        private void button1_Click(object sender, EventArgs e)
-        {
-            Execution(true);
-        }
-        private void textBox1_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Space)
-            {
-                Execution(false);
-            }
-        }
-        //Execution
-        public void Execution(bool button, string emoteToSearch = "")
-        {
-            try
-            {
-                string image_name;
-                if (emoteToSearch.Length > 0)
-                {
-                    image_name = emoteToSearch;
-                }
-                else
-                {
-                    if (textBox1.Text == getEmotes) return;
-                    image_name = textBox1.Text.ToLower();
-                }
-                string link = $"http://kellphy.com/emotes/{image_name}.png";
-
-                Image i = DownloadImage(link);
-                Bitmap image = new Bitmap(i);
-
-                switch (option)
-                {
-                    case 1:
-                        Bitmap blank = new Bitmap(Convert.ToInt32(i.Width), Convert.ToInt32(i.Height));
-                        Graphics g = Graphics.FromImage(blank);
-                        g.Clear(Color.FromArgb(54, 57, 63));
-                        g.DrawImage(i, 0, 0, Convert.ToInt32(i.Width), Convert.ToInt32(i.Height));
-
-                        Bitmap tempImage = new Bitmap(blank);
-                        blank.Dispose();
-
-                        Clipboard.SetImage(new Bitmap(tempImage));
-                        tempImage.Dispose();
-                        break;
-                    case 2:
-                        new Option2().Start(image);
-                        break;
-                    case 3:
-                        Clipboard.SetText(link);
-                        break;
-                    default:
-                        break;
-                }
-
-                if (!button) textBox1.Text = ""; else TextColor(textBox1, getEmotes, "", nonTextColor, true);
-
-                i.Dispose();
-                image.Dispose();
-
-                label1.ForeColor = Color.LightGreen;
-                label1.Text = $"{image_name} - Copied to clipboard!";
-            }
-            catch (Exception ex) { SendErrorMessage(ex.Message.ToString()); }
-        }
         //Search
         private void button5_Click(object sender, EventArgs e)
         {
@@ -175,13 +135,18 @@ namespace DiscordCopy
             {
                 processStop = true;
                 while (!processStopped) await Task.Delay(100);
-                if (textBox2.Text == searchEmotes)
+
+                if (textBox2.Text == searchEmotes || textBox2.Text.Length < 1)
                 {
+                    label1.ForeColor = textColor;
+                    label1.Text = firstLabel;
                     ImageFilter("");
                 }
                 else
                 {
-                    ImageFilter(textBox2.Text);
+                    label1.ForeColor = textColor;
+                    label1.Text = $"Searching for {textBox2.Text.ToLower()} ...";
+                    ImageFilter(textBox2.Text.ToLower());
                 }
 
                 if (!button) textBox2.Text = ""; else TextColor(textBox2, searchEmotes, "", nonTextColor, true);
@@ -230,36 +195,76 @@ namespace DiscordCopy
         }
         public void ImageGetting(string keyword = "")
         {
-            emoteString = new List<string>();
-            string url = "http://kellphy.com/emotes/";
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            if (matches.Count > 0)
             {
-                using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                foreach (Match match in matches)
                 {
-                    string html = reader.ReadToEnd();
-                    Regex regex = new Regex(GetDirectoryListingRegexForUrl(url));
-                    MatchCollection matches = regex.Matches(html);
-                    if (matches.Count > 0)
+                    if (match.Success)
                     {
-                        foreach (Match match in matches)
+                        if (match.Groups["name"].ToString() == keyword)
                         {
-                            if (match.Success && match.Groups["name"].ToString().Contains(keyword))
-                            {
-                                emoteString.Add(match.Groups["name"].ToString());
-                            }
+                            Execution(keyword);
+                        }
+                        if (match.Groups["name"].ToString().Contains(keyword))
+                        {
+                            emoteString.Add(match.Groups["name"].ToString());
                         }
                     }
                 }
             }
         }
-        public static string GetDirectoryListingRegexForUrl(string url)
+        public void Execution(string emoteToSearch)
         {
-            if (url.Equals("http://kellphy.com/emotes/"))
+            try
             {
-                return "<a href=\".*.png\">(?<name>.*).png</a>";
+                string image_name = emoteToSearch;
+
+                string link = $"http://kellphy.com/emotes/{image_name}.png";
+
+                Image i = DownloadImage(link);
+                Bitmap image = new Bitmap(i);
+
+                switch (option)
+                {
+                    case 1:
+                        Bitmap blank = new Bitmap(Convert.ToInt32(i.Width), Convert.ToInt32(i.Height));
+                        Graphics g = Graphics.FromImage(blank);
+                        g.Clear(Color.FromArgb(54, 57, 63));
+                        g.DrawImage(i, 0, 0, Convert.ToInt32(i.Width), Convert.ToInt32(i.Height));
+
+                        Bitmap tempImage = new Bitmap(blank);
+                        blank.Dispose();
+
+                        Clipboard.SetImage(new Bitmap(tempImage));
+                        tempImage.Dispose();
+                        break;
+                    case 2:
+                        new Option2().Start(image);
+                        break;
+                    case 3:
+                        Clipboard.SetText(link);
+                        break;
+                    default:
+                        break;
+                }
+
+                i.Dispose();
+                image.Dispose();
+
+                label1.ForeColor = Color.LightGreen;
+                label1.Text = $"{image_name} - Copied to clipboard!";
             }
-            throw new NotSupportedException();
+            catch (Exception ex) { SendErrorMessage(ex.Message.ToString()); }
+        }
+        public Image DownloadImage(string fromUrl)
+        {
+            using (WebClient webClient = new WebClient())
+            {
+                using (Stream stream = webClient.OpenRead(fromUrl))
+                {
+                    return Image.FromStream(stream);
+                }
+            }
         }
         public async Task ImageLoading(int x, int division, int max)
         {
@@ -288,7 +293,7 @@ namespace DiscordCopy
         {
             try
             {
-                Execution(true, (sender as Button).Name);
+                Execution((sender as Button).Name);
             }
             catch (Exception ex) { SendErrorMessage(ex.Message.ToString()); }
         }
@@ -315,26 +320,7 @@ namespace DiscordCopy
             TextColor(textBox2, searchEmotes, "", nonTextColor, true);
             NewSearch(true);
         }
-        //Get & Search
-        public Image DownloadImage(string fromUrl)
-        {
-            using (WebClient webClient = new WebClient())
-            {
-                using (Stream stream = webClient.OpenRead(fromUrl))
-                {
-                    return Image.FromStream(stream);
-                }
-            }
-        }
         //TextBox placeholder text
-        private void textBox1_Enter(object sender, EventArgs e)
-        {
-            TextColor(textBox1, "", getEmotes, textColor);
-        }
-        private void textBox1_Leave(object sender, EventArgs e)
-        {
-            TextColor(textBox1, getEmotes, "", nonTextColor);
-        }
         private void textBox2_Enter(object sender, EventArgs e)
         {
             TextColor(textBox2, "", searchEmotes, textColor);
@@ -356,6 +342,11 @@ namespace DiscordCopy
         {
             label1.ForeColor = Color.DarkRed;
             label1.Text = error;
+        }
+        //Info
+        private void button1_Click(object sender, EventArgs e)
+        {
+            new Form2().Start();
         }
     }
 }
