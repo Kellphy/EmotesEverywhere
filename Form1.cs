@@ -32,7 +32,7 @@ namespace DiscordCopy
             option = 1;
             division = 10;
             page = 0;
-            paging = division * 100;
+            paging = division * 50;
             searchEmotes = "Emote to Search";
             firstLabel = "Click the info button in the bottom right corner for tips.";
 
