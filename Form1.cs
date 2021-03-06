@@ -12,21 +12,14 @@ namespace DiscordCopy
 {
     public partial class Form1 : Form
     {
-        public int option = 1;
-        public int integer;
-        public int division = 8;
-        public string searchEmotes = "Search For Emotes";
-        public string getEmotes = "Get Emotes By Name";
-
-        public Color textColor = Color.FromArgb(0, 48, 102);
-        public Color nonTextColor = Color.FromArgb(92, 103, 125);
+        public int option, integer, division, page, paging;
+        public string searchEmotes, getEmotes;
+        public Color textColor, nonTextColor;
+        public bool processStop, processStopped;
 
         public List<Image> imagesList;
         public List<Button> buttonList;
         public List<string> emoteString;
-
-        public bool processStop = false;
-        public bool processStopped = true;
 
         public Form1()
         {
@@ -34,6 +27,19 @@ namespace DiscordCopy
         }
         private void Form1_Load(object sender, EventArgs e)
         {
+            option = 1;
+            division = 10;
+            page = 0;
+            paging = division * 100;
+            searchEmotes = "Search For Emotes";
+            getEmotes = "Get Emotes By Name";
+
+            processStop = false;
+            processStopped = true;
+
+            textColor = Color.FromArgb(0, 48, 102);
+            nonTextColor = Color.FromArgb(92, 103, 125);
+
             button1.Select();
             textBox1.ForeColor = nonTextColor;
             textBox2.ForeColor = nonTextColor;
@@ -100,7 +106,6 @@ namespace DiscordCopy
         {
             try
             {
-                //string outputFile = @"kee_temp.png";
                 string image_name;
                 if (emoteToSearch.Length > 0)
                 {
@@ -113,11 +118,6 @@ namespace DiscordCopy
                 }
                 string link = $"http://kellphy.com/emotes/{image_name}.png";
 
-                //using (WebClient client = new WebClient())
-                //{
-                //    client.DownloadFile(new Uri(link), outputFile);
-                //    client.Dispose();
-                //}
                 Image i = DownloadImage(link);
                 Bitmap image = new Bitmap(i);
 
@@ -149,7 +149,7 @@ namespace DiscordCopy
 
                 i.Dispose();
                 image.Dispose();
-                //File.Delete(outputFile);
+
                 label1.ForeColor = Color.LightGreen;
                 label1.Text = $"{image_name} - Copied to clipboard!";
             }
@@ -158,12 +158,14 @@ namespace DiscordCopy
         //Search
         private void button5_Click(object sender, EventArgs e)
         {
+            page = 0;
             NewSearch(true);
         }
         private void textBox2_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Space)
             {
+                page = 0;
                 NewSearch(false);
             }
         }
@@ -204,12 +206,22 @@ namespace DiscordCopy
                 }
 
                 ImageGetting(keyword);
-                for (int x = 0; x <= emoteString.Count / division; x++)
+                label2.Text = $"{emoteString.Count} Emotes";
+                label3.Text = $"{page+1} / {emoteString.Count/paging+1}";
+
+                int emotesOnPage = Math.Min(paging, emoteString.Count - page * paging);
+                for (int x = 0; x <= emotesOnPage/division; x++)
                 {
-                    int max = Math.Min(x * division + division, emoteString.Count);
+                    int max = Math.Min(x * division + division, emotesOnPage);
                     await Task.Run(() => ImageLoading(x, division, max));
+
                     if (processStop) break;
-                    ShowImages(x, division, max);
+
+                    label4.Text = $"{integer} / {emotesOnPage}";
+                    for (int y = x * division; y < max; y++)
+                    {
+                        flowLayoutPanel1.Controls.Add(buttonList[y]);
+                    }
                 }
                 processStopped = true;
                 processStop = false;
@@ -251,40 +263,26 @@ namespace DiscordCopy
         }
         public async Task ImageLoading(int x, int division, int max)
         {
-            //int top = 10;
-            //int left = 400;
             for (int y = x * division; y < max; y++)
             {
                 if (processStop) break;
-                string link = $"http://kellphy.com/emotes/{emoteString[y]}.png";
+                string link = $"http://kellphy.com/emotes/{emoteString[y+page*paging]}.png";
 
                 imagesList.Add(DownloadImage(link));
 
                 Button button = new Button();
-                button.Name = emoteString[integer];
-                //button.Left = left;
-                //button.Top = top;
+                button.Name = emoteString[y + page*paging];
                 button.TabStop = false;
                 button.FlatStyle = FlatStyle.Flat;
                 button.FlatAppearance.BorderSize = 0;
                 button.Size = new Size(48, 48);
                 button.Click += this.buttonGenerated_Click;
                 button.BackgroundImageLayout = ImageLayout.Zoom;
-                button.BackgroundImage = imagesList.ElementAt(integer);
-                //button.Image = new Bitmap(imagesList.ElementAt(integer), new Size(button.Width, button.Width));
+                button.BackgroundImage = imagesList.ElementAt(y);
                 buttonList.Add(button);
-                //top += button.Height + 2;
                 integer++;
             }
             await Task.CompletedTask;
-        }
-        public void ShowImages(int x, int division, int max)
-        {
-            label2.Text = $"{integer} / {emoteString.Count} Emotes";
-            for (int y = x * division; y < max; y++)
-            {
-                flowLayoutPanel1.Controls.Add(buttonList[y]);
-            }
         }
         private void buttonGenerated_Click(object sender, EventArgs e)
         {
@@ -293,6 +291,29 @@ namespace DiscordCopy
                 Execution(true, (sender as Button).Name);
             }
             catch (Exception ex) { SendErrorMessage(ex.Message.ToString()); }
+        }
+        //Pages & Reset
+        private void button6_Click(object sender, EventArgs e)
+        {
+            if(page > 0)
+            {
+                page--;
+                NewSearch(true);
+            }
+        }
+        private void button7_Click(object sender, EventArgs e)
+        {
+            if (page < emoteString.Count / paging)
+            {
+                page++;
+                NewSearch(true);
+            }
+        }
+        private void button8_Click(object sender, EventArgs e)
+        {
+            page = 0;
+            TextColor(textBox2, searchEmotes, "", nonTextColor, true);
+            NewSearch(true);
         }
         //Get & Search
         public Image DownloadImage(string fromUrl)
