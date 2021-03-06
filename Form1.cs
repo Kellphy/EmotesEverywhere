@@ -217,7 +217,7 @@ namespace DiscordCopy
 
                     if (processStop) break;
 
-                    label4.Text = $"{integer} / {emotesOnPage}";
+                    label4.Text = $"Loaded {integer} / {emotesOnPage}";
                     for (int y = x * division; y < max; y++)
                     {
                         flowLayoutPanel1.Controls.Add(buttonList[y]);
