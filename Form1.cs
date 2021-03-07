@@ -15,7 +15,7 @@ namespace KEE
         public int option, integer, division, page, paging;
         public string searchEmotes, firstLabel;
         public bool processStop, processStopped;
-        public Color color_bg, button_bg, color_fg, nonTextColor, textbox_bg, color_link,color_vlink;
+        public Color color_bg, button_bg, color_fg, nonTextColor, textbox_bg, color_link,color_vlink,color_copy,color_error;
 
         public List<Image> imagesList;
         public List<Button> buttonList;
@@ -57,6 +57,8 @@ namespace KEE
             textbox_bg = Color.FromArgb(151, 157, 172);
             color_link = Color.FromArgb(0, 0, 255);
             color_vlink = Color.FromArgb(128, 0, 128);
+            color_copy = Color.LightGreen;
+            color_error = Color.DarkRed;
 
             string curFile = $"{Environment.CurrentDirectory}\\KEE.exe.config";
             if (File.Exists(curFile))
@@ -68,6 +70,8 @@ namespace KEE
                 Properties.Settings.Default["TextBox_BG"]= textbox_bg;
                 Properties.Settings.Default["Color_Link"]= color_link;
                 Properties.Settings.Default["Color_VLink"]= color_vlink;
+                Properties.Settings.Default["Copy"]= color_copy;
+                Properties.Settings.Default["Error"]= color_error;
             }
         }
         public void ColorProfiles()
@@ -82,6 +86,8 @@ namespace KEE
                 textbox_bg = (Color)Properties.Settings.Default["TextBox_BG"];
                 color_link = (Color)Properties.Settings.Default["Color_Link"];
                 color_vlink = (Color)Properties.Settings.Default["Color_VLink"];
+                color_copy = (Color)Properties.Settings.Default["Copy"];
+                color_error = (Color)Properties.Settings.Default["Error"];
             }
             else
             {
@@ -313,7 +319,7 @@ namespace KEE
                 i.Dispose();
                 image.Dispose();
 
-                label1.ForeColor = Color.LightGreen;
+                label1.ForeColor = color_copy;
                 label1.Text = $"{image_name} - Copied to clipboard!";
             }
             catch (Exception ex) { SendErrorMessage(ex.Message.ToString()); }
@@ -403,7 +409,7 @@ namespace KEE
         //Errors
         public void SendErrorMessage(string error)
         {
-            label1.ForeColor = Color.DarkRed;
+            label1.ForeColor = color_error;
             label1.Text = error;
         }
         //Info

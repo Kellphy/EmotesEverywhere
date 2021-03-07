@@ -99,5 +99,27 @@ namespace KEE.Properties {
                 this["Color_VLink"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Drawing.Color Error {
+            get {
+                return ((global::System.Drawing.Color)(this["Error"]));
+            }
+            set {
+                this["Error"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Drawing.Color Copy {
+            get {
+                return ((global::System.Drawing.Color)(this["Copy"]));
+            }
+            set {
+                this["Copy"] = value;
+            }
+        }
     }
 }

@@ -42,6 +42,8 @@
             this.button3 = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
+            this.button11 = new System.Windows.Forms.Button();
+            this.button12 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -82,7 +84,7 @@
             this.button4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
             this.button4.Location = new System.Drawing.Point(12, 187);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(110, 28);
+            this.button4.Size = new System.Drawing.Size(88, 28);
             this.button4.TabIndex = 26;
             this.button4.Text = "BG Color";
             this.button4.UseCompatibleTextRendering = true;
@@ -96,9 +98,9 @@
             this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button5.Font = new System.Drawing.Font("Baloo", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.button5.Location = new System.Drawing.Point(128, 187);
+            this.button5.Location = new System.Drawing.Point(106, 187);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(110, 28);
+            this.button5.Size = new System.Drawing.Size(88, 28);
             this.button5.TabIndex = 27;
             this.button5.Text = "FG Color";
             this.button5.UseCompatibleTextRendering = true;
@@ -112,9 +114,9 @@
             this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button6.Font = new System.Drawing.Font("Baloo", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.button6.Location = new System.Drawing.Point(12, 221);
+            this.button6.Location = new System.Drawing.Point(388, 187);
             this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(110, 28);
+            this.button6.Size = new System.Drawing.Size(88, 28);
             this.button6.TabIndex = 28;
             this.button6.Text = "BG Buttons";
             this.button6.UseCompatibleTextRendering = true;
@@ -128,9 +130,9 @@
             this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button7.Font = new System.Drawing.Font("Baloo", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.button7.Location = new System.Drawing.Point(362, 187);
+            this.button7.Location = new System.Drawing.Point(294, 187);
             this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(110, 28);
+            this.button7.Size = new System.Drawing.Size(88, 28);
             this.button7.TabIndex = 29;
             this.button7.Text = "FG Text Box";
             this.button7.UseCompatibleTextRendering = true;
@@ -144,9 +146,9 @@
             this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button8.Font = new System.Drawing.Font("Baloo", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.button8.Location = new System.Drawing.Point(245, 187);
+            this.button8.Location = new System.Drawing.Point(200, 187);
             this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(110, 28);
+            this.button8.Size = new System.Drawing.Size(88, 28);
             this.button8.TabIndex = 30;
             this.button8.Text = "BG Text Box";
             this.button8.UseCompatibleTextRendering = true;
@@ -202,9 +204,9 @@
             this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button3.Font = new System.Drawing.Font("Baloo", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.button3.Location = new System.Drawing.Point(129, 221);
+            this.button3.Location = new System.Drawing.Point(13, 221);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(110, 28);
+            this.button3.Size = new System.Drawing.Size(88, 28);
             this.button3.TabIndex = 34;
             this.button3.Text = "Link Color";
             this.button3.UseCompatibleTextRendering = true;
@@ -218,9 +220,9 @@
             this.button9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button9.Font = new System.Drawing.Font("Baloo", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.button9.Location = new System.Drawing.Point(245, 221);
+            this.button9.Location = new System.Drawing.Point(107, 221);
             this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(110, 28);
+            this.button9.Size = new System.Drawing.Size(88, 28);
             this.button9.TabIndex = 35;
             this.button9.Text = "Visited Link";
             this.button9.UseCompatibleTextRendering = true;
@@ -243,12 +245,46 @@
             this.button10.UseVisualStyleBackColor = false;
             this.button10.Click += new System.EventHandler(this.button10_Click);
             // 
+            // button11
+            // 
+            this.button11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(110)))), ((int)(((byte)(127)))));
+            this.button11.FlatAppearance.BorderSize = 2;
+            this.button11.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button11.Font = new System.Drawing.Font("Baloo", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button11.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
+            this.button11.Location = new System.Drawing.Point(200, 221);
+            this.button11.Name = "button11";
+            this.button11.Size = new System.Drawing.Size(88, 28);
+            this.button11.TabIndex = 37;
+            this.button11.Text = "Copy Color";
+            this.button11.UseCompatibleTextRendering = true;
+            this.button11.UseVisualStyleBackColor = false;
+            this.button11.Click += new System.EventHandler(this.button11_Click);
+            // 
+            // button12
+            // 
+            this.button12.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(110)))), ((int)(((byte)(127)))));
+            this.button12.FlatAppearance.BorderSize = 2;
+            this.button12.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button12.Font = new System.Drawing.Font("Baloo", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button12.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
+            this.button12.Location = new System.Drawing.Point(294, 221);
+            this.button12.Name = "button12";
+            this.button12.Size = new System.Drawing.Size(88, 28);
+            this.button12.TabIndex = 38;
+            this.button12.Text = "Error Color";
+            this.button12.UseCompatibleTextRendering = true;
+            this.button12.UseVisualStyleBackColor = false;
+            this.button12.Click += new System.EventHandler(this.button12_Click);
+            // 
             // Form3
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(110)))), ((int)(((byte)(127)))));
             this.ClientSize = new System.Drawing.Size(484, 261);
+            this.Controls.Add(this.button12);
+            this.Controls.Add(this.button11);
             this.Controls.Add(this.button10);
             this.Controls.Add(this.button9);
             this.Controls.Add(this.button3);
@@ -287,6 +323,8 @@
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button9;
         private System.Windows.Forms.Button button10;
+        private System.Windows.Forms.Button button11;
+        private System.Windows.Forms.Button button12;
     }
 }
 
