@@ -1,4 +1,4 @@
-﻿namespace DiscordCopy
+﻿namespace KEE
 {
     partial class Form2
     {

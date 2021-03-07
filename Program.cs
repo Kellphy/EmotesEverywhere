@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace DiscordCopy
+namespace KEE
 {
     static class Program
     {

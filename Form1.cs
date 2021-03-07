@@ -8,14 +8,14 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace DiscordCopy
+namespace KEE
 {
     public partial class Form1 : Form
     {
         public int option, integer, division, page, paging;
         public string searchEmotes, firstLabel;
-        public Color textColor, nonTextColor;
         public bool processStop, processStopped;
+        public Color color_bg, button_bg, color_fg, nonTextColor, textbox_bg, color_link,color_vlink;
 
         public List<Image> imagesList;
         public List<Button> buttonList;
@@ -27,8 +27,10 @@ namespace DiscordCopy
         {
             InitializeComponent();
         }
-        private void Form1_Load(object sender, EventArgs e)
+        public void Form1_Load(object sender, EventArgs e)
         {
+            ColorProfiles();
+
             option = 1;
             division = 10;
             page = 0;
@@ -39,16 +41,76 @@ namespace DiscordCopy
             processStop = false;
             processStopped = true;
 
-            textColor = Color.FromArgb(0, 48, 102);
-            nonTextColor = Color.FromArgb(92, 103, 125);
-
             label1.Text = firstLabel;
-            textBox2.ForeColor = nonTextColor;
             textBox2.Text = searchEmotes;
-            label1.ForeColor = textColor;
 
             ImageFirstGetting();
             ImageFilter();
+        }
+        //Color Profiles
+        public void DefaultColors()
+        {
+            color_bg = Color.FromArgb(125, 133, 151);
+            color_fg = Color.FromArgb(0, 48, 102);
+            button_bg = Color.FromArgb(113, 122, 142);
+            nonTextColor = Color.FromArgb(92, 103, 125);
+            textbox_bg = Color.FromArgb(151, 157, 172);
+            color_link = Color.FromArgb(0, 0, 255);
+            color_vlink = Color.FromArgb(128, 0, 128);
+
+            string curFile = $"{Environment.CurrentDirectory}\\KEE.exe.config";
+            if (File.Exists(curFile))
+            {
+                Properties.Settings.Default["Color_BG"]= color_bg;
+                Properties.Settings.Default["Color_FG"]= color_fg;
+                Properties.Settings.Default["Button_BG"]= button_bg;
+                Properties.Settings.Default["Color_NonText"]= nonTextColor;
+                Properties.Settings.Default["TextBox_BG"]= textbox_bg;
+                Properties.Settings.Default["Color_Link"]= color_link;
+                Properties.Settings.Default["Color_VLink"]= color_vlink;
+            }
+        }
+        public void ColorProfiles()
+        {
+            string curFile = $"{Environment.CurrentDirectory}\\KEE.exe.config";
+            if (File.Exists(curFile))
+            {
+                color_bg = (Color)Properties.Settings.Default["Color_BG"];
+                color_fg = (Color)Properties.Settings.Default["Color_FG"];
+                button_bg = (Color)Properties.Settings.Default["Button_BG"];
+                nonTextColor = (Color)Properties.Settings.Default["Color_NonText"];
+                textbox_bg = (Color)Properties.Settings.Default["TextBox_BG"];
+                color_link = (Color)Properties.Settings.Default["Color_Link"];
+                color_vlink = (Color)Properties.Settings.Default["Color_VLink"];
+            }
+            else
+            {
+                DefaultColors();
+            }
+
+            this.BackColor = color_bg;
+            for (int ix = this.Controls.Count - 1; ix >= 0; ix--)
+            {
+                if (this.Controls[ix] is Button)
+                {
+                    this.Controls[ix].BackColor = button_bg;
+                    this.Controls[ix].ForeColor = color_fg;
+                }
+                else if (this.Controls[ix] is LinkLabel)
+                {
+                    ((LinkLabel)this.Controls[ix]).LinkColor = color_link;
+                    ((LinkLabel)this.Controls[ix]).VisitedLinkColor = color_vlink;
+                }
+                else if (this.Controls[ix] is Label)
+                {
+                    this.Controls[ix].ForeColor = color_fg;
+                }
+                else if ( this.Controls[ix] is TextBox)
+                {
+                    this.Controls[ix].ForeColor = nonTextColor;
+                    this.Controls[ix].BackColor = textbox_bg;
+                }
+            }
         }
         //First Get
         public void ImageFirstGetting()
@@ -78,19 +140,19 @@ namespace DiscordCopy
         private void button2_Click(object sender, EventArgs e)
         {
             option = 1;
-            label1.ForeColor = textColor;
+            label1.ForeColor = color_fg;
             label1.Text = "Now using the 1st Option.";
         }
         private void button3_Click(object sender, EventArgs e)
         {
             option = 2;
-            label1.ForeColor = textColor;
+            label1.ForeColor = color_fg;
             label1.Text = "Now using the 2nd Option.";
         }
         private void button4_Click(object sender, EventArgs e)
         {
             option = 3;
-            label1.ForeColor = textColor;
+            label1.ForeColor = color_fg;
             label1.Text = "Now using the 3rd Option.";
         }
         //Links
@@ -138,13 +200,13 @@ namespace DiscordCopy
 
                 if (textBox2.Text == searchEmotes || textBox2.Text.Length < 1)
                 {
-                    label1.ForeColor = textColor;
+                    label1.ForeColor = color_fg;
                     label1.Text = firstLabel;
                     ImageFilter("");
                 }
                 else
                 {
-                    label1.ForeColor = textColor;
+                    label1.ForeColor = color_fg;
                     label1.Text = $"Searching for {textBox2.Text.ToLower()} ...";
                     ImageFilter(textBox2.Text.ToLower());
                 }
@@ -316,6 +378,7 @@ namespace DiscordCopy
         }
         private void button8_Click(object sender, EventArgs e)
         {
+            ColorProfiles();
             page = 0;
             TextColor(textBox2, searchEmotes, "", nonTextColor, true);
             NewSearch(true);
@@ -323,7 +386,7 @@ namespace DiscordCopy
         //TextBox placeholder text
         private void textBox2_Enter(object sender, EventArgs e)
         {
-            TextColor(textBox2, "", searchEmotes, textColor);
+            TextColor(textBox2, "", searchEmotes, color_fg);
         }
         private void textBox2_Leave(object sender, EventArgs e)
         {
@@ -347,6 +410,17 @@ namespace DiscordCopy
         private void button1_Click(object sender, EventArgs e)
         {
             new Form2().Start();
+        }
+        //Profiles
+        private void button9_Click(object sender, EventArgs e)
+        {
+            Form3 Frm = new Form3();
+            Frm.ClosePanel += HandleCloseRequest;
+            Frm.Start();
+        }
+        private void HandleCloseRequest(object sender, EventArgs e)
+        {
+            ColorProfiles();
         }
     }
 }

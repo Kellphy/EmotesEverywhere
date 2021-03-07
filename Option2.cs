@@ -5,7 +5,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace DiscordCopy
+namespace KEE
 {
     public class Option2
     {

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace DiscordCopy
+namespace KEE
 {
     public partial class Form2 : Form
     {
@@ -24,6 +25,7 @@ namespace DiscordCopy
         private void Form2_Load(object sender, EventArgs e) { }
         public void Start()
         {
+            ColorProfiles();
             this.StartPosition = FormStartPosition.CenterParent;
             label1.Text = "# Get emotes by entering their full name in the search box" +
                 "\nor by clicking the search results." +
@@ -37,6 +39,37 @@ namespace DiscordCopy
                 "\n[Option 2] - An alternative / experimental transparent background." +
                 "\n[Option 3] - A direct link to the image.";
             this.ShowDialog();
+        }
+        public void ColorProfiles()
+        {
+            Color color_bg, color_fg, button_bg;
+            string curFile = $"{Environment.CurrentDirectory}\\KEE.exe.config";
+            if (File.Exists(curFile))
+            {
+                color_bg = (Color)Properties.Settings.Default["Color_BG"];
+                color_fg = (Color)Properties.Settings.Default["Color_FG"];
+                button_bg = (Color)Properties.Settings.Default["Button_BG"];
+            }
+            else
+            {
+                color_bg = new Form1().color_bg;
+                color_fg = new Form1().color_fg;
+                button_bg = new Form1().button_bg;
+            }
+
+            this.BackColor = color_bg;
+            for (int ix = this.Controls.Count - 1; ix >= 0; ix--)
+            {
+                if (this.Controls[ix] is Button)
+                {
+                    this.Controls[ix].BackColor = button_bg;
+                    this.Controls[ix].ForeColor = color_fg;
+                }
+                else if (this.Controls[ix] is Label)
+                {
+                    this.Controls[ix].ForeColor = color_fg;
+                }
+            }
         }
         private void button1_Click(object sender, EventArgs e)
         {

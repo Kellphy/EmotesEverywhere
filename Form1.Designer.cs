@@ -1,4 +1,4 @@
-﻿namespace DiscordCopy
+﻿namespace KEE
 {
     partial class Form1
     {
@@ -46,6 +46,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.button8 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
+            this.button9 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -98,7 +99,7 @@
             this.linkLabel1.AutoSize = true;
             this.linkLabel1.Font = new System.Drawing.Font("Baloo", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.linkLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(40)))), ((int)(((byte)(85)))));
-            this.linkLabel1.Location = new System.Drawing.Point(155, 327);
+            this.linkLabel1.Location = new System.Drawing.Point(233, 327);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(78, 26);
             this.linkLabel1.TabIndex = 5;
@@ -113,7 +114,7 @@
             this.linkLabel2.AutoSize = true;
             this.linkLabel2.Font = new System.Drawing.Font("Baloo", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.linkLabel2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(40)))), ((int)(((byte)(85)))));
-            this.linkLabel2.Location = new System.Drawing.Point(46, 327);
+            this.linkLabel2.Location = new System.Drawing.Point(124, 327);
             this.linkLabel2.Name = "linkLabel2";
             this.linkLabel2.Size = new System.Drawing.Size(103, 26);
             this.linkLabel2.TabIndex = 6;
@@ -137,7 +138,7 @@
             this.linkLabel4.AutoSize = true;
             this.linkLabel4.Font = new System.Drawing.Font("Baloo", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.linkLabel4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(40)))), ((int)(((byte)(85)))));
-            this.linkLabel4.Location = new System.Drawing.Point(239, 327);
+            this.linkLabel4.Location = new System.Drawing.Point(317, 327);
             this.linkLabel4.Name = "linkLabel4";
             this.linkLabel4.Size = new System.Drawing.Size(44, 26);
             this.linkLabel4.TabIndex = 10;
@@ -297,12 +298,29 @@
             this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // button9
+            // 
+            this.button9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(113)))), ((int)(((byte)(122)))), ((int)(((byte)(142)))));
+            this.button9.FlatAppearance.BorderSize = 2;
+            this.button9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button9.Font = new System.Drawing.Font("Baloo", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
+            this.button9.Location = new System.Drawing.Point(46, 327);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(72, 28);
+            this.button9.TabIndex = 22;
+            this.button9.Text = "Profiles";
+            this.button9.UseCompatibleTextRendering = true;
+            this.button9.UseVisualStyleBackColor = false;
+            this.button9.Click += new System.EventHandler(this.button9_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(125)))), ((int)(((byte)(133)))), ((int)(((byte)(151)))));
             this.ClientSize = new System.Drawing.Size(584, 361);
+            this.Controls.Add(this.button9);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label2);
@@ -349,6 +367,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button9;
     }
 }
 
