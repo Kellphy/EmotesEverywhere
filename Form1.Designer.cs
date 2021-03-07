@@ -140,10 +140,10 @@
             this.linkLabel4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(40)))), ((int)(((byte)(85)))));
             this.linkLabel4.Location = new System.Drawing.Point(317, 327);
             this.linkLabel4.Name = "linkLabel4";
-            this.linkLabel4.Size = new System.Drawing.Size(44, 26);
+            this.linkLabel4.Size = new System.Drawing.Size(41, 26);
             this.linkLabel4.TabIndex = 10;
             this.linkLabel4.TabStop = true;
-            this.linkLabel4.Text = "v.0.2.0";
+            this.linkLabel4.Text = "v.0.2.1";
             this.linkLabel4.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.linkLabel4.UseCompatibleTextRendering = true;
             this.linkLabel4.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel4_LinkClicked);
@@ -309,7 +309,7 @@
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(72, 28);
             this.button9.TabIndex = 22;
-            this.button9.Text = "Profiles";
+            this.button9.Text = "Themes";
             this.button9.UseCompatibleTextRendering = true;
             this.button9.UseVisualStyleBackColor = false;
             this.button9.Click += new System.EventHandler(this.button9_Click);

@@ -175,7 +175,7 @@
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(53, 26);
             this.label3.TabIndex = 32;
-            this.label3.Text = "Profiles";
+            this.label3.Text = "Themes";
             this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             this.label3.UseCompatibleTextRendering = true;
             // 
