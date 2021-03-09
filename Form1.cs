@@ -5,8 +5,11 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+
+//Space bar search bug
 
 namespace KEE
 {
@@ -14,7 +17,7 @@ namespace KEE
     {
         public int option, integer, division, page, paging;
         public string searchEmotes, firstLabel;
-        public bool processStop, processStopped;
+        public static bool processStop, processStopped;
         public Color color_bg, button_bg, color_fg, nonTextColor, textbox_bg, color_link,color_vlink,color_copy,color_error;
 
         public List<Image> imagesList;
@@ -22,6 +25,7 @@ namespace KEE
         public List<string> emoteString;
 
         MatchCollection matches;
+        SemaphoreSlim semaphore = new SemaphoreSlim(1);
 
         public Form1()
         {
@@ -36,7 +40,7 @@ namespace KEE
             page = 0;
             paging = division * 50;
             searchEmotes = "Emote to Search";
-            firstLabel = "Click the info button in the bottom right corner for tips.";
+            firstLabel = "Click the info button in the bottom left corner for tips.";
 
             processStop = false;
             processStopped = true;
@@ -184,25 +188,25 @@ namespace KEE
             catch (Exception ex) { SendErrorMessage(ex.Message.ToString()); }
         }
         //Search
-        private void button5_Click(object sender, EventArgs e)
+        private void textBox2_Key(object sender, KeyEventArgs e)
         {
             page = 0;
-            NewSearch(true);
+            NewSearch();
         }
-        private void textBox2_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Space)
-            {
-                page = 0;
-                NewSearch(false);
-            }
-        }
-        public async void NewSearch(bool button)
+        public async void NewSearch()
         {
             try
             {
+                await semaphore.WaitAsync();
+
                 processStop = true;
-                while (!processStopped) await Task.Delay(100);
+
+                while (!processStopped)
+                {
+                    await Task.Delay(10);
+                }
+
+                textBox2.Text = textBox2.Text.Trim(' ');
 
                 if (textBox2.Text == searchEmotes || textBox2.Text.Length < 1)
                 {
@@ -217,7 +221,7 @@ namespace KEE
                     ImageFilter(textBox2.Text.ToLower());
                 }
 
-                if (!button) textBox2.Text = ""; else TextColor(textBox2, searchEmotes, "", nonTextColor, true);
+                semaphore.Release();
             }
             catch (Exception ex) { SendErrorMessage(ex.Message.ToString()); }
         }
@@ -228,32 +232,40 @@ namespace KEE
                 processStop = false;
                 processStopped = false;
 
-                integer = 0;
-                imagesList = new List<Image>();
-                emoteString = new List<string>();
-                buttonList = new List<Button>();
-
                 for (int ix = flowLayoutPanel1.Controls.Count - 1; ix >= 0; ix--)
                 {
                     if (flowLayoutPanel1.Controls[ix] is Button) flowLayoutPanel1.Controls[ix].Dispose();
                 }
 
-                ImageGetting(keyword);
-                label2.Text = $"{emoteString.Count} Emotes";
-                label3.Text = $"{page+1} / {emoteString.Count/paging+1}";
-
-                int emotesOnPage = Math.Min(paging, emoteString.Count - page * paging);
-                for (int x = 0; x <= emotesOnPage/division; x++)
+                if (!processStop)
                 {
-                    int max = Math.Min(x * division + division, emotesOnPage);
-                    await Task.Run(() => ImageLoading(x, division, max));
+                    integer = 0;
+                    imagesList = new List<Image>();
+                    emoteString = new List<string>();
+                    buttonList = new List<Button>();
 
-                    if (processStop) break;
+                    ImageGetting(keyword);
+                    label2.Text = $"{emoteString.Count} Emotes";
+                    label3.Text = $"{page + 1} / {emoteString.Count / paging + 1}";
 
-                    label4.Text = $"Loaded {integer} / {emotesOnPage}";
-                    for (int y = x * division; y < max; y++)
+                    int emotesOnPage = Math.Min(paging, emoteString.Count - page * paging);
+                    for (int x = 0; x <= emotesOnPage / division; x++)
                     {
-                        flowLayoutPanel1.Controls.Add(buttonList[y]);
+                        if (processStop) break;
+                        int max = Math.Min(x * division + division, emotesOnPage);
+
+                        for (int y = x * division; y < max; y++)
+                        {
+                            if (processStop) break;
+                            await Task.Run(() => ImageLoading(y));
+                        }
+
+                        label4.Text = $"Loaded {integer} / {emotesOnPage}";
+                        for (int y = x * division; y < max; y++)
+                        {
+                            if (processStop) break;
+                            flowLayoutPanel1.Controls.Add(buttonList[y]);
+                        }
                     }
                 }
                 processStopped = true;
@@ -334,11 +346,9 @@ namespace KEE
                 }
             }
         }
-        public async Task ImageLoading(int x, int division, int max)
+        public async Task ImageLoading(int y)
         {
-            for (int y = x * division; y < max; y++)
-            {
-                if (processStop) break;
+
                 string link = $"http://kellphy.com/emotes/{emoteString[y+page*paging]}.png";
 
                 imagesList.Add(DownloadImage(link));
@@ -354,7 +364,7 @@ namespace KEE
                 button.BackgroundImage = imagesList.ElementAt(y);
                 buttonList.Add(button);
                 integer++;
-            }
+
             await Task.CompletedTask;
         }
         private void buttonGenerated_Click(object sender, EventArgs e)
@@ -371,7 +381,7 @@ namespace KEE
             if(page > 0)
             {
                 page--;
-                NewSearch(true);
+                NewSearch();
             }
         }
         private void button7_Click(object sender, EventArgs e)
@@ -379,15 +389,14 @@ namespace KEE
             if (page < emoteString.Count / paging)
             {
                 page++;
-                NewSearch(true);
+                NewSearch();
             }
         }
         private void button8_Click(object sender, EventArgs e)
         {
-            ColorProfiles();
             page = 0;
             TextColor(textBox2, searchEmotes, "", nonTextColor, true);
-            NewSearch(true);
+            NewSearch();
         }
         //TextBox placeholder text
         private void textBox2_Enter(object sender, EventArgs e)

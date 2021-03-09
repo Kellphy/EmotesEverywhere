@@ -38,7 +38,6 @@
             this.linkLabel4 = new System.Windows.Forms.LinkLabel();
             this.button4 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
-            this.button5 = new System.Windows.Forms.Button();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.button6 = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
@@ -71,7 +70,7 @@
             this.button2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
             this.button2.Location = new System.Drawing.Point(12, 33);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(150, 28);
+            this.button2.Size = new System.Drawing.Size(145, 28);
             this.button2.TabIndex = 3;
             this.button2.Text = "Option 1 (Discord BG)";
             this.button2.UseCompatibleTextRendering = true;
@@ -85,9 +84,9 @@
             this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button3.Font = new System.Drawing.Font("Baloo", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.button3.Location = new System.Drawing.Point(168, 33);
+            this.button3.Location = new System.Drawing.Point(163, 33);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(150, 28);
+            this.button3.Size = new System.Drawing.Size(145, 28);
             this.button3.TabIndex = 4;
             this.button3.Text = "Option 2 (Alt BG)";
             this.button3.UseCompatibleTextRendering = true;
@@ -143,7 +142,7 @@
             this.linkLabel4.Size = new System.Drawing.Size(43, 26);
             this.linkLabel4.TabIndex = 10;
             this.linkLabel4.TabStop = true;
-            this.linkLabel4.Text = "v.0.2.2";
+            this.linkLabel4.Text = "v.0.2.3";
             this.linkLabel4.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.linkLabel4.UseCompatibleTextRendering = true;
             this.linkLabel4.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel4_LinkClicked);
@@ -155,9 +154,9 @@
             this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button4.Font = new System.Drawing.Font("Baloo", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.button4.Location = new System.Drawing.Point(324, 33);
+            this.button4.Location = new System.Drawing.Point(314, 33);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(150, 28);
+            this.button4.Size = new System.Drawing.Size(145, 28);
             this.button4.TabIndex = 11;
             this.button4.Text = "Option 3 (Link)";
             this.button4.UseCompatibleTextRendering = true;
@@ -169,29 +168,13 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Baloo", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.label2.Location = new System.Drawing.Point(480, 33);
+            this.label2.Location = new System.Drawing.Point(465, 33);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(61, 26);
             this.label2.TabIndex = 12;
             this.label2.Text = "0 Emotes";
             this.label2.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.label2.UseCompatibleTextRendering = true;
-            // 
-            // button5
-            // 
-            this.button5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(113)))), ((int)(((byte)(122)))), ((int)(((byte)(142)))));
-            this.button5.FlatAppearance.BorderSize = 2;
-            this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button5.Font = new System.Drawing.Font("Baloo", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.button5.Location = new System.Drawing.Point(168, 67);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(72, 28);
-            this.button5.TabIndex = 14;
-            this.button5.Text = "Search";
-            this.button5.UseCompatibleTextRendering = true;
-            this.button5.UseVisualStyleBackColor = false;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // textBox2
             // 
@@ -201,11 +184,11 @@
             this.textBox2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(40)))), ((int)(((byte)(85)))));
             this.textBox2.Location = new System.Drawing.Point(12, 67);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(150, 28);
+            this.textBox2.Size = new System.Drawing.Size(296, 28);
             this.textBox2.TabIndex = 15;
             this.textBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textBox2.Enter += new System.EventHandler(this.textBox2_Enter);
-            this.textBox2.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox2_KeyDown);
+            this.textBox2.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBox2_Key);
             this.textBox2.Leave += new System.EventHandler(this.textBox2_Leave);
             // 
             // button6
@@ -258,7 +241,7 @@
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Baloo", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.label4.Location = new System.Drawing.Point(324, 67);
+            this.label4.Location = new System.Drawing.Point(465, 67);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(79, 26);
             this.label4.TabIndex = 19;
@@ -273,11 +256,11 @@
             this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button8.Font = new System.Drawing.Font("Baloo", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.button8.Location = new System.Drawing.Point(246, 67);
+            this.button8.Location = new System.Drawing.Point(314, 67);
             this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(72, 28);
+            this.button8.Size = new System.Drawing.Size(145, 28);
             this.button8.TabIndex = 20;
-            this.button8.Text = "Reset";
+            this.button8.Text = "Reset Search";
             this.button8.UseCompatibleTextRendering = true;
             this.button8.UseVisualStyleBackColor = false;
             this.button8.Click += new System.EventHandler(this.button8_Click);
@@ -320,12 +303,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(125)))), ((int)(((byte)(133)))), ((int)(((byte)(151)))));
             this.ClientSize = new System.Drawing.Size(584, 361);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.button9);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.label4);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.button8);
-            this.Controls.Add(this.button5);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
@@ -359,7 +341,6 @@
         private System.Windows.Forms.LinkLabel linkLabel4;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button button5;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Label label3;

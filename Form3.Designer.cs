@@ -118,7 +118,7 @@
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(88, 28);
             this.button6.TabIndex = 28;
-            this.button6.Text = "BG Buttons";
+            this.button6.Text = "Buttons";
             this.button6.UseCompatibleTextRendering = true;
             this.button6.UseVisualStyleBackColor = false;
             this.button6.Click += new System.EventHandler(this.button6_Click);
@@ -134,7 +134,7 @@
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(88, 28);
             this.button7.TabIndex = 29;
-            this.button7.Text = "FG Text Box";
+            this.button7.Text = "Text Box FG";
             this.button7.UseCompatibleTextRendering = true;
             this.button7.UseVisualStyleBackColor = false;
             this.button7.Click += new System.EventHandler(this.button7_Click);
@@ -150,7 +150,7 @@
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(88, 28);
             this.button8.TabIndex = 30;
-            this.button8.Text = "BG Text Box";
+            this.button8.Text = "Text Box";
             this.button8.UseCompatibleTextRendering = true;
             this.button8.UseVisualStyleBackColor = false;
             this.button8.Click += new System.EventHandler(this.button8_Click);
