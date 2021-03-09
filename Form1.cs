@@ -9,8 +9,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-//Space bar search bug
-
 namespace KEE
 {
     public partial class Form1 : Form
