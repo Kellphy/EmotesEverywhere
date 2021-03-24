@@ -121,5 +121,17 @@ namespace KEE.Properties {
                 this["Copy"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AOT {
+            get {
+                return ((bool)(this["AOT"]));
+            }
+            set {
+                this["AOT"] = value;
+            }
+        }
     }
 }

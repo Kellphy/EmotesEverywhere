@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace KEE
 {
-    public partial class Form1 : Form
+    public partial class Form1 : Window
     {
         public int option, integer, division, page, paging;
         public string searchEmotes, firstLabel;
@@ -31,7 +31,7 @@ namespace KEE
         }
         public void Form1_Load(object sender, EventArgs e)
         {
-            ColorProfiles();
+            RefreshWindow();
 
             option = 1;
             division = 10;
@@ -76,7 +76,7 @@ namespace KEE
                 Properties.Settings.Default["Error"]= color_error;
             }
         }
-        public void ColorProfiles()
+        public override void ColorProfiles()
         {
             string curFile = $"{Environment.CurrentDirectory}\\KEE.exe.config";
             if (File.Exists(curFile))
@@ -188,8 +188,14 @@ namespace KEE
         //Search
         private void textBox2_Key(object sender, KeyEventArgs e)
         {
-            page = 0;
-            NewSearch();
+            if ((e.KeyValue >= 0x30 && e.KeyValue <= 0x39) // numbers
+             || (e.KeyValue >= 0x41 && e.KeyValue <= 0x5A) // letters
+             || (e.KeyValue >= 0x60 && e.KeyValue <= 0x69) // numpad
+             || (e.KeyValue == 0x08)) // backspace
+            {
+                page = 0;
+                NewSearch();
+            }
         }
         public async void NewSearch()
         {
@@ -425,7 +431,7 @@ namespace KEE
             new Form2().Start();
         }
         //Profiles
-        private void button9_Click(object sender, EventArgs e)
+        private void button5_Click(object sender, EventArgs e)
         {
             Form3 Frm = new Form3();
             Frm.ClosePanel += HandleCloseRequest;
@@ -433,7 +439,14 @@ namespace KEE
         }
         private void HandleCloseRequest(object sender, EventArgs e)
         {
-            ColorProfiles();
+            RefreshWindow();
+        }
+        //Settings
+        private void button9_Click(object sender, EventArgs e)
+        {
+            Form4 Frm = new Form4();
+            Frm.ClosePanel += HandleCloseRequest;
+            Frm.Start();
         }
     }
 }

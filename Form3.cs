@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace KEE
 {
-    public partial class Form3 : Form
+    public partial class Form3 : Window
     {
         public event ClosePanelHandler ClosePanel;
         public delegate void ClosePanelHandler(object sender, EventArgs e);
@@ -16,44 +16,13 @@ namespace KEE
         private void Form3_Load(object sender, EventArgs e) { }
         public void Start()
         {
-            ColorProfiles();
+            RefreshWindow();
             string curFile = $"{Environment.CurrentDirectory}\\KEE.exe.config";
             if (File.Exists(curFile))
             {
                 this.StartPosition = FormStartPosition.CenterParent;
                 label1.Text = "Select a profile or manually set your colors.";
                 this.ShowDialog();
-            }
-        }
-        public void ColorProfiles()
-        {
-            Color color_bg, color_fg, button_bg;
-            string curFile = $"{Environment.CurrentDirectory}\\KEE.exe.config";
-            if (File.Exists(curFile))
-            {
-                color_bg = (Color)Properties.Settings.Default["Color_BG"];
-                color_fg = (Color)Properties.Settings.Default["Color_FG"];
-                button_bg = (Color)Properties.Settings.Default["Button_BG"];
-            }
-            else
-            {
-                color_bg = new Form1().color_bg;
-                color_fg = new Form1().color_fg;
-                button_bg = new Form1().button_bg;
-            }
-
-            this.BackColor = color_bg;
-            for (int ix = this.Controls.Count - 1; ix >= 0; ix--)
-            {
-                if (this.Controls[ix] is Button)
-                {
-                    this.Controls[ix].BackColor = button_bg;
-                    this.Controls[ix].ForeColor = color_fg;
-                }
-                else if (this.Controls[ix] is Label)
-                {
-                    this.Controls[ix].ForeColor = color_fg;
-                }
             }
         }
         public void SaveColors()
@@ -180,6 +149,5 @@ namespace KEE
 
             SaveColors();
         }
-
     }
 }
