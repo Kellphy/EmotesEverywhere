@@ -140,10 +140,10 @@
             this.linkLabel4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(40)))), ((int)(((byte)(85)))));
             this.linkLabel4.Location = new System.Drawing.Point(395, 327);
             this.linkLabel4.Name = "linkLabel4";
-            this.linkLabel4.Size = new System.Drawing.Size(43, 26);
+            this.linkLabel4.Size = new System.Drawing.Size(44, 26);
             this.linkLabel4.TabIndex = 12;
             this.linkLabel4.TabStop = true;
-            this.linkLabel4.Text = "v.0.2.3";
+            this.linkLabel4.Text = "v.0.2.4";
             this.linkLabel4.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.linkLabel4.UseCompatibleTextRendering = true;
             this.linkLabel4.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel4_LinkClicked);
