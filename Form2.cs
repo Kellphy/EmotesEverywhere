@@ -29,7 +29,7 @@ namespace KEE
                 "\n# You can press [Enter] / [Space] instead of clicking \"Search\"." +
                 "\n# Press [Win+V] to see the clipboard history." +
                 "\n# If you see the emotes panel snapping to a position when scrolling, click" +
-                "\non an [Option] / info button to change the window's the main focus." +
+                "\non an [Option] button to change the window's the main focus." +
                 "\n" +
                 "\n# The 1st option is the default one, but you are free to try any of the 3:" +
                 "\n[Option 1] - The image's background will be Discord's dark theme color." +

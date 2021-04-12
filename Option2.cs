@@ -99,9 +99,9 @@ namespace KEE
             // Order: try PNG, move on to try 32-bit ARGB DIB, then try the normal Bitmap and Image types.
             if (retrievedData.GetDataPresent("PNG"))
             {
-                MemoryStream png_stream = retrievedData.GetData("PNG") as MemoryStream;
-                if (png_stream != null)
-                    using (Bitmap bm = new Bitmap(png_stream))
+                //MemoryStream png_stream = retrievedData.GetData("PNG") as MemoryStream; //don't store because a lot of memory
+                if ((retrievedData.GetData("PNG") as MemoryStream) != null)
+                    using (Bitmap bm = new Bitmap((retrievedData.GetData("PNG") as MemoryStream)))
                         clipboardimage = ImageUtils.CloneImage(bm);
             }
             if (clipboardimage == null && retrievedData.GetDataPresent(DataFormats.Dib))
