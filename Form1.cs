@@ -399,7 +399,7 @@ namespace KEE
             TextColor(textBox2, searchEmotes, "", nonTextColor, true);
             NewSearch();
         }
-        //TextBox placeholder text
+        //TextBox text
         private void textBox2_Enter(object sender, EventArgs e)
         {
             TextColor(textBox2, "", searchEmotes, color_fg);
