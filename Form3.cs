@@ -115,22 +115,22 @@ namespace KEE
         //Classic
         private void button2_Click(object sender, EventArgs e)
         {
-            new Form1().DefaultColors();
+            Properties.Settings.Default["Color_BG"] = Color.FromArgb(125, 133, 151);//Background Color
+            Properties.Settings.Default["Color_FG"] = Color.FromArgb(0, 48, 102);//Text Color
+            Properties.Settings.Default["Button_BG"] = Color.FromArgb(113, 122, 142);//Menu HighLight Color
+            Properties.Settings.Default["Color_NonText"] = Color.FromArgb(92, 103, 125);//Menu HightlightBorder Color
+            Properties.Settings.Default["TextBox_BG"] = Color.FromArgb(151, 157, 172);//Menu Check Background Color
+            Properties.Settings.Default["Color_Link"] = Color.FromArgb(0, 0, 255);
+            Properties.Settings.Default["Color_VLink"] = Color.FromArgb(128, 0, 128);
+            Properties.Settings.Default["Copy"] = Color.LightGreen;
+            Properties.Settings.Default["Error"] = Color.DarkRed;
 
             SaveColors();
         }
         //Dark
         private void button1_Click(object sender, EventArgs e)
         {
-            Properties.Settings.Default["Color_BG"] = Color.FromArgb(42, 47, 56);   //Background Color
-            Properties.Settings.Default["Color_FG"] = Color.FromArgb(179, 179, 179); //Text Color
-            Properties.Settings.Default["Button_BG"] = Color.FromArgb(30, 34, 40);  //Menu HighLight Color
-            Properties.Settings.Default["Color_NonText"] = Color.FromArgb(116, 129, 152);   //Menu HightlightBorderCOlor
-            Properties.Settings.Default["TextBox_BG"] = Color.FromArgb(56, 64, 75); //Menu Check Background COlor
-            Properties.Settings.Default["Color_Link"] = Color.FromArgb(166, 212, 255);
-            Properties.Settings.Default["Color_VLink"] = Color.FromArgb(128, 0, 128);
-            Properties.Settings.Default["Copy"] = Color.LightGreen;
-            Properties.Settings.Default["Error"] = Color.DarkRed;
+            new Form1().DefaultColors();
 
             SaveColors();
         }

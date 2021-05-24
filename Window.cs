@@ -32,7 +32,15 @@ namespace KEE
         }
         private void SettingsRefresh()
         {
-            this.TopMost = (bool)Properties.Settings.Default["AOT"];
+            string curFile = $"{Environment.CurrentDirectory}\\KEE.exe.config";
+            if (File.Exists(curFile))
+            {
+                this.TopMost = (bool)Properties.Settings.Default["AOT"];
+            }
+            else
+            {
+                this.TopMost = false;
+            }
         }
         public virtual void ColorProfiles()
         {

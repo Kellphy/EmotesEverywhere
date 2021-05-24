@@ -53,12 +53,12 @@ namespace KEE
         //Color Profiles
         public void DefaultColors()
         {
-            color_bg = Color.FromArgb(125, 133, 151);
-            color_fg = Color.FromArgb(0, 48, 102);
-            button_bg = Color.FromArgb(113, 122, 142);
-            nonTextColor = Color.FromArgb(92, 103, 125);
-            textbox_bg = Color.FromArgb(151, 157, 172);
-            color_link = Color.FromArgb(0, 0, 255);
+            color_bg = Color.FromArgb(42, 47, 56);   //Background Color
+            color_fg = Color.FromArgb(179, 179, 179); //Text Color
+            button_bg = Color.FromArgb(30, 34, 40);  //Menu HighLight Color
+            nonTextColor = Color.FromArgb(116, 129, 152);   //Menu HightlightBorderCOlor
+            textbox_bg = Color.FromArgb(56, 64, 75); //Menu Check Background COlor
+            color_link = Color.FromArgb(166, 212, 255);
             color_vlink = Color.FromArgb(128, 0, 128);
             color_copy = Color.LightGreen;
             color_error = Color.DarkRed;
