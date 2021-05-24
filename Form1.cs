@@ -39,14 +39,11 @@ namespace KEE
             paging = division * 50;
             searchEmotes = "Emote to Search";
             firstLabel = "Click the info button in the bottom left corner for tips.";
+            label1.Text = firstLabel;
 
             processStop = false;
             processStopped = true;
 
-            label1.Text = firstLabel;
-            textBox2.Text = searchEmotes;
-
-            TextColor(textBox2, "", searchEmotes, color_fg);
             ImageFirstGetting();
             ImageFilter();
         }
