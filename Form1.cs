@@ -16,7 +16,7 @@ namespace KEE
         public int option, integer, division, page, paging;
         public string searchEmotes, firstLabel;
         public static bool processStop, processStopped;
-        public Color color_bg, button_bg, color_fg, nonTextColor, textbox_bg, color_link,color_vlink,color_copy,color_error;
+        public Color color_bg, button_bg, color_fg, nonTextColor, textbox_bg, color_link, color_vlink, color_copy, color_error;
 
         public List<Image> imagesList;
         public List<Button> buttonList;
@@ -46,6 +46,7 @@ namespace KEE
             label1.Text = firstLabel;
             textBox2.Text = searchEmotes;
 
+            TextColor(textBox2, "", searchEmotes, color_fg);
             ImageFirstGetting();
             ImageFilter();
         }
@@ -65,15 +66,15 @@ namespace KEE
             string curFile = $"{Environment.CurrentDirectory}\\KEE.exe.config";
             if (File.Exists(curFile))
             {
-                Properties.Settings.Default["Color_BG"]= color_bg;
-                Properties.Settings.Default["Color_FG"]= color_fg;
-                Properties.Settings.Default["Button_BG"]= button_bg;
-                Properties.Settings.Default["Color_NonText"]= nonTextColor;
-                Properties.Settings.Default["TextBox_BG"]= textbox_bg;
-                Properties.Settings.Default["Color_Link"]= color_link;
-                Properties.Settings.Default["Color_VLink"]= color_vlink;
-                Properties.Settings.Default["Copy"]= color_copy;
-                Properties.Settings.Default["Error"]= color_error;
+                Properties.Settings.Default["Color_BG"] = color_bg;
+                Properties.Settings.Default["Color_FG"] = color_fg;
+                Properties.Settings.Default["Button_BG"] = button_bg;
+                Properties.Settings.Default["Color_NonText"] = nonTextColor;
+                Properties.Settings.Default["TextBox_BG"] = textbox_bg;
+                Properties.Settings.Default["Color_Link"] = color_link;
+                Properties.Settings.Default["Color_VLink"] = color_vlink;
+                Properties.Settings.Default["Copy"] = color_copy;
+                Properties.Settings.Default["Error"] = color_error;
             }
         }
         public override void ColorProfiles()
@@ -113,7 +114,7 @@ namespace KEE
                 {
                     this.Controls[ix].ForeColor = color_fg;
                 }
-                else if ( this.Controls[ix] is TextBox)
+                else if (this.Controls[ix] is TextBox)
                 {
                     this.Controls[ix].ForeColor = nonTextColor;
                     this.Controls[ix].BackColor = textbox_bg;
@@ -184,18 +185,6 @@ namespace KEE
                 System.Diagnostics.Process.Start(link);
             }
             catch (Exception ex) { SendErrorMessage(ex.Message.ToString()); }
-        }
-        //Search
-        private void textBox2_Key(object sender, KeyEventArgs e)
-        {
-            if ((e.KeyValue >= 0x30 && e.KeyValue <= 0x39) // numbers
-             || (e.KeyValue >= 0x41 && e.KeyValue <= 0x5A) // letters
-             || (e.KeyValue >= 0x60 && e.KeyValue <= 0x69) // numpad
-             || (e.KeyValue == 0x08)) // backspace
-            {
-                page = 0;
-                NewSearch();
-            }
         }
         public async void NewSearch()
         {
@@ -277,7 +266,7 @@ namespace KEE
             }
             catch (Exception ex) { SendErrorMessage(ex.Message.ToString()); }
         }
-        public void ImageGetting(string keyword = "")
+        public void ImageGetting(string keyword)
         {
             if (matches.Count > 0)
             {
@@ -340,6 +329,17 @@ namespace KEE
             }
             catch (Exception ex) { SendErrorMessage(ex.Message.ToString()); }
         }
+        private void textBox2_KeyUp(object sender, KeyEventArgs e)
+        {
+            if ((e.KeyValue >= 0x30 && e.KeyValue <= 0x39) // numbers
+                || (e.KeyValue >= 0x41 && e.KeyValue <= 0x5A) // letters
+                || (e.KeyValue >= 0x60 && e.KeyValue <= 0x69) // numpad
+                || (e.KeyValue == 0x08)) // backspace
+            {
+                page = 0;
+                NewSearch();
+            }
+        }
         public Image DownloadImage(string fromUrl)
         {
             using (WebClient webClient = new WebClient())
@@ -353,21 +353,21 @@ namespace KEE
         public async Task ImageLoading(int y)
         {
 
-                string link = $"http://kellphy.com/emotes/{emoteString[y+page*paging]}.png";
+            string link = $"http://kellphy.com/emotes/{emoteString[y + page * paging]}.png";
 
-                imagesList.Add(DownloadImage(link));
+            imagesList.Add(DownloadImage(link));
 
-                Button button = new Button();
-                button.Name = emoteString[y + page*paging];
-                button.TabStop = false;
-                button.FlatStyle = FlatStyle.Flat;
-                button.FlatAppearance.BorderSize = 0;
-                button.Size = new Size(48, 48);
-                button.Click += this.buttonGenerated_Click;
-                button.BackgroundImageLayout = ImageLayout.Zoom;
-                button.BackgroundImage = imagesList.ElementAt(y);
-                buttonList.Add(button);
-                integer++;
+            Button button = new Button();
+            button.Name = emoteString[y + page * paging];
+            button.TabStop = false;
+            button.FlatStyle = FlatStyle.Flat;
+            button.FlatAppearance.BorderSize = 0;
+            button.Size = new Size(48, 48);
+            button.Click += this.buttonGenerated_Click;
+            button.BackgroundImageLayout = ImageLayout.Zoom;
+            button.BackgroundImage = imagesList.ElementAt(y);
+            buttonList.Add(button);
+            integer++;
 
             await Task.CompletedTask;
         }
@@ -382,7 +382,7 @@ namespace KEE
         //Pages & Reset
         private void button6_Click(object sender, EventArgs e)
         {
-            if(page > 0)
+            if (page > 0)
             {
                 page--;
                 NewSearch();

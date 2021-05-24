@@ -72,7 +72,7 @@
             this.button2.Location = new System.Drawing.Point(12, 33);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(145, 28);
-            this.button2.TabIndex = 1;
+            this.button2.TabIndex = 2;
             this.button2.Text = "Option 1 (Discord BG)";
             this.button2.UseCompatibleTextRendering = true;
             this.button2.UseVisualStyleBackColor = false;
@@ -88,7 +88,7 @@
             this.button3.Location = new System.Drawing.Point(163, 33);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(145, 28);
-            this.button3.TabIndex = 2;
+            this.button3.TabIndex = 3;
             this.button3.Text = "Option 2 (Alt BG)";
             this.button3.UseCompatibleTextRendering = true;
             this.button3.UseVisualStyleBackColor = false;
@@ -158,7 +158,7 @@
             this.button4.Location = new System.Drawing.Point(314, 33);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(145, 28);
-            this.button4.TabIndex = 3;
+            this.button4.TabIndex = 4;
             this.button4.Text = "Option 3 (Link)";
             this.button4.UseCompatibleTextRendering = true;
             this.button4.UseVisualStyleBackColor = false;
@@ -186,10 +186,10 @@
             this.textBox2.Location = new System.Drawing.Point(12, 67);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(296, 28);
-            this.textBox2.TabIndex = 4;
+            this.textBox2.TabIndex = 1;
             this.textBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textBox2.Enter += new System.EventHandler(this.textBox2_Enter);
-            this.textBox2.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBox2_Key);
+            this.textBox2.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBox2_KeyUp);
             this.textBox2.Leave += new System.EventHandler(this.textBox2_Leave);
             // 
             // button6
