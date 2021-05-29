@@ -24,9 +24,8 @@ namespace KEE
         {
             RefreshWindow();
             this.StartPosition = FormStartPosition.CenterParent;
-            label1.Text = "# Get emotes by entering their full name in the search box" +
-                "\nor by clicking the search results." +
-                "\n# You can press [Enter] / [Space] instead of clicking \"Search\"." +
+            label1.Text = "# Find emotes by entering their full name in the search box," +
+                "\nby clicking the search results or by drag-and-drop (best)." +
                 "\n# Press [Win+V] to see the clipboard history." +
                 "\n# If you see the emotes panel snapping to a position when scrolling, click" +
                 "\non an [Option] button to change the window's the main focus." +
@@ -34,7 +33,8 @@ namespace KEE
                 "\n# The 1st option is the default one, but you are free to try any of the 3:" +
                 "\n[Option 1] - The image's background will be Discord's dark theme color." +
                 "\n[Option 2] - An alternative / experimental transparent background." +
-                "\n[Option 3] - A direct link to the image.";
+                "\n[Option 3] - A direct link to the image." +
+                "\n[Best Option] - Drag and drop the emote to have both transparency and gif";
             this.ShowDialog();
         }
         private void button1_Click(object sender, EventArgs e)

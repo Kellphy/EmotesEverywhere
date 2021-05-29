@@ -24,6 +24,13 @@ namespace KEE
 
         MatchCollection matches;
         SemaphoreSlim semaphore = new SemaphoreSlim(1);
+        public struct ImgExt
+        {
+            public Image Image;
+            public string Ext;
+        };
+
+        string baselink = "http://kellphy.com/emotes/";
 
         public Form1()
         {
@@ -38,8 +45,9 @@ namespace KEE
             page = 0;
             paging = division * 50;
             searchEmotes = "Emote to Search";
-            firstLabel = "Click the info button in the bottom left corner for tips.";
+            firstLabel = "Bottom left corner for info. Drag and Drop emotes for best results.";
             label1.Text = firstLabel;
+            textBox2.ForeColor = color_fg;
 
             processStop = false;
             processStopped = true;
@@ -122,23 +130,22 @@ namespace KEE
         public void ImageFirstGetting()
         {
             emoteString = new List<string>();
-            string url = "http://kellphy.com/emotes/";
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(baselink);
             using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
             {
                 using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                 {
                     string html = reader.ReadToEnd();
-                    Regex regex = new Regex(GetDirectoryListingRegexForUrl(url));
+                    Regex regex = new Regex(GetDirectoryListingRegexForUrl(baselink));
                     matches = regex.Matches(html);
                 }
             }
         }
-        public static string GetDirectoryListingRegexForUrl(string url)
+        public string GetDirectoryListingRegexForUrl(string url)
         {
-            if (url.Equals("http://kellphy.com/emotes/"))
+            if (url.Equals(baselink))
             {
-                return "<a href=\".*.png\">(?<name>.*).png</a>";
+                return "<a href=\".*\">(?<name>.*?)\\..*?</a>";
             }
             throw new NotSupportedException();
         }
@@ -181,7 +188,7 @@ namespace KEE
                 label.LinkVisited = true;
                 System.Diagnostics.Process.Start(link);
             }
-            catch (Exception ex) { SendErrorMessage(ex.Message.ToString()); }
+            catch (Exception ex) { SendErrorMessage("0 " + ex.Message.ToString()); }
         }
         public async void NewSearch()
         {
@@ -213,7 +220,7 @@ namespace KEE
 
                 semaphore.Release();
             }
-            catch (Exception ex) { SendErrorMessage(ex.Message.ToString()); }
+            catch (Exception ex) { SendErrorMessage("1 " + ex.Message.ToString()); }
         }
         public async void ImageFilter(string keyword = "")
         {
@@ -261,7 +268,7 @@ namespace KEE
                 processStopped = true;
                 processStop = false;
             }
-            catch (Exception ex) { SendErrorMessage(ex.Message.ToString()); }
+            catch (Exception ex) { SendErrorMessage("2 " + ex.Message.ToString()); }
         }
         public void ImageGetting(string keyword)
         {
@@ -289,9 +296,10 @@ namespace KEE
             {
                 string image_name = emoteToSearch;
 
-                string link = $"http://kellphy.com/emotes/{image_name}.png";
+                string link = $"{baselink}{image_name}";
 
-                Image i = DownloadImage(link);
+                ImgExt ie = DownloadImage(link);
+                Image i = ie.Image;
                 Bitmap image = new Bitmap(i);
 
                 switch (option)
@@ -310,9 +318,14 @@ namespace KEE
                         break;
                     case 2:
                         new Option2().Start(image);
+
+                        //new Transparency().CopyTransparentImageToClipboard(i);
+                        //IDataObject clipboard = Clipboard.GetDataObject();
+                        //string datas = new Transparency().GetFormatList(clipboard);
+                        //MessageBox.Show(datas);
                         break;
                     case 3:
-                        Clipboard.SetText(link);
+                        Clipboard.SetText(link + ie.Ext);
                         break;
                     default:
                         break;
@@ -324,7 +337,7 @@ namespace KEE
                 label1.ForeColor = color_copy;
                 label1.Text = $"{image_name} - Copied to clipboard!";
             }
-            catch (Exception ex) { SendErrorMessage(ex.Message.ToString()); }
+            catch (Exception ex) { SendErrorMessage("3 " + ex.Message.ToString()); }
         }
         private void textBox2_KeyUp(object sender, KeyEventArgs e)
         {
@@ -337,24 +350,35 @@ namespace KEE
                 NewSearch();
             }
         }
-        public Image DownloadImage(string fromUrl)
+        public ImgExt DownloadImage(string fromUrl)
         {
             using (WebClient webClient = new WebClient())
             {
-                using (Stream stream = webClient.OpenRead(fromUrl))
+                Stream stream;
+                string ext;
+                try
                 {
-                    return Image.FromStream(stream);
+                    ext = ".png";
+                    stream = webClient.OpenRead(fromUrl + ext);
                 }
+                catch
+                {
+                    ext = ".gif";
+                    stream = webClient.OpenRead(fromUrl + ext);
+                }
+
+                return new ImgExt { Image = Image.FromStream(stream), Ext = ext };
             }
         }
         public async Task ImageLoading(int y)
         {
+            string link = $"{baselink}{emoteString[y + page * paging]}";
 
-            string link = $"http://kellphy.com/emotes/{emoteString[y + page * paging]}.png";
-
-            imagesList.Add(DownloadImage(link));
+            ImgExt ie = DownloadImage(link);
+            imagesList.Add(ie.Image);
 
             Button button = new Button();
+            button.MouseMove += this.buttonGenerated_MouseMove;
             button.Name = emoteString[y + page * paging];
             button.TabStop = false;
             button.FlatStyle = FlatStyle.Flat;
@@ -368,13 +392,39 @@ namespace KEE
 
             await Task.CompletedTask;
         }
+        private void buttonGenerated_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                try
+                {
+                    string filename = (sender as Button).Name;
+                    string ext = DownloadImage($"{baselink}{(sender as Button).Name}").Ext;
+                    string path = Path.Combine(Path.GetTempPath(), filename + ext);
+
+                    HttpWebRequest myHttpWebRequest = (HttpWebRequest)WebRequest.Create($"{baselink}{(sender as Button).Name}{ext}");
+                    HttpWebResponse myHttpWebResponse = (HttpWebResponse)myHttpWebRequest.GetResponse();
+                    using (Stream stream2 = myHttpWebResponse.GetResponseStream())
+                    {
+                        using (FileStream fs = File.Create(path))
+                        {
+                            stream2.CopyTo(fs);
+                        }
+                    }
+
+                    string[] paths = new[] { path };
+                    this.DoDragDrop(new DataObject(DataFormats.FileDrop, paths), DragDropEffects.Copy);
+                }
+                catch (Exception ex) { SendErrorMessage("4 " + ex.Message.ToString()); }
+            }
+        }
         private void buttonGenerated_Click(object sender, EventArgs e)
         {
             try
             {
                 Execution((sender as Button).Name);
             }
-            catch (Exception ex) { SendErrorMessage(ex.Message.ToString()); }
+            catch (Exception ex) { SendErrorMessage("5 " + ex.Message.ToString()); }
         }
         //Pages & Reset
         private void button6_Click(object sender, EventArgs e)
