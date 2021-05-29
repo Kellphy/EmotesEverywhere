@@ -45,7 +45,7 @@ namespace KEE
             page = 0;
             paging = division * 50;
             searchEmotes = "Emote to Search";
-            firstLabel = "Bottom left corner for info. Drag and Drop emotes for best results.";
+            firstLabel = "Bottom left corner for info. Drag and Drop with Right-Mouse-Button for best results.";
             label1.Text = firstLabel;
             textBox2.ForeColor = color_fg;
 
