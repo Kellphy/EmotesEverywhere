@@ -21,7 +21,7 @@ namespace KEE
             string curFile = $"{Environment.CurrentDirectory}\\KEE.exe.config";
             if (File.Exists(curFile))
             {
-                this.StartPosition = FormStartPosition.CenterParent;
+                StartPosition = FormStartPosition.CenterParent;
                 try
                 {
                     button2_Update((bool)Properties.Settings.Default["AOT"]);
@@ -30,12 +30,12 @@ namespace KEE
                 {
                     button2_Update(false);
                 }
-                this.ShowDialog();
+                ShowDialog();
             }
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            this.Dispose();
+            Dispose();
         }
         private void button2_Click(object sender, EventArgs e)
         {

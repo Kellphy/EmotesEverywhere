@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -13,116 +12,86 @@ namespace KEE
 {
     public partial class Form1 : Window
     {
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                cp.ExStyle |= 0x02000000;  // Turn on WS_EX_COMPOSITED
+                return cp;
+            }
+        }
         public int option, integer, division, page, paging;
         public string searchEmotes, firstLabel;
-        public static bool processStop, processStopped;
-        public Color color_bg, button_bg, color_fg, nonTextColor, textbox_bg, color_link, color_vlink, color_copy, color_error;
+        public static bool processStop;
 
-        public List<Image> imagesList;
-        public List<Button> buttonList;
+        public List<Button> buttonList = new List<Button>();
         public List<string> emoteString;
+        public FlowLayoutPanel flowPanel = new FlowLayoutPanel();
+
+        string temp_path = Path.Combine(Path.GetTempPath(), "KEE");
 
         MatchCollection matches;
         SemaphoreSlim semaphore = new SemaphoreSlim(1);
-        public struct ImgExt
-        {
-            public Image Image;
-            public string Ext;
-        };
-
-        string baselink = "http://kellphy.com/emotes/";
 
         public Form1()
         {
+            FindOrCreate();
             InitializeComponent();
         }
         public void Form1_Load(object sender, EventArgs e)
         {
+            Directory.CreateDirectory(temp_path);
+            Temp_Clean();
             RefreshWindow();
+
+            flowPanel = new FlowLayoutPanel
+            {
+                Size = new Size(560, 272),
+                Location = new Point(12, 101),
+                BorderStyle = BorderStyle.FixedSingle,
+                AutoScroll = true,
+            };
+            Controls.Add(flowPanel);
 
             option = 1;
             division = 10;
             page = 0;
-            paging = division * 50;
+            paging = division * 100;
             searchEmotes = "Emote to Search";
             firstLabel = "Bottom left corner for info. Drag and Drop with Right-Mouse-Button for best results.";
             label1.Text = firstLabel;
-            textBox2.ForeColor = color_fg;
+            textBox2.ForeColor = (Color)Properties.Settings.Default["Color_FG"];
 
             processStop = false;
-            processStopped = true;
 
             ImageFirstGetting();
-            ImageFilter();
+            NewSearch();
         }
-        //Color Profiles
-        public void DefaultColors()
+        //Clean AppData Folder
+        public void Temp_Clean()
         {
-            color_bg = Color.FromArgb(42, 47, 56);   //Background Color
-            color_fg = Color.FromArgb(179, 179, 179); //Text Color
-            button_bg = Color.FromArgb(30, 34, 40);  //Menu HighLight Color
-            nonTextColor = Color.FromArgb(116, 129, 152);   //Menu HightlightBorderCOlor
-            textbox_bg = Color.FromArgb(56, 64, 75); //Menu Check Background COlor
-            color_link = Color.FromArgb(166, 212, 255);
-            color_vlink = Color.FromArgb(128, 0, 128);
-            color_copy = Color.LightGreen;
-            color_error = Color.DarkRed;
-
-            string curFile = $"{Environment.CurrentDirectory}\\KEE.exe.config";
-            if (File.Exists(curFile))
+            DirectoryInfo di = new DirectoryInfo(temp_path);
+            bool empty = true;
+            foreach (FileInfo file in di.GetFiles())
             {
-                Properties.Settings.Default["Color_BG"] = color_bg;
-                Properties.Settings.Default["Color_FG"] = color_fg;
-                Properties.Settings.Default["Button_BG"] = button_bg;
-                Properties.Settings.Default["Color_NonText"] = nonTextColor;
-                Properties.Settings.Default["TextBox_BG"] = textbox_bg;
-                Properties.Settings.Default["Color_Link"] = color_link;
-                Properties.Settings.Default["Color_VLink"] = color_vlink;
-                Properties.Settings.Default["Copy"] = color_copy;
-                Properties.Settings.Default["Error"] = color_error;
+                empty = false;
+                break;
             }
-        }
-        public override void ColorProfiles()
-        {
-            string curFile = $"{Environment.CurrentDirectory}\\KEE.exe.config";
-            if (File.Exists(curFile))
+            foreach (DirectoryInfo dir in di.GetDirectories())
             {
-                color_bg = (Color)Properties.Settings.Default["Color_BG"];
-                color_fg = (Color)Properties.Settings.Default["Color_FG"];
-                button_bg = (Color)Properties.Settings.Default["Button_BG"];
-                nonTextColor = (Color)Properties.Settings.Default["Color_NonText"];
-                textbox_bg = (Color)Properties.Settings.Default["TextBox_BG"];
-                color_link = (Color)Properties.Settings.Default["Color_Link"];
-                color_vlink = (Color)Properties.Settings.Default["Color_VLink"];
-                color_copy = (Color)Properties.Settings.Default["Copy"];
-                color_error = (Color)Properties.Settings.Default["Error"];
+                empty = false;
+                break;
             }
-            else
+            if (!empty)
             {
-                DefaultColors();
-            }
-
-            this.BackColor = color_bg;
-            for (int ix = this.Controls.Count - 1; ix >= 0; ix--)
-            {
-                if (this.Controls[ix] is Button)
+                foreach (FileInfo file in di.GetFiles())
                 {
-                    this.Controls[ix].BackColor = button_bg;
-                    this.Controls[ix].ForeColor = color_fg;
+                    file.Delete();
                 }
-                else if (this.Controls[ix] is LinkLabel)
+                foreach (DirectoryInfo dir in di.GetDirectories())
                 {
-                    ((LinkLabel)this.Controls[ix]).LinkColor = color_link;
-                    ((LinkLabel)this.Controls[ix]).VisitedLinkColor = color_vlink;
-                }
-                else if (this.Controls[ix] is Label)
-                {
-                    this.Controls[ix].ForeColor = color_fg;
-                }
-                else if (this.Controls[ix] is TextBox)
-                {
-                    this.Controls[ix].ForeColor = nonTextColor;
-                    this.Controls[ix].BackColor = textbox_bg;
+                    dir.Delete(true);
                 }
             }
         }
@@ -145,146 +114,140 @@ namespace KEE
         {
             if (url.Equals(baselink))
             {
-                return "<a href=\".*\">(?<name>.*?)\\..*?</a>";
+                return "alt=\"\\[IMG\\]\"></td><td><a href=\".*\">(?<name>.*?)</a>";
             }
             throw new NotSupportedException();
         }
-        //Options
-        private void button2_Click(object sender, EventArgs e)
-        {
-            option = 1;
-            label1.ForeColor = color_fg;
-            label1.Text = "Now using the 1st Option.";
-        }
-        private void button3_Click(object sender, EventArgs e)
-        {
-            option = 2;
-            label1.ForeColor = color_fg;
-            label1.Text = "Now using the 2nd Option.";
-        }
-        private void button4_Click(object sender, EventArgs e)
-        {
-            option = 3;
-            label1.ForeColor = color_fg;
-            label1.Text = "Now using the 3rd Option.";
-        }
-        //Links
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            VisitLink(linkLabel1, "http://kellphy.com/");
-        }
-        private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            VisitLink(linkLabel2, "https://discord.gg/ycYmMmP");
-        }
-        private void linkLabel4_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            VisitLink(linkLabel4, "https://github.com/Kellphy/KEE/releases/");
-        }
-        public void VisitLink(LinkLabel label, string link)
-        {
-            try
-            {
-                label.LinkVisited = true;
-                System.Diagnostics.Process.Start(link);
-            }
-            catch (Exception ex) { SendErrorMessage("0 " + ex.Message.ToString()); }
-        }
+        //Search
         public async void NewSearch()
         {
             try
             {
-                await semaphore.WaitAsync();
-
                 processStop = true;
 
-                while (!processStopped)
-                {
-                    await Task.Delay(10);
-                }
+                await semaphore.WaitAsync();
 
                 textBox2.Text = textBox2.Text.Trim(' ');
 
                 if (textBox2.Text == searchEmotes || textBox2.Text.Length < 1)
                 {
-                    label1.ForeColor = color_fg;
+                    label1.ForeColor = (Color)Properties.Settings.Default["Color_FG"];
                     label1.Text = firstLabel;
-                    ImageFilter("");
+                    await ImageFilter();
                 }
                 else
                 {
-                    label1.ForeColor = color_fg;
+                    label1.ForeColor = (Color)Properties.Settings.Default["Color_FG"];
                     label1.Text = $"Searching for {textBox2.Text.ToLower()} ...";
-                    ImageFilter(textBox2.Text.ToLower());
+                    await ImageFilter(textBox2.Text.ToLower());
                 }
 
                 semaphore.Release();
             }
             catch (Exception ex) { SendErrorMessage("1 " + ex.Message.ToString()); }
         }
-        public async void ImageFilter(string keyword = "")
+        public async Task ImageFilter(string keyword = "")
         {
+            processStop = false;
+
+            flowPanel.Dispose();
+            flowPanel = new FlowLayoutPanel
+            {
+                Size = new Size(560, 272),
+                Location = new Point(12, 101),
+                BorderStyle = BorderStyle.FixedSingle,
+                AutoScroll = true,
+            };
+            Controls.Add(flowPanel);
+
+            //GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
+            //GC.Collect();
+            //GC.WaitForPendingFinalizers();
+
+            integer = 0;
+            emoteString = new List<string>();
+            buttonList = new List<Button>();
+
+            ImageGetting(keyword);
+            label2.Text = $"{emoteString.Count} Emotes";
+            label3.Text = $"{page + 1} / {emoteString.Count / paging + 1}";
+
+            int emotesOnPage = Math.Min(paging, emoteString.Count - page * paging);
+            for (int x = 0; x < emotesOnPage; x++)
+            {
+                if (processStop) break;
+                await Task.Run(() => ImageLoading(x));
+                flowPanel.Controls.Add(buttonList[x]);
+                label4.Text = $"{integer} / {emotesOnPage}";
+            }
+        }
+        public void ImageLoading(int y)
+        {
+            Button button = new Button()
+            {
+                Name = emoteString[y + page * paging],
+                TabStop = false,
+                FlatStyle = FlatStyle.Flat,
+                Size = new Size(48, 48),
+                Image = GetImage(emoteString[y + page * paging]),
+            };
+            //button.BackgroundImageLayout = ImageLayout.Zoom;
+            //if (emoteString[y + page * paging] .Substring(emoteString[y + page * paging].Length - 4, 4) == ".gif")
+            //{
+            //    button.FlatAppearance.BorderColor = Color.FromArgb(200, 50, 100, 150);
+            //    button.FlatAppearance.BorderSize = 3;
+            //}
+            button.FlatAppearance.BorderSize = 0;
+            button.Click += buttonGenerated_Click;
+            button.MouseMove += buttonGenerated_MouseMove;
+
+            buttonList.Add(button);
+            integer++;
+        }
+        public Image GetImage(string filename)
+        {
+            string path = Path.Combine(temp_path, filename);
             try
             {
-                processStop = false;
-                processStopped = false;
-
-                for (int ix = flowLayoutPanel1.Controls.Count - 1; ix >= 0; ix--)
+                if (!File.Exists(path))
                 {
-                    if (flowLayoutPanel1.Controls[ix] is Button) flowLayoutPanel1.Controls[ix].Dispose();
+                    DownloadImage(filename, path);
                 }
-
-                if (!processStop)
-                {
-                    integer = 0;
-                    imagesList = new List<Image>();
-                    emoteString = new List<string>();
-                    buttonList = new List<Button>();
-
-                    ImageGetting(keyword);
-                    label2.Text = $"{emoteString.Count} Emotes";
-                    label3.Text = $"{page + 1} / {emoteString.Count / paging + 1}";
-
-                    int emotesOnPage = Math.Min(paging, emoteString.Count - page * paging);
-                    for (int x = 0; x <= emotesOnPage / division; x++)
-                    {
-                        if (processStop) break;
-                        int max = Math.Min(x * division + division, emotesOnPage);
-
-                        for (int y = x * division; y < max; y++)
-                        {
-                            if (processStop) break;
-                            await Task.Run(() => ImageLoading(y));
-                        }
-
-                        label4.Text = $"Loaded {integer} / {emotesOnPage}";
-                        for (int y = x * division; y < max; y++)
-                        {
-                            if (processStop) break;
-                            flowLayoutPanel1.Controls.Add(buttonList[y]);
-                        }
-                    }
-                }
-                processStopped = true;
-                processStop = false;
+                return Image.FromFile(path);
             }
-            catch (Exception ex) { SendErrorMessage("2 " + ex.Message.ToString()); }
+            catch
+            {
+                DownloadImage(filename, path);
+                return Image.FromFile(path);
+            }
+
+        }
+        public Image DownloadImage(string filename, string path)
+        {
+            using (Stream stream2 = WebRequest.Create($"{baselink}{filename}").GetResponse().GetResponseStream())
+            using (FileStream fs = File.Create(path))
+            {
+                stream2.CopyTo(fs);
+            }
+            return Image.FromFile(path);
         }
         public void ImageGetting(string keyword)
         {
             if (matches.Count > 0)
             {
+                string temp;
                 foreach (Match match in matches)
                 {
                     if (match.Success)
                     {
-                        if (match.Groups["name"].ToString() == keyword)
+                        temp = match.Groups["name"].ToString();
+                        if (temp.Substring(0, temp.Length - 4) == keyword)
                         {
-                            Execution(keyword);
+                            Execution(temp);
                         }
-                        if (match.Groups["name"].ToString().Contains(keyword))
+                        if (temp.Contains(keyword))
                         {
-                            emoteString.Add(match.Groups["name"].ToString());
+                            emoteString.Add(temp);
                         }
                     }
                 }
@@ -294,12 +257,15 @@ namespace KEE
         {
             try
             {
-                string image_name = emoteToSearch;
+                string link = $"{baselink}{emoteToSearch}";
 
-                string link = $"{baselink}{image_name}";
+                Stream stream;
+                using (WebClient webClient = new WebClient())
+                {
+                    stream = webClient.OpenRead($"{baselink}{emoteToSearch}");
+                }
 
-                ImgExt ie = DownloadImage(link);
-                Image i = ie.Image;
+                Image i = Image.FromStream(stream);
                 Bitmap image = new Bitmap(i);
 
                 switch (option)
@@ -318,14 +284,13 @@ namespace KEE
                         break;
                     case 2:
                         new Option2().Start(image);
-
                         //new Transparency().CopyTransparentImageToClipboard(i);
                         //IDataObject clipboard = Clipboard.GetDataObject();
                         //string datas = new Transparency().GetFormatList(clipboard);
                         //MessageBox.Show(datas);
                         break;
                     case 3:
-                        Clipboard.SetText(link + ie.Ext);
+                        Clipboard.SetText(link);
                         break;
                     default:
                         break;
@@ -334,8 +299,9 @@ namespace KEE
                 i.Dispose();
                 image.Dispose();
 
-                label1.ForeColor = color_copy;
-                label1.Text = $"{image_name} - Copied to clipboard!";
+                label1.ForeColor = (Color)Properties.Settings.Default["Color_FG"];
+                label1.Text = $"{emoteToSearch} - Copied to clipboard!";
+                textBox2.Focus();
             }
             catch (Exception ex) { SendErrorMessage("3 " + ex.Message.ToString()); }
         }
@@ -344,54 +310,13 @@ namespace KEE
             if ((e.KeyValue >= 0x30 && e.KeyValue <= 0x39) // numbers
                 || (e.KeyValue >= 0x41 && e.KeyValue <= 0x5A) // letters
                 || (e.KeyValue >= 0x60 && e.KeyValue <= 0x69) // numpad
-                || (e.KeyValue == 0x08)) // backspace
+                || (e.KeyValue == 0x08) || (e.KeyValue == 0x2E)) // backspace + delete
             {
                 page = 0;
                 NewSearch();
             }
         }
-        public ImgExt DownloadImage(string fromUrl)
-        {
-            using (WebClient webClient = new WebClient())
-            {
-                Stream stream;
-                string ext;
-                try
-                {
-                    ext = ".png";
-                    stream = webClient.OpenRead(fromUrl + ext);
-                }
-                catch
-                {
-                    ext = ".gif";
-                    stream = webClient.OpenRead(fromUrl + ext);
-                }
-
-                return new ImgExt { Image = Image.FromStream(stream), Ext = ext };
-            }
-        }
-        public async Task ImageLoading(int y)
-        {
-            string link = $"{baselink}{emoteString[y + page * paging]}";
-
-            ImgExt ie = DownloadImage(link);
-            imagesList.Add(ie.Image);
-
-            Button button = new Button();
-            button.MouseMove += this.buttonGenerated_MouseMove;
-            button.Name = emoteString[y + page * paging];
-            button.TabStop = false;
-            button.FlatStyle = FlatStyle.Flat;
-            button.FlatAppearance.BorderSize = 0;
-            button.Size = new Size(48, 48);
-            button.Click += this.buttonGenerated_Click;
-            button.BackgroundImageLayout = ImageLayout.Zoom;
-            button.BackgroundImage = imagesList.ElementAt(y);
-            buttonList.Add(button);
-            integer++;
-
-            await Task.CompletedTask;
-        }
+        //Generated Button Events
         private void buttonGenerated_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
@@ -399,10 +324,8 @@ namespace KEE
                 try
                 {
                     string filename = (sender as Button).Name;
-                    string ext = DownloadImage($"{baselink}{(sender as Button).Name}").Ext;
-                    string path = Path.Combine(Path.GetTempPath(), filename + ext);
-
-                    HttpWebRequest myHttpWebRequest = (HttpWebRequest)WebRequest.Create($"{baselink}{(sender as Button).Name}{ext}");
+                    string path = Path.Combine(temp_path, "t_" + filename);
+                    HttpWebRequest myHttpWebRequest = (HttpWebRequest)WebRequest.Create($"{baselink}{filename}");
                     HttpWebResponse myHttpWebResponse = (HttpWebResponse)myHttpWebRequest.GetResponse();
                     using (Stream stream2 = myHttpWebResponse.GetResponseStream())
                     {
@@ -413,7 +336,7 @@ namespace KEE
                     }
 
                     string[] paths = new[] { path };
-                    this.DoDragDrop(new DataObject(DataFormats.FileDrop, paths), DragDropEffects.Copy);
+                    DoDragDrop(new DataObject(DataFormats.FileDrop, paths), DragDropEffects.Copy);
                 }
                 catch (Exception ex) { SendErrorMessage("4 " + ex.Message.ToString()); }
             }
@@ -425,6 +348,76 @@ namespace KEE
                 Execution((sender as Button).Name);
             }
             catch (Exception ex) { SendErrorMessage("5 " + ex.Message.ToString()); }
+        }
+        //Color Profiles
+        public override void ColorProfiles()
+        {
+            FindOrCreate();
+
+            BackColor = (Color)Properties.Settings.Default["Color_BG"];
+            for (int ix = Controls.Count - 1; ix >= 0; ix--)
+            {
+                if (Controls[ix] is Button)
+                {
+                    Controls[ix].BackColor = (Color)Properties.Settings.Default["Button_BG"];
+                    Controls[ix].ForeColor = (Color)Properties.Settings.Default["Color_FG"];
+                }
+                else if (Controls[ix] is LinkLabel)
+                {
+                    ((LinkLabel)Controls[ix]).LinkColor = (Color)Properties.Settings.Default["Color_Link"];
+                    ((LinkLabel)Controls[ix]).VisitedLinkColor = (Color)Properties.Settings.Default["Color_VLink"];
+                }
+                else if (Controls[ix] is Label)
+                {
+                    Controls[ix].ForeColor = (Color)Properties.Settings.Default["Color_FG"];
+                }
+                else if (Controls[ix] is TextBox)
+                {
+                    Controls[ix].ForeColor = (Color)Properties.Settings.Default["Color_NonText"];
+                    Controls[ix].BackColor = (Color)Properties.Settings.Default["TextBox_BG"];
+                }
+            }
+        }
+        //Options
+        private void button2_Click(object sender, EventArgs e)
+        {
+            option = 1;
+            label1.ForeColor = (Color)Properties.Settings.Default["Color_FG"];
+            label1.Text = "Now using the 1st Option.";
+        }
+        private void button3_Click(object sender, EventArgs e)
+        {
+            option = 2;
+            label1.ForeColor = (Color)Properties.Settings.Default["Color_FG"];
+            label1.Text = "Now using the 2nd Option.";
+        }
+        private void button4_Click(object sender, EventArgs e)
+        {
+            option = 3;
+            label1.ForeColor = (Color)Properties.Settings.Default["Color_FG"];
+            label1.Text = "Now using the 3rd Option.";
+        }
+        //Links
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            VisitLink(linkLabel1, "http://kellphy.com/");
+        }
+        private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            VisitLink(linkLabel2, "https://kellphy.com/discord");
+        }
+        private void linkLabel4_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            VisitLink(linkLabel4, "https://github.com/Kellphy/KEE/releases/");
+        }
+        public void VisitLink(LinkLabel label, string link)
+        {
+            try
+            {
+                label.LinkVisited = true;
+                System.Diagnostics.Process.Start(link);
+            }
+            catch (Exception ex) { SendErrorMessage("0 " + ex.Message.ToString()); }
         }
         //Pages & Reset
         private void button6_Click(object sender, EventArgs e)
@@ -446,17 +439,17 @@ namespace KEE
         private void button8_Click(object sender, EventArgs e)
         {
             page = 0;
-            TextColor(textBox2, searchEmotes, "", nonTextColor, true);
+            TextColor(textBox2, searchEmotes, "", (Color)Properties.Settings.Default["Color_NonText"], true);
             NewSearch();
         }
         //TextBox text
         private void textBox2_Enter(object sender, EventArgs e)
         {
-            TextColor(textBox2, "", searchEmotes, color_fg);
+            TextColor(textBox2, "", searchEmotes, (Color)Properties.Settings.Default["Color_FG"]);
         }
         private void textBox2_Leave(object sender, EventArgs e)
         {
-            TextColor(textBox2, searchEmotes, "", nonTextColor);
+            TextColor(textBox2, searchEmotes, "", (Color)Properties.Settings.Default["Color_NonText"]);
         }
         public void TextColor(TextBox textBox, string text, string reqText, Color color, bool forcedReplace = false)
         {
@@ -469,7 +462,7 @@ namespace KEE
         //Errors
         public void SendErrorMessage(string error)
         {
-            label1.ForeColor = color_error;
+            label1.ForeColor = (Color)Properties.Settings.Default["Error"];
             label1.Text = error;
         }
         //Info
@@ -484,16 +477,16 @@ namespace KEE
             Frm.ClosePanel += HandleCloseRequest;
             Frm.Start();
         }
-        private void HandleCloseRequest(object sender, EventArgs e)
-        {
-            RefreshWindow();
-        }
         //Settings
         private void button9_Click(object sender, EventArgs e)
         {
             Form4 Frm = new Form4();
             Frm.ClosePanel += HandleCloseRequest;
             Frm.Start();
+        }
+        private void HandleCloseRequest(object sender, EventArgs e)
+        {
+            RefreshWindow();
         }
     }
 }

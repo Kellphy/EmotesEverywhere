@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Windows.Forms;
+using System.IO;
 using System.Runtime.InteropServices;
-using System.Windows.Media.Imaging;
+using System.Windows.Forms;
 using System.Windows.Interop;
-using System.Windows.Media;
-using System.Net;
+using System.Windows.Media.Imaging;
 
 namespace KEE
 {
@@ -42,7 +37,7 @@ namespace KEE
         //}
         public byte[] ImageToByteArray(System.Drawing.Image imageIn)
         {
-            using (var ms = new MemoryStream())
+            using (MemoryStream ms = new MemoryStream())
             {
                 imageIn.Save(ms, imageIn.RawFormat);
                 return ms.ToArray();
@@ -51,7 +46,7 @@ namespace KEE
         // returns true/false if successful/unsuccessful
         public bool CopyTransparentImageToClipboard(Image img)
         {
-            using (var ms = new MemoryStream())
+            using (MemoryStream ms = new MemoryStream())
             {
                 img.Save(ms, ImageFormat.Png);
 
@@ -180,17 +175,17 @@ namespace KEE
         public Image GetImageFromClipboard(Image img)
         {
 
-            var dib = ((System.IO.MemoryStream)Clipboard.GetData(DataFormats.Dib)).ToArray();
-            var width = BitConverter.ToInt32(dib, 4);
-            var height = BitConverter.ToInt32(dib, 8);
-            var bpp = BitConverter.ToInt16(dib, 14);
+            byte[] dib = ((System.IO.MemoryStream)Clipboard.GetData(DataFormats.Dib)).ToArray();
+            int width = BitConverter.ToInt32(dib, 4);
+            int height = BitConverter.ToInt32(dib, 8);
+            short bpp = BitConverter.ToInt16(dib, 14);
             if (bpp == 32)
             {
-                var gch = GCHandle.Alloc(dib, GCHandleType.Pinned);
+                GCHandle gch = GCHandle.Alloc(dib, GCHandleType.Pinned);
                 Bitmap bmp = null;
                 try
                 {
-                    var ptr = new IntPtr((long)gch.AddrOfPinnedObject() + 40);
+                    IntPtr ptr = new IntPtr((long)gch.AddrOfPinnedObject() + 40);
                     bmp = new Bitmap(width, height, width * 4, System.Drawing.Imaging.PixelFormat.Format32bppArgb, ptr);
                     return new Bitmap(bmp);
                 }
@@ -233,7 +228,7 @@ namespace KEE
         public Bitmap CF_DIBV5ToBitmap(byte[] data)
         {
             GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            var bmi = (BITMAPV5HEADER)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(BITMAPV5HEADER));
+            BITMAPV5HEADER bmi = (BITMAPV5HEADER)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(BITMAPV5HEADER));
             Bitmap bitmap = new Bitmap((int)bmi.bV5Width, (int)bmi.bV5Height, -
                                        (int)(bmi.bV5SizeImage / bmi.bV5Height), System.Drawing.Imaging.PixelFormat.Format32bppArgb,
                                        new IntPtr(handle.AddrOfPinnedObject().ToInt32()
