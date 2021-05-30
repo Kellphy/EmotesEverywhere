@@ -299,7 +299,7 @@ namespace KEE
                 i.Dispose();
                 image.Dispose();
 
-                label1.ForeColor = (Color)Properties.Settings.Default["Color_FG"];
+                label1.ForeColor = (Color)Properties.Settings.Default["Copy"];
                 label1.Text = $"{emoteToSearch} - Copied to clipboard!";
                 textBox2.Focus();
             }
