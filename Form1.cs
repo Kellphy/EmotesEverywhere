@@ -12,6 +12,21 @@ namespace KEE
 {
     public partial class Form1 : Window
     {
+        #region variables
+        public int option, integer, division, page, paging;
+        public string searchEmotes, firstLabel;
+        public static bool processStop;
+
+        public List<PictureBox> pictureList = new List<PictureBox>();
+        public List<string> emoteString;
+        public FlowLayoutPanel flowPanel = new FlowLayoutPanel();
+
+        string temp_path = Path.Combine(Path.GetTempPath(), "KEE");
+
+        MatchCollection matches;
+        SemaphoreSlim semaphore = new SemaphoreSlim(1);
+        #endregion
+        #region pre
         protected override CreateParams CreateParams
         {
             get
@@ -21,19 +36,8 @@ namespace KEE
                 return cp;
             }
         }
-        public int option, integer, division, page, paging;
-        public string searchEmotes, firstLabel;
-        public static bool processStop;
-
-        public List<Button> buttonList = new List<Button>();
-        public List<string> emoteString;
-        public FlowLayoutPanel flowPanel = new FlowLayoutPanel();
-
-        string temp_path = Path.Combine(Path.GetTempPath(), "KEE");
-
-        MatchCollection matches;
-        SemaphoreSlim semaphore = new SemaphoreSlim(1);
-
+        #endregion
+        #region Start
         public Form1()
         {
             FindOrCreate();
@@ -45,13 +49,7 @@ namespace KEE
             Temp_Clean();
             RefreshWindow();
 
-            flowPanel = new FlowLayoutPanel
-            {
-                Size = new Size(560, 272),
-                Location = new Point(12, 101),
-                BorderStyle = BorderStyle.FixedSingle,
-                AutoScroll = true,
-            };
+            flowPanel = new FlowLayoutPanel();
             Controls.Add(flowPanel);
 
             option = 1;
@@ -59,7 +57,7 @@ namespace KEE
             page = 0;
             paging = division * 100;
             searchEmotes = "Emote to Search";
-            firstLabel = "Bottom left corner for info. Drag and Drop with Right-Mouse-Button for best results.";
+            firstLabel = "Bottom left corner for info. Drag and Drop with RMB for best results.";
             label1.Text = firstLabel;
             textBox2.ForeColor = (Color)Properties.Settings.Default["Color_FG"];
 
@@ -68,7 +66,8 @@ namespace KEE
             ImageFirstGetting();
             NewSearch();
         }
-        //Clean AppData Folder
+        #endregion
+        #region AppData
         public void Temp_Clean()
         {
             DirectoryInfo di = new DirectoryInfo(temp_path);
@@ -95,7 +94,8 @@ namespace KEE
                 }
             }
         }
-        //First Get
+        #endregion
+        #region First Get
         public void ImageFirstGetting()
         {
             emoteString = new List<string>();
@@ -118,7 +118,8 @@ namespace KEE
             }
             throw new NotSupportedException();
         }
-        //Search
+        #endregion
+        #region Search
         public async void NewSearch()
         {
             try
@@ -153,9 +154,9 @@ namespace KEE
             flowPanel.Dispose();
             flowPanel = new FlowLayoutPanel
             {
-                Size = new Size(560, 272),
-                Location = new Point(12, 101),
-                BorderStyle = BorderStyle.FixedSingle,
+                Size = new Size(558, 268),
+                Location = new Point(14, 103),
+                //BorderStyle = BorderStyle.None,
                 AutoScroll = true,
             };
             Controls.Add(flowPanel);
@@ -166,10 +167,10 @@ namespace KEE
 
             integer = 0;
             emoteString = new List<string>();
-            buttonList = new List<Button>();
+            pictureList = new List<PictureBox>();
 
             ImageGetting(keyword);
-            label2.Text = $"{emoteString.Count} Emotes";
+            label2.Text = $"{emoteString.Count} Search Results";
             label3.Text = $"{page + 1} / {emoteString.Count / paging + 1}";
 
             int emotesOnPage = Math.Min(paging, emoteString.Count - page * paging);
@@ -177,31 +178,31 @@ namespace KEE
             {
                 if (processStop) break;
                 await Task.Run(() => ImageLoading(x));
-                flowPanel.Controls.Add(buttonList[x]);
-                label4.Text = $"{integer} / {emotesOnPage}";
+                flowPanel.Controls.Add(pictureList[x]);
+                label4.Text = $"{integer} / {emotesOnPage} Loaded";
             }
         }
         public void ImageLoading(int y)
         {
-            Button button = new Button()
+            PictureBox picture = new PictureBox()
             {
                 Name = emoteString[y + page * paging],
                 TabStop = false,
-                FlatStyle = FlatStyle.Flat,
+                //FlatStyle = FlatStyle.Flat,
                 Size = new Size(48, 48),
                 Image = GetImage(emoteString[y + page * paging]),
             };
-            //button.BackgroundImageLayout = ImageLayout.Zoom;
+            picture.SizeMode = PictureBoxSizeMode.Zoom;
             //if (emoteString[y + page * paging] .Substring(emoteString[y + page * paging].Length - 4, 4) == ".gif")
             //{
             //    button.FlatAppearance.BorderColor = Color.FromArgb(200, 50, 100, 150);
             //    button.FlatAppearance.BorderSize = 3;
             //}
-            button.FlatAppearance.BorderSize = 0;
-            button.Click += buttonGenerated_Click;
-            button.MouseMove += buttonGenerated_MouseMove;
+            //button.FlatAppearance.BorderSize = 0;
+            picture.Click += buttonGenerated_Click;
+            picture.MouseMove += buttonGenerated_MouseMove;
 
-            buttonList.Add(button);
+            pictureList.Add(picture);
             integer++;
         }
         public Image GetImage(string filename)
@@ -220,7 +221,6 @@ namespace KEE
                 DownloadImage(filename, path);
                 return Image.FromFile(path);
             }
-
         }
         public Image DownloadImage(string filename, string path)
         {
@@ -316,25 +316,19 @@ namespace KEE
                 NewSearch();
             }
         }
-        //Generated Button Events
+        #endregion
+        #region Generated Events
         private void buttonGenerated_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {
                 try
                 {
-                    string filename = (sender as Button).Name;
-                    string path = Path.Combine(temp_path, "t_" + filename);
-                    HttpWebRequest myHttpWebRequest = (HttpWebRequest)WebRequest.Create($"{baselink}{filename}");
-                    HttpWebResponse myHttpWebResponse = (HttpWebResponse)myHttpWebRequest.GetResponse();
-                    using (Stream stream2 = myHttpWebResponse.GetResponseStream())
-                    {
-                        using (FileStream fs = File.Create(path))
-                        {
-                            stream2.CopyTo(fs);
-                        }
-                    }
+                    string filename = (sender as PictureBox).Name;
 
+                    pictureBox1.Image = GetImage(filename);
+
+                    string path = Path.Combine(temp_path, filename);
                     string[] paths = new[] { path };
                     DoDragDrop(new DataObject(DataFormats.FileDrop, paths), DragDropEffects.Copy);
                 }
@@ -345,11 +339,131 @@ namespace KEE
         {
             try
             {
-                Execution((sender as Button).Name);
+                string filename = (sender as PictureBox).Name;
+                pictureBox1.Image = GetImage(filename);
+                Execution(filename);
             }
             catch (Exception ex) { SendErrorMessage("5 " + ex.Message.ToString()); }
         }
-        //Color Profiles
+        #endregion
+        #region Options
+        private void button2_Click(object sender, EventArgs e)
+        {
+            option = 1;
+            label1.ForeColor = (Color)Properties.Settings.Default["Color_FG"];
+            label1.Text = "Now using the 1st Option.";
+        }
+        private void button3_Click(object sender, EventArgs e)
+        {
+            option = 2;
+            label1.ForeColor = (Color)Properties.Settings.Default["Color_FG"];
+            label1.Text = "Now using the 2nd Option.";
+        }
+        private void button4_Click(object sender, EventArgs e)
+        {
+            option = 3;
+            label1.ForeColor = (Color)Properties.Settings.Default["Color_FG"];
+            label1.Text = "Now using the 3rd Option.";
+        }
+        #endregion
+        #region Links
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            VisitLink(linkLabel1, "http://kellphy.com/");
+        }
+        private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            VisitLink(linkLabel2, "https://kellphy.com/discord");
+        }
+        private void linkLabel4_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            VisitLink(linkLabel4, "https://github.com/Kellphy/KEE/releases/");
+        }
+        public void VisitLink(LinkLabel label, string link)
+        {
+            try
+            {
+                label.LinkVisited = true;
+                System.Diagnostics.Process.Start(link);
+            }
+            catch (Exception ex) { SendErrorMessage("0 " + ex.Message.ToString()); }
+        }
+        #endregion
+        #region Pages & Reset
+        private void button6_Click(object sender, EventArgs e)
+        {
+            if (page > 0)
+            {
+                page--;
+                NewSearch();
+            }
+        }
+        private void button7_Click(object sender, EventArgs e)
+        {
+            if (page < emoteString.Count / paging)
+            {
+                page++;
+                NewSearch();
+            }
+        }
+        private void button8_Click(object sender, EventArgs e)
+        {
+            page = 0;
+            TextColor(textBox2, searchEmotes, "", (Color)Properties.Settings.Default["Color_NonText"], true);
+            NewSearch();
+        }
+        #endregion
+        #region Textbox Test
+        private void textBox2_Enter(object sender, EventArgs e)
+        {
+            TextColor(textBox2, "", searchEmotes, (Color)Properties.Settings.Default["Color_FG"]);
+        }
+        private void textBox2_Leave(object sender, EventArgs e)
+        {
+            TextColor(textBox2, searchEmotes, "", (Color)Properties.Settings.Default["Color_NonText"]);
+        }
+        public void TextColor(TextBox textBox, string text, string reqText, Color color, bool forcedReplace = false)
+        {
+            if (textBox.Text == reqText || forcedReplace)
+            {
+                textBox.ForeColor = color;
+                textBox.Text = text;
+            }
+        }
+        #endregion
+        #region Errors
+        public void SendErrorMessage(string error)
+        {
+            label1.ForeColor = (Color)Properties.Settings.Default["Error"];
+            label1.Text = error;
+        }
+        #endregion
+        #region Info, Profiles, Settings
+        //Info
+        private void button1_Click(object sender, EventArgs e)
+        {
+            new Form2().Start();
+        }
+        //Profiles
+        private void button5_Click(object sender, EventArgs e)
+        {
+            Form3 Frm = new Form3();
+            Frm.ClosePanel += HandleCloseRequest;
+            Frm.Start();
+        }
+        //Settings
+        private void button9_Click(object sender, EventArgs e)
+        {
+            Form4 Frm = new Form4();
+            Frm.ClosePanel += HandleCloseRequest;
+            Frm.Start();
+        }
+        private void HandleCloseRequest(object sender, EventArgs e)
+        {
+            RefreshWindow();
+        }
+        #endregion
+        #region Color Overrite
         public override void ColorProfiles()
         {
             FindOrCreate();
@@ -377,116 +491,19 @@ namespace KEE
                     Controls[ix].BackColor = (Color)Properties.Settings.Default["TextBox_BG"];
                 }
             }
+
+            Invalidate();
         }
-        //Options
-        private void button2_Click(object sender, EventArgs e)
+        #endregion
+        #region Borders for textbox, picturebox, flowpanel
+        protected override void OnPaint(PaintEventArgs e)
         {
-            option = 1;
-            label1.ForeColor = (Color)Properties.Settings.Default["Color_FG"];
-            label1.Text = "Now using the 1st Option.";
+            base.OnPaint(e);
+            Pen pen = new Pen(new SolidBrush((Color)Properties.Settings.Default["Color_FG"]), 4);
+            e.Graphics.DrawRectangle(pen, flowPanel.Location.X, flowPanel.Location.Y, flowPanel.Width, flowPanel.Height);
+            e.Graphics.DrawRectangle(pen, pictureBox1.Location.X, pictureBox1.Location.Y, pictureBox1.Width, pictureBox1.Height);
+            e.Graphics.DrawRectangle(pen, textBox2.Location.X, textBox2.Location.Y, textBox2.Width, textBox2.Height);
         }
-        private void button3_Click(object sender, EventArgs e)
-        {
-            option = 2;
-            label1.ForeColor = (Color)Properties.Settings.Default["Color_FG"];
-            label1.Text = "Now using the 2nd Option.";
-        }
-        private void button4_Click(object sender, EventArgs e)
-        {
-            option = 3;
-            label1.ForeColor = (Color)Properties.Settings.Default["Color_FG"];
-            label1.Text = "Now using the 3rd Option.";
-        }
-        //Links
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            VisitLink(linkLabel1, "http://kellphy.com/");
-        }
-        private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            VisitLink(linkLabel2, "https://kellphy.com/discord");
-        }
-        private void linkLabel4_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            VisitLink(linkLabel4, "https://github.com/Kellphy/KEE/releases/");
-        }
-        public void VisitLink(LinkLabel label, string link)
-        {
-            try
-            {
-                label.LinkVisited = true;
-                System.Diagnostics.Process.Start(link);
-            }
-            catch (Exception ex) { SendErrorMessage("0 " + ex.Message.ToString()); }
-        }
-        //Pages & Reset
-        private void button6_Click(object sender, EventArgs e)
-        {
-            if (page > 0)
-            {
-                page--;
-                NewSearch();
-            }
-        }
-        private void button7_Click(object sender, EventArgs e)
-        {
-            if (page < emoteString.Count / paging)
-            {
-                page++;
-                NewSearch();
-            }
-        }
-        private void button8_Click(object sender, EventArgs e)
-        {
-            page = 0;
-            TextColor(textBox2, searchEmotes, "", (Color)Properties.Settings.Default["Color_NonText"], true);
-            NewSearch();
-        }
-        //TextBox text
-        private void textBox2_Enter(object sender, EventArgs e)
-        {
-            TextColor(textBox2, "", searchEmotes, (Color)Properties.Settings.Default["Color_FG"]);
-        }
-        private void textBox2_Leave(object sender, EventArgs e)
-        {
-            TextColor(textBox2, searchEmotes, "", (Color)Properties.Settings.Default["Color_NonText"]);
-        }
-        public void TextColor(TextBox textBox, string text, string reqText, Color color, bool forcedReplace = false)
-        {
-            if (textBox.Text == reqText || forcedReplace)
-            {
-                textBox.ForeColor = color;
-                textBox.Text = text;
-            }
-        }
-        //Errors
-        public void SendErrorMessage(string error)
-        {
-            label1.ForeColor = (Color)Properties.Settings.Default["Error"];
-            label1.Text = error;
-        }
-        //Info
-        private void button1_Click(object sender, EventArgs e)
-        {
-            new Form2().Start();
-        }
-        //Profiles
-        private void button5_Click(object sender, EventArgs e)
-        {
-            Form3 Frm = new Form3();
-            Frm.ClosePanel += HandleCloseRequest;
-            Frm.Start();
-        }
-        //Settings
-        private void button9_Click(object sender, EventArgs e)
-        {
-            Form4 Frm = new Form4();
-            Frm.ClosePanel += HandleCloseRequest;
-            Frm.Start();
-        }
-        private void HandleCloseRequest(object sender, EventArgs e)
-        {
-            RefreshWindow();
-        }
+        #endregion
     }
 }
