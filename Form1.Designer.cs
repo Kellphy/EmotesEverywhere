@@ -72,9 +72,9 @@
             this.button2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
             this.button2.Location = new System.Drawing.Point(12, 33);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(110, 28);
+            this.button2.Size = new System.Drawing.Size(100, 28);
             this.button2.TabIndex = 2;
-            this.button2.Text = "Option 1 (RGB)";
+            this.button2.Text = "Copy as RGB";
             this.button2.UseCompatibleTextRendering = true;
             this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.button2_Click);
@@ -86,11 +86,11 @@
             this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button3.Font = new System.Drawing.Font("Baloo", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.button3.Location = new System.Drawing.Point(128, 33);
+            this.button3.Location = new System.Drawing.Point(118, 33);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(110, 28);
+            this.button3.Size = new System.Drawing.Size(100, 28);
             this.button3.TabIndex = 3;
-            this.button3.Text = "Option 2 (DiB)";
+            this.button3.Text = "Copy as DiB";
             this.button3.UseCompatibleTextRendering = true;
             this.button3.UseVisualStyleBackColor = false;
             this.button3.Click += new System.EventHandler(this.button3_Click);
@@ -147,11 +147,11 @@
             this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button4.Font = new System.Drawing.Font("Baloo", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.button4.Location = new System.Drawing.Point(244, 33);
+            this.button4.Location = new System.Drawing.Point(224, 33);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(110, 28);
+            this.button4.Size = new System.Drawing.Size(100, 28);
             this.button4.TabIndex = 4;
-            this.button4.Text = "Option 3 (Link)";
+            this.button4.Text = "Copy as Link";
             this.button4.UseCompatibleTextRendering = true;
             this.button4.UseVisualStyleBackColor = false;
             this.button4.Click += new System.EventHandler(this.button4_Click);
@@ -161,11 +161,11 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Baloo", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.label2.Location = new System.Drawing.Point(360, 67);
+            this.label2.Location = new System.Drawing.Point(330, 67);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(106, 26);
+            this.label2.Size = new System.Drawing.Size(138, 26);
             this.label2.TabIndex = 12;
-            this.label2.Text = "0 Search Results";
+            this.label2.Text = "00000 Search Results";
             this.label2.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.label2.UseCompatibleTextRendering = true;
             // 
@@ -177,7 +177,7 @@
             this.textBox2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(40)))), ((int)(((byte)(85)))));
             this.textBox2.Location = new System.Drawing.Point(14, 69);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(222, 24);
+            this.textBox2.Size = new System.Drawing.Size(202, 24);
             this.textBox2.TabIndex = 1;
             this.textBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textBox2.Enter += new System.EventHandler(this.textBox2_Enter);
@@ -234,11 +234,11 @@
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Baloo", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.label4.Location = new System.Drawing.Point(360, 33);
+            this.label4.Location = new System.Drawing.Point(330, 33);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(79, 26);
+            this.label4.Size = new System.Drawing.Size(144, 26);
             this.label4.TabIndex = 19;
-            this.label4.Text = "0 / 0 Loaded";
+            this.label4.Text = "00000 / 00000 Loaded";
             this.label4.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.label4.UseCompatibleTextRendering = true;
             // 
@@ -249,9 +249,9 @@
             this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button8.Font = new System.Drawing.Font("Baloo", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.button8.Location = new System.Drawing.Point(244, 67);
+            this.button8.Location = new System.Drawing.Point(224, 67);
             this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(110, 28);
+            this.button8.Size = new System.Drawing.Size(100, 28);
             this.button8.TabIndex = 5;
             this.button8.Text = "Reset Search";
             this.button8.UseCompatibleTextRendering = true;
