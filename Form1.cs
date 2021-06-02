@@ -12,10 +12,6 @@ namespace KEE
 {
     public partial class Form1 : Window
     {
-        // links to appdata and temp folders
-        // option for 500 / 1000 emotes per page
-        // new details of what you copied (RGB/DiB/link) and drag-and-dropped
-
         // Variables
         public int option = 1,
             integer,
