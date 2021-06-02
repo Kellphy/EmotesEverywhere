@@ -371,19 +371,19 @@ namespace KEE
         {
             option = 1;
             label1.ForeColor = (Color)Properties.Settings.Default["Color_FG"];
-            label1.Text = "Now using the 1st Option.";
+            label1.Text = "Saved! Now click on emotes to copy them as RGB.";
         }
         private void button3_Click(object sender, EventArgs e)
         {
             option = 2;
             label1.ForeColor = (Color)Properties.Settings.Default["Color_FG"];
-            label1.Text = "Now using the 2nd Option.";
+            label1.Text = "Saved! Now click on emotes to copy them as Device independent Bitmap.";
         }
         private void button4_Click(object sender, EventArgs e)
         {
             option = 3;
             label1.ForeColor = (Color)Properties.Settings.Default["Color_FG"];
-            label1.Text = "Now using the 3rd Option.";
+            label1.Text = "Saved! Now click on emotes to copy them as Links.";
         }
         // Links
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
