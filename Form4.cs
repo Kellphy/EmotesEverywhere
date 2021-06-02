@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
@@ -57,6 +58,45 @@ namespace KEE
                 button2.BackColor = Color.Red;
                 button2.Text = "OFF";
             }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Process.Start("explorer.exe", $"{new Form1().temp_path}");
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Process.Start("explorer.exe", $"{Path.Combine(Environment.GetEnvironmentVariable("LocalAppData"), "KEE")}");
+            }
+            catch
+            {
+                Process.Start("explorer.exe", $"{Application.LocalUserAppDataPath}");
+            }
+
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default["Paging"] = 50;
+            Properties.Settings.Default.Save();
+            ClosePanel(this, new EventArgs());
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default["Paging"] = 100;
+            Properties.Settings.Default.Save();
+            ClosePanel(this, new EventArgs());
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default["Paging"] = 9000;
+            Properties.Settings.Default.Save();
+            ClosePanel(this, new EventArgs());
         }
     }
 }

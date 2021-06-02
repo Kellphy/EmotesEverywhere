@@ -12,21 +12,30 @@ namespace KEE
 {
     public partial class Form1 : Window
     {
-        #region variables
-        public int option, integer, division, page, paging;
-        public string searchEmotes, firstLabel;
-        public static bool processStop;
+        // links to appdata and temp folders
+        // option for 500 / 1000 emotes per page
+        // new details of what you copied (RGB/DiB/link) and drag-and-dropped
+
+        // Variables
+        public int option = 1,
+            integer,
+            division = 10,
+            page = 0,
+            paging,
+            paging_multiplier;
+        public string searchEmotes = "Emote to Search",
+            firstLabel = "Bottom left corner for info. Drag and Drop with RMB for best results.";
+        public bool processStop = false;
 
         public List<PictureBox> pictureList = new List<PictureBox>();
         public List<string> emoteString;
         public FlowLayoutPanel flowPanel = new FlowLayoutPanel();
 
-        string temp_path = Path.Combine(Path.GetTempPath(), "KEE");
+        public string temp_path = Path.Combine(Path.GetTempPath(), "KEE");
 
         MatchCollection matches;
         SemaphoreSlim semaphore = new SemaphoreSlim(1);
-        #endregion
-        #region pre
+        // PreStart
         protected override CreateParams CreateParams
         {
             get
@@ -36,8 +45,7 @@ namespace KEE
                 return cp;
             }
         }
-        #endregion
-        #region Start
+        // Start
         public Form1()
         {
             FindOrCreate();
@@ -45,29 +53,18 @@ namespace KEE
         }
         public void Form1_Load(object sender, EventArgs e)
         {
+            flowPanel = new FlowLayoutPanel();
+            Controls.Add(flowPanel);
+            label1.Text = firstLabel;
+            ImageFirstGetting();
+
             Directory.CreateDirectory(temp_path);
             Temp_Clean();
             RefreshWindow();
 
-            flowPanel = new FlowLayoutPanel();
-            Controls.Add(flowPanel);
-
-            option = 1;
-            division = 10;
-            page = 0;
-            paging = division * 100;
-            searchEmotes = "Emote to Search";
-            firstLabel = "Bottom left corner for info. Drag and Drop with RMB for best results.";
-            label1.Text = firstLabel;
             textBox2.ForeColor = (Color)Properties.Settings.Default["Color_FG"];
-
-            processStop = false;
-
-            ImageFirstGetting();
-            NewSearch();
         }
-        #endregion
-        #region AppData
+        // AppData
         public void Temp_Clean()
         {
             DirectoryInfo di = new DirectoryInfo(temp_path);
@@ -94,8 +91,50 @@ namespace KEE
                 }
             }
         }
-        #endregion
-        #region First Get
+        // Window Overrites
+        public override void ColorProfiles()
+        {
+            FindOrCreate();
+
+            BackColor = (Color)Properties.Settings.Default["Color_BG"];
+            for (int ix = Controls.Count - 1; ix >= 0; ix--)
+            {
+                if (Controls[ix] is Button)
+                {
+                    Controls[ix].BackColor = (Color)Properties.Settings.Default["Button_BG"];
+                    Controls[ix].ForeColor = (Color)Properties.Settings.Default["Color_FG"];
+                }
+                else if (Controls[ix] is LinkLabel)
+                {
+                    ((LinkLabel)Controls[ix]).LinkColor = (Color)Properties.Settings.Default["Color_Link"];
+                    ((LinkLabel)Controls[ix]).VisitedLinkColor = (Color)Properties.Settings.Default["Color_VLink"];
+                }
+                else if (Controls[ix] is Label)
+                {
+                    Controls[ix].ForeColor = (Color)Properties.Settings.Default["Color_FG"];
+                }
+                else if (Controls[ix] is TextBox)
+                {
+                    Controls[ix].ForeColor = (Color)Properties.Settings.Default["Color_NonText"];
+                    Controls[ix].BackColor = (Color)Properties.Settings.Default["TextBox_BG"];
+                }
+            }
+
+            Invalidate();
+        }
+        public override void SettingsRefresh()
+        {
+            base.SettingsRefresh();
+
+            int temp_paging = (int)Properties.Settings.Default["Paging"];
+            if (paging_multiplier != temp_paging)
+            {
+                paging_multiplier = temp_paging;
+                paging = division * paging_multiplier;
+                NewSearch();
+            }
+        }
+        // First Get
         public void ImageFirstGetting()
         {
             emoteString = new List<string>();
@@ -118,15 +157,14 @@ namespace KEE
             }
             throw new NotSupportedException();
         }
-        #endregion
-        #region Search
+        // Search
         public async void NewSearch()
         {
             try
             {
                 processStop = true;
-
                 await semaphore.WaitAsync();
+                processStop = false;
 
                 textBox2.Text = textBox2.Text.Trim(' ');
 
@@ -142,42 +180,37 @@ namespace KEE
                     label1.Text = $"Searching for {textBox2.Text.ToLower()} ...";
                     await ImageFilter(textBox2.Text.ToLower());
                 }
-
                 semaphore.Release();
             }
             catch (Exception ex) { SendErrorMessage("1 " + ex.Message.ToString()); }
         }
         public async Task ImageFilter(string keyword = "")
         {
-            processStop = false;
-
+            if (processStop) return;
             flowPanel.Dispose();
             flowPanel = new FlowLayoutPanel
             {
                 Size = new Size(558, 268),
                 Location = new Point(14, 103),
-                //BorderStyle = BorderStyle.None,
                 AutoScroll = true,
             };
             Controls.Add(flowPanel);
-
-            //GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
-            //GC.Collect();
-            //GC.WaitForPendingFinalizers();
 
             integer = 0;
             emoteString = new List<string>();
             pictureList = new List<PictureBox>();
 
+            if (processStop) return;
             ImageGetting(keyword);
             label2.Text = $"{emoteString.Count} Search Results";
             label3.Text = $"{page + 1} / {emoteString.Count / paging + 1}";
-
             int emotesOnPage = Math.Min(paging, emoteString.Count - page * paging);
+
             for (int x = 0; x < emotesOnPage; x++)
             {
                 if (processStop) break;
                 await Task.Run(() => ImageLoading(x));
+                if (processStop) break;
                 flowPanel.Controls.Add(pictureList[x]);
                 label4.Text = $"{integer} / {emotesOnPage} Loaded";
             }
@@ -188,17 +221,10 @@ namespace KEE
             {
                 Name = emoteString[y + page * paging],
                 TabStop = false,
-                //FlatStyle = FlatStyle.Flat,
                 Size = new Size(48, 48),
                 Image = GetImage(emoteString[y + page * paging]),
             };
             picture.SizeMode = PictureBoxSizeMode.Zoom;
-            //if (emoteString[y + page * paging] .Substring(emoteString[y + page * paging].Length - 4, 4) == ".gif")
-            //{
-            //    button.FlatAppearance.BorderColor = Color.FromArgb(200, 50, 100, 150);
-            //    button.FlatAppearance.BorderSize = 3;
-            //}
-            //button.FlatAppearance.BorderSize = 0;
             picture.Click += buttonGenerated_Click;
             picture.MouseMove += buttonGenerated_MouseMove;
 
@@ -266,7 +292,7 @@ namespace KEE
                 }
 
                 Image i = Image.FromStream(stream);
-                Bitmap image = new Bitmap(i);
+                string labelText = $"{emoteToSearch} - Copied to clipboard";
 
                 switch (option)
                 {
@@ -281,26 +307,26 @@ namespace KEE
 
                         Clipboard.SetImage(new Bitmap(tempImage));
                         tempImage.Dispose();
+                        labelText = $"{emoteToSearch} - Copied to clipboard as RGB!";
                         break;
                     case 2:
-                        new Option2().Start(image);
-                        //new Transparency().CopyTransparentImageToClipboard(i);
-                        //IDataObject clipboard = Clipboard.GetDataObject();
-                        //string datas = new Transparency().GetFormatList(clipboard);
-                        //MessageBox.Show(datas);
+                        new Option2().Start(new Bitmap(i));
+                        labelText = $"{emoteToSearch} - Copied to clipboard as DiB!";
                         break;
                     case 3:
                         Clipboard.SetText(link);
+                        labelText = $"{emoteToSearch} - Copied to clipboard as link!";
                         break;
                     default:
                         break;
                 }
 
                 i.Dispose();
-                image.Dispose();
 
                 label1.ForeColor = (Color)Properties.Settings.Default["Copy"];
-                label1.Text = $"{emoteToSearch} - Copied to clipboard!";
+                label1.Text = labelText;
+                pictureBox1.Image = GetImage(emoteToSearch);
+
                 textBox2.Focus();
             }
             catch (Exception ex) { SendErrorMessage("3 " + ex.Message.ToString()); }
@@ -316,8 +342,7 @@ namespace KEE
                 NewSearch();
             }
         }
-        #endregion
-        #region Generated Events
+        // Generated Events
         private void buttonGenerated_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
@@ -326,6 +351,8 @@ namespace KEE
                 {
                     string filename = (sender as PictureBox).Name;
 
+                    label1.ForeColor = (Color)Properties.Settings.Default["Copy"];
+                    label1.Text = $"{filename} - Drag and Drop!";
                     pictureBox1.Image = GetImage(filename);
 
                     string path = Path.Combine(temp_path, filename);
@@ -339,14 +366,11 @@ namespace KEE
         {
             try
             {
-                string filename = (sender as PictureBox).Name;
-                pictureBox1.Image = GetImage(filename);
-                Execution(filename);
+                Execution((sender as PictureBox).Name);
             }
             catch (Exception ex) { SendErrorMessage("5 " + ex.Message.ToString()); }
         }
-        #endregion
-        #region Options
+        // Options
         private void button2_Click(object sender, EventArgs e)
         {
             option = 1;
@@ -365,8 +389,7 @@ namespace KEE
             label1.ForeColor = (Color)Properties.Settings.Default["Color_FG"];
             label1.Text = "Now using the 3rd Option.";
         }
-        #endregion
-        #region Links
+        // Links
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             VisitLink(linkLabel1, "http://kellphy.com/");
@@ -388,8 +411,7 @@ namespace KEE
             }
             catch (Exception ex) { SendErrorMessage("0 " + ex.Message.ToString()); }
         }
-        #endregion
-        #region Pages & Reset
+        // Pages & Reset
         private void button6_Click(object sender, EventArgs e)
         {
             if (page > 0)
@@ -412,8 +434,7 @@ namespace KEE
             TextColor(textBox2, searchEmotes, "", (Color)Properties.Settings.Default["Color_NonText"], true);
             NewSearch();
         }
-        #endregion
-        #region Textbox Test
+        // Textbox Test
         private void textBox2_Enter(object sender, EventArgs e)
         {
             TextColor(textBox2, "", searchEmotes, (Color)Properties.Settings.Default["Color_FG"]);
@@ -430,28 +451,25 @@ namespace KEE
                 textBox.Text = text;
             }
         }
-        #endregion
-        #region Errors
+        // Errors
         public void SendErrorMessage(string error)
         {
             label1.ForeColor = (Color)Properties.Settings.Default["Error"];
             label1.Text = error;
         }
-        #endregion
-        #region Info, Profiles, Settings
-        //Info
+        // Info
         private void button1_Click(object sender, EventArgs e)
         {
             new Form2().Start();
         }
-        //Profiles
+        // Profiles
         private void button5_Click(object sender, EventArgs e)
         {
             Form3 Frm = new Form3();
             Frm.ClosePanel += HandleCloseRequest;
             Frm.Start();
         }
-        //Settings
+        // Settings
         private void button9_Click(object sender, EventArgs e)
         {
             Form4 Frm = new Form4();
@@ -462,40 +480,7 @@ namespace KEE
         {
             RefreshWindow();
         }
-        #endregion
-        #region Color Overrite
-        public override void ColorProfiles()
-        {
-            FindOrCreate();
-
-            BackColor = (Color)Properties.Settings.Default["Color_BG"];
-            for (int ix = Controls.Count - 1; ix >= 0; ix--)
-            {
-                if (Controls[ix] is Button)
-                {
-                    Controls[ix].BackColor = (Color)Properties.Settings.Default["Button_BG"];
-                    Controls[ix].ForeColor = (Color)Properties.Settings.Default["Color_FG"];
-                }
-                else if (Controls[ix] is LinkLabel)
-                {
-                    ((LinkLabel)Controls[ix]).LinkColor = (Color)Properties.Settings.Default["Color_Link"];
-                    ((LinkLabel)Controls[ix]).VisitedLinkColor = (Color)Properties.Settings.Default["Color_VLink"];
-                }
-                else if (Controls[ix] is Label)
-                {
-                    Controls[ix].ForeColor = (Color)Properties.Settings.Default["Color_FG"];
-                }
-                else if (Controls[ix] is TextBox)
-                {
-                    Controls[ix].ForeColor = (Color)Properties.Settings.Default["Color_NonText"];
-                    Controls[ix].BackColor = (Color)Properties.Settings.Default["TextBox_BG"];
-                }
-            }
-
-            Invalidate();
-        }
-        #endregion
-        #region Borders for textbox, picturebox, flowpanel
+        // Borders for textbox, picturebox, flowpanel
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
@@ -504,6 +489,5 @@ namespace KEE
             e.Graphics.DrawRectangle(pen, pictureBox1.Location.X, pictureBox1.Location.Y, pictureBox1.Width, pictureBox1.Height);
             e.Graphics.DrawRectangle(pen, textBox2.Location.X, textBox2.Location.Y, textBox2.Width, textBox2.Height);
         }
-        #endregion
     }
 }

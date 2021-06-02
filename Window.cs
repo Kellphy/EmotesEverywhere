@@ -29,7 +29,6 @@ namespace KEE
                 {
                     webClient.DownloadFile($"{baselink}/KEE.exe.config", config_file);
                 }
-                DefaultColors();
             }
         }
 
@@ -46,7 +45,7 @@ namespace KEE
             ColorProfiles();
             SettingsRefresh();
         }
-        void SettingsRefresh()
+        public virtual void SettingsRefresh()
         {
             FindOrCreate();
             TopMost = (bool)Properties.Settings.Default["AOT"];
@@ -68,20 +67,6 @@ namespace KEE
                     Controls[ix].ForeColor = (Color)Properties.Settings.Default["Color_FG"];
                 }
             }
-        }
-        public void DefaultColors()
-        {
-            Properties.Settings.Default["Color_BG"] = Color.FromArgb(42, 47, 56);   //Background Color
-            Properties.Settings.Default["Color_FG"] = Color.FromArgb(179, 179, 179); //Text Color
-            Properties.Settings.Default["Button_BG"] = Color.FromArgb(30, 34, 40);  //Menu HighLight Color
-            Properties.Settings.Default["Color_NonText"] = Color.FromArgb(116, 129, 152);   //Menu Hightlight Border Color
-            Properties.Settings.Default["TextBox_BG"] = Color.FromArgb(56, 64, 75); //Menu Check Background Color
-            Properties.Settings.Default["Color_Link"] = Color.FromArgb(166, 212, 255);
-            Properties.Settings.Default["Color_VLink"] = Color.FromArgb(128, 0, 128);
-            Properties.Settings.Default["Copy"] = Color.LightGreen;
-            Properties.Settings.Default["Error"] = Color.DarkRed;
-
-            SaveColors();
         }
         public virtual void SaveColors()
         {

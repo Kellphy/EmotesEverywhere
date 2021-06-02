@@ -12,7 +12,7 @@ namespace KEE.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.7.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.8.1.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -25,6 +25,7 @@ namespace KEE.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("42, 47, 56")]
         public global::System.Drawing.Color Color_BG {
             get {
                 return ((global::System.Drawing.Color)(this["Color_BG"]));
@@ -36,6 +37,7 @@ namespace KEE.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("30, 34, 40")]
         public global::System.Drawing.Color Button_BG {
             get {
                 return ((global::System.Drawing.Color)(this["Button_BG"]));
@@ -47,6 +49,7 @@ namespace KEE.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("179, 179, 179")]
         public global::System.Drawing.Color Color_FG {
             get {
                 return ((global::System.Drawing.Color)(this["Color_FG"]));
@@ -58,6 +61,7 @@ namespace KEE.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("116, 129, 152")]
         public global::System.Drawing.Color Color_NonText {
             get {
                 return ((global::System.Drawing.Color)(this["Color_NonText"]));
@@ -69,6 +73,7 @@ namespace KEE.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("56, 64, 75")]
         public global::System.Drawing.Color TextBox_BG {
             get {
                 return ((global::System.Drawing.Color)(this["TextBox_BG"]));
@@ -80,6 +85,7 @@ namespace KEE.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("166, 212, 255")]
         public global::System.Drawing.Color Color_Link {
             get {
                 return ((global::System.Drawing.Color)(this["Color_Link"]));
@@ -91,6 +97,7 @@ namespace KEE.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Purple")]
         public global::System.Drawing.Color Color_VLink {
             get {
                 return ((global::System.Drawing.Color)(this["Color_VLink"]));
@@ -102,6 +109,7 @@ namespace KEE.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("DarkRed")]
         public global::System.Drawing.Color Error {
             get {
                 return ((global::System.Drawing.Color)(this["Error"]));
@@ -113,6 +121,7 @@ namespace KEE.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("LightGreen")]
         public global::System.Drawing.Color Copy {
             get {
                 return ((global::System.Drawing.Color)(this["Copy"]));
@@ -131,6 +140,18 @@ namespace KEE.Properties {
             }
             set {
                 this["AOT"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("50")]
+        public int Paging {
+            get {
+                return ((int)(this["Paging"]));
+            }
+            set {
+                this["Paging"] = value;
             }
         }
     }

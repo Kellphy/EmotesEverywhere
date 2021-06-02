@@ -3,34 +3,37 @@
   <Profiles />
   <Settings>
     <Setting Name="Color_BG" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">42, 47, 56</Value>
     </Setting>
     <Setting Name="Button_BG" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">30, 34, 40</Value>
     </Setting>
     <Setting Name="Color_FG" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">179, 179, 179</Value>
     </Setting>
     <Setting Name="Color_NonText" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">116, 129, 152</Value>
     </Setting>
     <Setting Name="TextBox_BG" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">56, 64, 75</Value>
     </Setting>
     <Setting Name="Color_Link" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">166, 212, 255</Value>
     </Setting>
     <Setting Name="Color_VLink" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">Purple</Value>
     </Setting>
     <Setting Name="Error" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">DarkRed</Value>
     </Setting>
     <Setting Name="Copy" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">LightGreen</Value>
     </Setting>
     <Setting Name="AOT" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="Paging" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">50</Value>
     </Setting>
   </Settings>
 </SettingsFile>
