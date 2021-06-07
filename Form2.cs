@@ -19,7 +19,7 @@ namespace KEE
                 "# Find emotes by entering their full name in the search box," +
                 "\n clicking the search results or drag-and-drop with RMB (best)." +
                 "\n# Win+V - check clipboard history." +
-                "\n# Shift+LMB - add an emote to favorites." +
+                "\n# Shift+LMB - add / remove an emote to / from favorites." +
                 "\n# Search \"gif\" for GIFs and \"png\" for PNGs." +
                 "\n" +
                 "\n# RGB is the default option, but you are free to try any of the 3:" +
