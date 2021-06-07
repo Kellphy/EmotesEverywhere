@@ -94,7 +94,7 @@ namespace KEE
 
         private void button7_Click(object sender, EventArgs e)
         {
-            Properties.Settings.Default["Paging"] = 9000;
+            Properties.Settings.Default["Paging"] = 500;
             Properties.Settings.Default.Save();
             ClosePanel(this, new EventArgs());
         }

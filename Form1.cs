@@ -13,19 +13,23 @@ namespace KEE
     public partial class Form1 : Window
     {
         // Variables
-        public int option = 1,
+        public int
+            option = 1,
             integer,
             division = 10,
             page = 0,
             paging,
-            paging_multiplier;
-        public string searchEmotes = "Emote to Search",
+            paging_multiplier,
+            search_length;
+        public string
+            searchEmotes = "Emote to Search",
             firstLabel = "Bottom left corner for info. Drag and Drop with RMB for best results.";
         public bool processStop = false;
 
         public List<PictureBox> pictureList = new List<PictureBox>();
         public List<string> emoteString;
         public FlowLayoutPanel flowPanel = new FlowLayoutPanel();
+        public FlowLayoutPanel flowPanelFav = new FlowLayoutPanel();
 
         public string temp_path = Path.Combine(Path.GetTempPath(), "KEE");
 
@@ -50,7 +54,10 @@ namespace KEE
         public void Form1_Load(object sender, EventArgs e)
         {
             flowPanel = new FlowLayoutPanel();
+            flowPanelFav = new FlowLayoutPanel();
             Controls.Add(flowPanel);
+            Controls.Add(flowPanelFav);
+
             label1.Text = firstLabel;
             ImageFirstGetting();
 
@@ -128,6 +135,7 @@ namespace KEE
                 paging_multiplier = temp_paging;
                 paging = division * paging_multiplier;
                 NewSearch();
+                FlowFavorite();
             }
         }
         // First Get
@@ -186,11 +194,13 @@ namespace KEE
             flowPanel.Dispose();
             flowPanel = new FlowLayoutPanel
             {
-                Size = new Size(558, 268),
+                Size = new Size(558, 272),
                 Location = new Point(14, 103),
                 AutoScroll = true,
             };
             Controls.Add(flowPanel);
+
+            FlowFavorite();
 
             integer = 0;
             emoteString = new List<string>();
@@ -227,9 +237,9 @@ namespace KEE
             pictureList.Add(picture);
             integer++;
         }
-        public Image GetImage(string filename)
+        public Image GetImage(string filename,string prefix = "")
         {
-            string path = Path.Combine(temp_path, filename);
+            string path = Path.Combine(temp_path, prefix+filename);
             try
             {
                 if (!File.Exists(path))
@@ -329,11 +339,9 @@ namespace KEE
         }
         private void textBox2_KeyUp(object sender, KeyEventArgs e)
         {
-            if ((e.KeyValue >= 0x30 && e.KeyValue <= 0x39) // numbers
-                || (e.KeyValue >= 0x41 && e.KeyValue <= 0x5A) // letters
-                || (e.KeyValue >= 0x60 && e.KeyValue <= 0x69) // numpad
-                || (e.KeyValue == 0x08) || (e.KeyValue == 0x2E)) // backspace + delete
+            if (textBox2.Text.Length!=search_length)
             {
+                search_length = textBox2.Text.Length;
                 page = 0;
                 NewSearch();
             }
@@ -341,11 +349,11 @@ namespace KEE
         // Generated Events
         private void buttonGenerated_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            try
             {
-                try
+                string filename = (sender as PictureBox).Name;
+                if (e.Button == MouseButtons.Right)
                 {
-                    string filename = (sender as PictureBox).Name;
 
                     label1.ForeColor = (Color)Properties.Settings.Default["Copy"];
                     label1.Text = $"{filename} - Drag and Drop!";
@@ -354,15 +362,84 @@ namespace KEE
                     string path = Path.Combine(temp_path, filename);
                     string[] paths = new[] { path };
                     DoDragDrop(new DataObject(DataFormats.FileDrop, paths), DragDropEffects.Copy);
+
                 }
-                catch (Exception ex) { SendErrorMessage("4 " + ex.Message.ToString()); }
+            }
+            catch (Exception ex) { SendErrorMessage("4 " + ex.Message.ToString()); }
+        }
+        private void FlowFavorite()
+        {
+            System.Collections.Specialized.StringCollection favorites = (System.Collections.Specialized.StringCollection)Properties.Settings.Default["Favorite"];
+            if (favorites == null) favorites = new System.Collections.Specialized.StringCollection();
+            if (favorites.Count < 1)
+            {
+                flowPanelFav.Size = new Size(558,0);
+                flowPanel.Size = new Size(558,272);
+            }
+            else
+            {
+                flowPanel.Size = new Size(558,216);
+                flowPanelFav.Dispose();
+                flowPanelFav = new FlowLayoutPanel
+                {
+                    Size = new Size(558, 54),
+                    Location = new Point(14, 321),
+                    AutoScroll = true,
+                };
+                Controls.Add(flowPanelFav);
+
+                foreach (string favorite in favorites)
+                {
+                    PictureBox picture = new PictureBox()
+                    {
+                        Name = favorite,
+                        TabStop = false,
+                        Size = new Size(48, 48),
+                        Image = GetImage(favorite, "f_"),
+                    };
+                    picture.SizeMode = PictureBoxSizeMode.Zoom;
+                    picture.Click += buttonGenerated_Click;
+                    picture.MouseMove += buttonGenerated_MouseMove;
+                    flowPanelFav.Controls.Add(picture);
+                }
             }
         }
         private void buttonGenerated_Click(object sender, EventArgs e)
         {
             try
             {
-                Execution((sender as PictureBox).Name);
+                string filename = (sender as PictureBox).Name;
+                if (ModifierKeys == Keys.Shift)
+                {
+                    System.Collections.Specialized.StringCollection favorites = (System.Collections.Specialized.StringCollection)Properties.Settings.Default["Favorite"];
+                    if (favorites == null) favorites = new System.Collections.Specialized.StringCollection();
+                    if (favorites.Contains(filename))
+                    {
+                        favorites.Remove(filename);
+                        Properties.Settings.Default["Favorite"] = favorites;
+                        Properties.Settings.Default.Save();
+                        label1.ForeColor = (Color)Properties.Settings.Default["Copy"];
+                        label1.Text = $"{filename} - Removed from Favorites! - {favorites.Count}/20";
+                    }
+                    else if (favorites.Count < 20)
+                    {
+                        favorites.Add(filename);
+                        Properties.Settings.Default["Favorite"] = favorites;
+                        Properties.Settings.Default.Save();
+                        label1.ForeColor = (Color)Properties.Settings.Default["Copy"];
+                        label1.Text = $"{filename} - Added to Favorites! - {favorites.Count}/20";
+                    }
+                    else
+                    {
+                        label1.ForeColor = (Color)Properties.Settings.Default["Error"];
+                        label1.Text = $"{filename} - Favorites Full - {favorites.Count}/20";
+                    }
+                    FlowFavorite();
+                }
+                else
+                {
+                    Execution(filename);
+                }
             }
             catch (Exception ex) { SendErrorMessage("5 " + ex.Message.ToString()); }
         }
@@ -482,6 +559,7 @@ namespace KEE
             base.OnPaint(e);
             Pen pen = new Pen(new SolidBrush((Color)Properties.Settings.Default["Color_FG"]), 4);
             e.Graphics.DrawRectangle(pen, flowPanel.Location.X, flowPanel.Location.Y, flowPanel.Width, flowPanel.Height);
+            e.Graphics.DrawRectangle(pen, flowPanelFav.Location.X, flowPanelFav.Location.Y, flowPanelFav.Width, flowPanelFav.Height);
             e.Graphics.DrawRectangle(pen, pictureBox1.Location.X, pictureBox1.Location.Y, pictureBox1.Width, pictureBox1.Height);
             e.Graphics.DrawRectangle(pen, textBox2.Location.X, textBox2.Location.Y, textBox2.Width, textBox2.Height);
         }

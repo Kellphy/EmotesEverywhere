@@ -100,7 +100,7 @@
             this.linkLabel1.AutoSize = true;
             this.linkLabel1.Font = new System.Drawing.Font("Baloo", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.linkLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(40)))), ((int)(((byte)(85)))));
-            this.linkLabel1.Location = new System.Drawing.Point(202, 379);
+            this.linkLabel1.Location = new System.Drawing.Point(202, 383);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(78, 26);
             this.linkLabel1.TabIndex = 9;
@@ -115,7 +115,7 @@
             this.linkLabel2.AutoSize = true;
             this.linkLabel2.Font = new System.Drawing.Font("Baloo", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.linkLabel2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(40)))), ((int)(((byte)(85)))));
-            this.linkLabel2.Location = new System.Drawing.Point(286, 379);
+            this.linkLabel2.Location = new System.Drawing.Point(286, 383);
             this.linkLabel2.Name = "linkLabel2";
             this.linkLabel2.Size = new System.Drawing.Size(137, 26);
             this.linkLabel2.TabIndex = 10;
@@ -130,12 +130,12 @@
             this.linkLabel4.AutoSize = true;
             this.linkLabel4.Font = new System.Drawing.Font("Baloo", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.linkLabel4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(40)))), ((int)(((byte)(85)))));
-            this.linkLabel4.Location = new System.Drawing.Point(429, 379);
+            this.linkLabel4.Location = new System.Drawing.Point(429, 383);
             this.linkLabel4.Name = "linkLabel4";
             this.linkLabel4.Size = new System.Drawing.Size(34, 26);
             this.linkLabel4.TabIndex = 11;
             this.linkLabel4.TabStop = true;
-            this.linkLabel4.Text = "0.4.2";
+            this.linkLabel4.Text = "0.4.3";
             this.linkLabel4.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.linkLabel4.UseCompatibleTextRendering = true;
             this.linkLabel4.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel4_LinkClicked);
@@ -191,7 +191,7 @@
             this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button6.Font = new System.Drawing.Font("Baloo", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.button6.Location = new System.Drawing.Point(473, 379);
+            this.button6.Location = new System.Drawing.Point(473, 383);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(28, 28);
             this.button6.TabIndex = 12;
@@ -205,7 +205,7 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Baloo", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.label3.Location = new System.Drawing.Point(541, 379);
+            this.label3.Location = new System.Drawing.Point(541, 383);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(31, 26);
             this.label3.TabIndex = 17;
@@ -220,7 +220,7 @@
             this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button7.Font = new System.Drawing.Font("Baloo", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.button7.Location = new System.Drawing.Point(507, 379);
+            this.button7.Location = new System.Drawing.Point(507, 383);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(28, 28);
             this.button7.TabIndex = 13;
@@ -265,7 +265,7 @@
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button1.Font = new System.Drawing.Font("Baloo", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.button1.Location = new System.Drawing.Point(12, 379);
+            this.button1.Location = new System.Drawing.Point(12, 383);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(28, 28);
             this.button1.TabIndex = 6;
@@ -281,7 +281,7 @@
             this.button9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button9.Font = new System.Drawing.Font("Baloo", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.button9.Location = new System.Drawing.Point(46, 379);
+            this.button9.Location = new System.Drawing.Point(46, 383);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(72, 28);
             this.button9.TabIndex = 7;
@@ -297,7 +297,7 @@
             this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button5.Font = new System.Drawing.Font("Baloo", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.button5.Location = new System.Drawing.Point(124, 379);
+            this.button5.Location = new System.Drawing.Point(124, 383);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(72, 28);
             this.button5.TabIndex = 8;
@@ -321,7 +321,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(125)))), ((int)(((byte)(133)))), ((int)(((byte)(151)))));
-            this.ClientSize = new System.Drawing.Size(584, 414);
+            this.ClientSize = new System.Drawing.Size(584, 418);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.linkLabel4);
             this.Controls.Add(this.linkLabel2);

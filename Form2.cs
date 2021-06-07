@@ -17,15 +17,16 @@ namespace KEE
             StartPosition = FormStartPosition.CenterParent;
             label1.Text =
                 "# Find emotes by entering their full name in the search box," +
-                "\n clicking the search results or drag-&-drop with RMB (best)." +
-                "\n# Press [Win+V] to see the clipboard history." +
+                "\n clicking the search results or drag-and-drop with RMB (best)." +
+                "\n# Win+V - check clipboard history." +
+                "\n# Shift+LMB - add an emote to favorites." +
                 "\n# Search \"gif\" for GIFs and \"png\" for PNGs." +
                 "\n" +
                 "\n# RGB is the default option, but you are free to try any of the 3:" +
-                "\nRGB - The image's background will be Discord's dark theme color." +
-                "\nDiB - An alternative / experimental transparent background." +
-                "\nLink - A direct link to the image." +
-                "\nBest results - Drag & Drop the emote with RMB for both transparency and gif";
+                "\n0) Best results: Drag-and-Drop with RMB for both transparency and gif" +
+                "\n1) RGB - The image's background will be Discord's dark theme color." +
+                "\n2) DiB - An alternative / experimental transparent background." +
+                "\n3) Link - A direct link to the image.";
             ShowDialog();
         }
         private void button1_Click(object sender, EventArgs e)

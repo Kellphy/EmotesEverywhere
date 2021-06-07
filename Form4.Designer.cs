@@ -173,7 +173,7 @@
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(56, 28);
             this.button7.TabIndex = 30;
-            this.button7.Text = "All";
+            this.button7.Text = "5000";
             this.button7.UseCompatibleTextRendering = true;
             this.button7.UseVisualStyleBackColor = false;
             this.button7.Click += new System.EventHandler(this.button7_Click);
