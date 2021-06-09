@@ -48,7 +48,6 @@ namespace KEE
         // Start
         public Form1()
         {
-            FindOrCreate();
             InitializeComponent();
         }
         public void Form1_Load(object sender, EventArgs e)
@@ -97,8 +96,6 @@ namespace KEE
         // Window Overrites
         public override void ColorProfiles()
         {
-            FindOrCreate();
-
             BackColor = (Color)Properties.Settings.Default["Color_BG"];
             for (int ix = Controls.Count - 1; ix >= 0; ix--)
             {
@@ -237,9 +234,9 @@ namespace KEE
             pictureList.Add(picture);
             integer++;
         }
-        public Image GetImage(string filename,string prefix = "")
+        public Image GetImage(string filename, string prefix = "")
         {
-            string path = Path.Combine(temp_path, prefix+filename);
+            string path = Path.Combine(temp_path, prefix + filename);
             try
             {
                 if (!File.Exists(path))
@@ -339,7 +336,7 @@ namespace KEE
         }
         private void textBox2_KeyUp(object sender, KeyEventArgs e)
         {
-            if (textBox2.Text.Length!=search_length)
+            if (textBox2.Text.Length != search_length)
             {
                 search_length = textBox2.Text.Length;
                 page = 0;
@@ -373,12 +370,12 @@ namespace KEE
             if (favorites == null) favorites = new System.Collections.Specialized.StringCollection();
             if (favorites.Count < 1)
             {
-                flowPanelFav.Size = new Size(558,0);
-                flowPanel.Size = new Size(558,272);
+                flowPanelFav.Size = new Size(558, 0);
+                flowPanel.Size = new Size(558, 272);
             }
             else
             {
-                flowPanel.Size = new Size(558,216);
+                flowPanel.Size = new Size(558, 216);
                 flowPanelFav.Dispose();
                 flowPanelFav = new FlowLayoutPanel
                 {

@@ -19,20 +19,16 @@ namespace KEE
         public void Start()
         {
             RefreshWindow();
-            string curFile = $"{Environment.CurrentDirectory}\\KEE.exe.config";
-            if (File.Exists(curFile))
+            StartPosition = FormStartPosition.CenterParent;
+            try
             {
-                StartPosition = FormStartPosition.CenterParent;
-                try
-                {
-                    button2_Update((bool)Properties.Settings.Default["AOT"]);
-                }
-                catch
-                {
-                    button2_Update(false);
-                }
-                ShowDialog();
+                button2_Update((bool)Properties.Settings.Default["AOT"]);
             }
+            catch
+            {
+                button2_Update(false);
+            }
+            ShowDialog();
         }
         private void button1_Click(object sender, EventArgs e)
         {
@@ -69,7 +65,7 @@ namespace KEE
         {
             try
             {
-                Process.Start("explorer.exe", $"{Path.Combine(Environment.GetEnvironmentVariable("LocalAppData"), "KEE")}");
+                Process.Start("explorer.exe", $"{Path.Combine(Environment.GetEnvironmentVariable("LocalAppData"), "Kellphy's_Projects")}");
             }
             catch
             {

@@ -18,19 +18,7 @@ namespace KEE
             int nWidthEllipse,
             int nHeightEllipse);
 
-        string config_file = Path.Combine(Environment.CurrentDirectory, "KEE.exe.config");
         public string baselink = "http://kellphy.com/emotes/";
-
-        public void FindOrCreate()
-        {
-            if (!File.Exists(config_file))
-            {
-                using (WebClient webClient = new WebClient())
-                {
-                    webClient.DownloadFile($"{baselink}/KEE.exe.config", config_file);
-                }
-            }
-        }
 
         public void Border(bool border)
         {
@@ -47,13 +35,10 @@ namespace KEE
         }
         public virtual void SettingsRefresh()
         {
-            FindOrCreate();
             TopMost = (bool)Properties.Settings.Default["AOT"];
         }
         public virtual void ColorProfiles()
         {
-            FindOrCreate();
-
             BackColor = (Color)Properties.Settings.Default["Color_BG"];
             for (int ix = Controls.Count - 1; ix >= 0; ix--)
             {

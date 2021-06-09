@@ -17,13 +17,9 @@ namespace KEE
         public void Start()
         {
             RefreshWindow();
-            string curFile = $"{Environment.CurrentDirectory}\\KEE.exe.config";
-            if (File.Exists(curFile))
-            {
-                StartPosition = FormStartPosition.CenterParent;
-                label1.Text = "Select a profile or manually set your colors.";
-                ShowDialog();
-            }
+            StartPosition = FormStartPosition.CenterParent;
+            label1.Text = "Select a profile or manually set your colors.";
+            ShowDialog();
         }
         public override void SaveColors()
         {
