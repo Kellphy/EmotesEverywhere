@@ -57,6 +57,10 @@ namespace KEE
             Controls.Add(flowPanel);
             Controls.Add(flowPanelFav);
 
+            linkLabel1.LinkBehavior = LinkBehavior.NeverUnderline;
+            linkLabel2.LinkBehavior = LinkBehavior.NeverUnderline;
+            linkLabel3.LinkBehavior = LinkBehavior.NeverUnderline;
+
             label1.Text = firstLabel;
             ImageFirstGetting();
 
@@ -468,9 +472,9 @@ namespace KEE
         {
             VisitLink(linkLabel2, "https://kellphy.com/discord");
         }
-        private void linkLabel4_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void linkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            VisitLink(linkLabel4, "https://github.com/Kellphy/KEE/releases/");
+            VisitLink(linkLabel3, "https://github.com/Kellphy/KEE/releases/");
         }
         public void VisitLink(LinkLabel label, string link)
         {

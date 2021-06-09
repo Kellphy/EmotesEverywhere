@@ -65,7 +65,7 @@ namespace KEE
         {
             try
             {
-                Process.Start("explorer.exe", $"{Path.Combine(Environment.GetEnvironmentVariable("LocalAppData"), "Kellphy's_Projects")}");
+                Process.Start("explorer.exe", $"{Path.Combine(Environment.GetEnvironmentVariable("LocalAppData"), "Kellphy")}");
             }
             catch
             {
