@@ -66,13 +66,13 @@
             // button2
             // 
             this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(113)))), ((int)(((byte)(122)))), ((int)(((byte)(142)))));
-            this.button2.FlatAppearance.BorderSize = 2;
+            this.button2.FlatAppearance.BorderSize = 0;
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
             this.button2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.button2.Location = new System.Drawing.Point(12, 33);
+            this.button2.Location = new System.Drawing.Point(14, 35);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(100, 28);
+            this.button2.Size = new System.Drawing.Size(96, 24);
             this.button2.TabIndex = 2;
             this.button2.Text = "Copy as RGB";
             this.button2.UseCompatibleTextRendering = true;
@@ -82,13 +82,13 @@
             // button3
             // 
             this.button3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(113)))), ((int)(((byte)(122)))), ((int)(((byte)(142)))));
-            this.button3.FlatAppearance.BorderSize = 2;
+            this.button3.FlatAppearance.BorderSize = 0;
             this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button3.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
             this.button3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.button3.Location = new System.Drawing.Point(118, 33);
+            this.button3.Location = new System.Drawing.Point(120, 35);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(100, 28);
+            this.button3.Size = new System.Drawing.Size(96, 24);
             this.button3.TabIndex = 3;
             this.button3.Text = "Copy as DiB";
             this.button3.UseCompatibleTextRendering = true;
@@ -135,7 +135,7 @@
             this.linkLabel3.Size = new System.Drawing.Size(35, 22);
             this.linkLabel3.TabIndex = 11;
             this.linkLabel3.TabStop = true;
-            this.linkLabel3.Text = "1.0.1";
+            this.linkLabel3.Text = "1.1.0";
             this.linkLabel3.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.linkLabel3.UseCompatibleTextRendering = true;
             this.linkLabel3.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel3_LinkClicked);
@@ -143,13 +143,13 @@
             // button4
             // 
             this.button4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(113)))), ((int)(((byte)(122)))), ((int)(((byte)(142)))));
-            this.button4.FlatAppearance.BorderSize = 2;
+            this.button4.FlatAppearance.BorderSize = 0;
             this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button4.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
             this.button4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.button4.Location = new System.Drawing.Point(224, 33);
+            this.button4.Location = new System.Drawing.Point(226, 35);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(100, 28);
+            this.button4.Size = new System.Drawing.Size(96, 24);
             this.button4.TabIndex = 4;
             this.button4.Text = "Copy as Link";
             this.button4.UseCompatibleTextRendering = true;
@@ -187,13 +187,13 @@
             // button6
             // 
             this.button6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(113)))), ((int)(((byte)(122)))), ((int)(((byte)(142)))));
-            this.button6.FlatAppearance.BorderSize = 2;
+            this.button6.FlatAppearance.BorderSize = 0;
             this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button6.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
             this.button6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.button6.Location = new System.Drawing.Point(457, 383);
+            this.button6.Location = new System.Drawing.Point(459, 385);
             this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(28, 28);
+            this.button6.Size = new System.Drawing.Size(24, 24);
             this.button6.TabIndex = 12;
             this.button6.Text = "<";
             this.button6.UseCompatibleTextRendering = true;
@@ -216,13 +216,13 @@
             // button7
             // 
             this.button7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(113)))), ((int)(((byte)(122)))), ((int)(((byte)(142)))));
-            this.button7.FlatAppearance.BorderSize = 2;
+            this.button7.FlatAppearance.BorderSize = 0;
             this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button7.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
             this.button7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.button7.Location = new System.Drawing.Point(491, 383);
+            this.button7.Location = new System.Drawing.Point(493, 385);
             this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(28, 28);
+            this.button7.Size = new System.Drawing.Size(24, 24);
             this.button7.TabIndex = 13;
             this.button7.Text = ">";
             this.button7.UseCompatibleTextRendering = true;
@@ -245,13 +245,13 @@
             // button8
             // 
             this.button8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(113)))), ((int)(((byte)(122)))), ((int)(((byte)(142)))));
-            this.button8.FlatAppearance.BorderSize = 2;
+            this.button8.FlatAppearance.BorderSize = 0;
             this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button8.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
             this.button8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.button8.Location = new System.Drawing.Point(224, 67);
+            this.button8.Location = new System.Drawing.Point(226, 69);
             this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(100, 28);
+            this.button8.Size = new System.Drawing.Size(96, 24);
             this.button8.TabIndex = 5;
             this.button8.Text = "Reset Search";
             this.button8.UseCompatibleTextRendering = true;
@@ -261,13 +261,13 @@
             // button1
             // 
             this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(113)))), ((int)(((byte)(122)))), ((int)(((byte)(142)))));
-            this.button1.FlatAppearance.BorderSize = 2;
+            this.button1.FlatAppearance.BorderSize = 0;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
             this.button1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.button1.Location = new System.Drawing.Point(12, 383);
+            this.button1.Location = new System.Drawing.Point(14, 385);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(28, 28);
+            this.button1.Size = new System.Drawing.Size(24, 24);
             this.button1.TabIndex = 6;
             this.button1.Text = "i";
             this.button1.UseCompatibleTextRendering = true;
@@ -277,13 +277,13 @@
             // button9
             // 
             this.button9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(113)))), ((int)(((byte)(122)))), ((int)(((byte)(142)))));
-            this.button9.FlatAppearance.BorderSize = 2;
+            this.button9.FlatAppearance.BorderSize = 0;
             this.button9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button9.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
             this.button9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.button9.Location = new System.Drawing.Point(46, 383);
+            this.button9.Location = new System.Drawing.Point(48, 385);
             this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(72, 28);
+            this.button9.Size = new System.Drawing.Size(68, 24);
             this.button9.TabIndex = 7;
             this.button9.Text = "Settings";
             this.button9.UseCompatibleTextRendering = true;
@@ -293,13 +293,13 @@
             // button5
             // 
             this.button5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(113)))), ((int)(((byte)(122)))), ((int)(((byte)(142)))));
-            this.button5.FlatAppearance.BorderSize = 2;
+            this.button5.FlatAppearance.BorderSize = 0;
             this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button5.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
             this.button5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.button5.Location = new System.Drawing.Point(124, 383);
+            this.button5.Location = new System.Drawing.Point(126, 385);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(72, 28);
+            this.button5.Size = new System.Drawing.Size(68, 24);
             this.button5.TabIndex = 8;
             this.button5.Text = "Themes";
             this.button5.UseCompatibleTextRendering = true;

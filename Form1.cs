@@ -111,6 +111,7 @@ namespace KEE
                 else if (Controls[ix] is LinkLabel)
                 {
                     ((LinkLabel)Controls[ix]).LinkColor = (Color)Properties.Settings.Default["Color_Link"];
+                    ((LinkLabel)Controls[ix]).ActiveLinkColor = (Color)Properties.Settings.Default["Color_Link"];
                     ((LinkLabel)Controls[ix]).VisitedLinkColor = (Color)Properties.Settings.Default["Color_VLink"];
                 }
                 else if (Controls[ix] is Label)
@@ -558,7 +559,7 @@ namespace KEE
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            Pen pen = new Pen(new SolidBrush((Color)Properties.Settings.Default["Color_FG"]), 4);
+            Pen pen = new Pen(new SolidBrush((Color)Properties.Settings.Default["Outline"]), 4);
             e.Graphics.DrawRectangle(pen, flowPanel.Location.X, flowPanel.Location.Y, flowPanel.Width, flowPanel.Height);
             e.Graphics.DrawRectangle(pen, flowPanelFav.Location.X, flowPanelFav.Location.Y, flowPanelFav.Width, flowPanelFav.Height);
             e.Graphics.DrawRectangle(pen, pictureBox1.Location.X, pictureBox1.Location.Y, pictureBox1.Width, pictureBox1.Height);

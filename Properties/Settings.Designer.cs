@@ -165,5 +165,17 @@ namespace KEE.Properties {
                 this["Favorite"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("179, 179, 179")]
+        public global::System.Drawing.Color Outline {
+            get {
+                return ((global::System.Drawing.Color)(this["Outline"]));
+            }
+            set {
+                this["Outline"] = value;
+            }
+        }
     }
 }

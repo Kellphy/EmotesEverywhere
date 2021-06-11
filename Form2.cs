@@ -23,8 +23,8 @@ namespace KEE
                 "\n# Search \"gif\" for GIFs and \"png\" for PNGs." +
                 "\n" +
                 "\n# RGB is the default option, but you are free to try any of the 3:" +
-                "\n0) Best results: Drag-and-Drop with RMB for both transparency and gif" +
-                "\n1) RGB - The image's background will be Discord's dark theme color." +
+                "\n0) Best - Drag-and-Drop with RMB for both transparency and gif" +
+                "\n1) RGB - The background color will be Discord's dark theme." +
                 "\n2) DiB - An alternative / experimental transparent background." +
                 "\n3) Link - A direct link to the image.";
             ShowDialog();

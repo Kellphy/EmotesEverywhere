@@ -38,5 +38,8 @@
     <Setting Name="Favorite" Type="System.Collections.Specialized.StringCollection" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="Outline" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">179, 179, 179</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

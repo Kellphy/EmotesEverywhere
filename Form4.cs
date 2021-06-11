@@ -46,12 +46,12 @@ namespace KEE
 
             if (option)
             {
-                button2.BackColor = Color.Green;
+                button2.BackColor = (Color)Properties.Settings.Default["Copy"];
                 button2.Text = "ON";
             }
             else
             {
-                button2.BackColor = Color.Red;
+                button2.BackColor = (Color)Properties.Settings.Default["Error"];
                 button2.Text = "OFF";
             }
         }

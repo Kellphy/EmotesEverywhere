@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.IO;
-using System.Net;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -57,6 +55,18 @@ namespace KEE
         {
             Properties.Settings.Default.Save();
             ColorProfiles();
+        }
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+            Pen pen = new Pen(new SolidBrush((Color)Properties.Settings.Default["Outline"]), 4);
+            for (int ix = Controls.Count - 1; ix >= 0; ix--)
+            {
+                if (Controls[ix] is Button)
+                {
+                    e.Graphics.DrawRectangle(pen, Controls[ix].Location.X, Controls[ix].Location.Y, Controls[ix].Width, Controls[ix].Height);
+                }
+            }
         }
     }
 }
