@@ -41,5 +41,14 @@
     <Setting Name="Outline" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">179, 179, 179</Value>
     </Setting>
+    <Setting Name="Quick_Save" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Cache" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Option" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

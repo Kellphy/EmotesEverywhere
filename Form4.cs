@@ -28,8 +28,25 @@ namespace KEE
             {
                 button2_Update(false);
             }
+
+            label4.Text = "Emotes cache version: " + (string)Properties.Settings.Default["Cache"];
+            QSLabel_Refresh();
+
             ShowDialog();
         }
+
+        private void QSLabel_Refresh()
+        {
+            if (((string)Properties.Settings.Default["Quick_Save"]).Length > 0)
+            {
+                label3.Text = (string)Properties.Settings.Default["Quick_Save"];
+            }
+            else
+            {
+                label3.Text = "No Quick Save Path";
+            }
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             Dispose();
@@ -94,5 +111,14 @@ namespace KEE
             Properties.Settings.Default.Save();
             ClosePanel(this, new EventArgs());
         }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default["Quick_Save"] = string.Empty;
+            Properties.Settings.Default.Save();
+            ClosePanel(this, new EventArgs());
+            QSLabel_Refresh();
+        }
+
     }
 }

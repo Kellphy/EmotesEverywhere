@@ -14,7 +14,6 @@ namespace KEE
     {
         // Variables
         public int
-            option = 1,
             integer,
             division = 10,
             page = 0,
@@ -57,6 +56,8 @@ namespace KEE
             Controls.Add(flowPanel);
             Controls.Add(flowPanelFav);
 
+            Cache_Check();
+
             linkLabel1.LinkBehavior = LinkBehavior.NeverUnderline;
             linkLabel2.LinkBehavior = LinkBehavior.NeverUnderline;
             linkLabel3.LinkBehavior = LinkBehavior.NeverUnderline;
@@ -64,15 +65,39 @@ namespace KEE
             label1.Text = firstLabel;
             ImageFirstGetting();
 
-            Directory.CreateDirectory(temp_path);
-            Temp_Clean();
             RefreshWindow();
 
             textBox2.ForeColor = (Color)Properties.Settings.Default["Color_FG"];
         }
+
+        private void Cache_Check()
+        {
+            //try
+            {
+                using (Stream stream2 = WebRequest.Create($"{baselink}_cache").GetResponse().GetResponseStream())
+                {
+                    using (StreamReader reader = new StreamReader(stream2))
+                    {
+                        string cached = reader.ReadToEnd();
+                        if (cached != (string)Properties.Settings.Default["Cache"])
+                        {
+                            Properties.Settings.Default["Cache"] = cached;
+                            Properties.Settings.Default.Save();
+                            Temp_Clean();
+                        }
+                    }
+                }
+            }
+            //catch
+            //{
+            //    Temp_Clean();
+            //}
+        }
+
         // AppData
         public void Temp_Clean()
         {
+            Directory.CreateDirectory(temp_path);
             DirectoryInfo di = new DirectoryInfo(temp_path);
             bool empty = true;
             foreach (FileInfo file in di.GetFiles())
@@ -124,7 +149,7 @@ namespace KEE
                     Controls[ix].BackColor = (Color)Properties.Settings.Default["TextBox_BG"];
                 }
             }
-
+            Option_Button_BG();
             Invalidate();
         }
         public override void SettingsRefresh()
@@ -302,7 +327,7 @@ namespace KEE
                 Image i = Image.FromStream(stream);
                 string labelText = $"{emoteToSearch} - Copied to clipboard";
 
-                switch (option)
+                switch (Properties.Settings.Default["Option"])
                 {
                     case 1:
                         Bitmap blank = new Bitmap(Convert.ToInt32(i.Width), Convert.ToInt32(i.Height));
@@ -325,6 +350,12 @@ namespace KEE
                         Clipboard.SetText(link);
                         labelText = $"{emoteToSearch} - Copied to clipboard as link!";
                         break;
+                    case 4:
+                        string prefix = "t_";
+                        GetImage(emoteToSearch, prefix);
+                        Clipboard.SetData(DataFormats.FileDrop, new string[] { Path.Combine(temp_path, prefix + emoteToSearch) });
+                        labelText = $"{emoteToSearch} - Copied to clipboard as file!";
+                        break;
                     default:
                         break;
                 }
@@ -334,6 +365,7 @@ namespace KEE
                 label1.ForeColor = (Color)Properties.Settings.Default["Copy"];
                 label1.Text = labelText;
                 pictureBox1.Image = GetImage(emoteToSearch);
+                pictureBox1.Name = emoteToSearch;
 
                 textBox2.Focus();
             }
@@ -360,6 +392,7 @@ namespace KEE
                     label1.ForeColor = (Color)Properties.Settings.Default["Copy"];
                     label1.Text = $"{filename} - Drag and Drop!";
                     pictureBox1.Image = GetImage(filename);
+                    pictureBox1.Name = filename;
 
                     string path = Path.Combine(temp_path, filename);
                     string[] paths = new[] { path };
@@ -448,21 +481,55 @@ namespace KEE
         // Options
         private void button2_Click(object sender, EventArgs e)
         {
-            option = 1;
+            Properties.Settings.Default["Option"] = 1;
+            Properties.Settings.Default.Save();
+            Option_Button_BG();
+
             label1.ForeColor = (Color)Properties.Settings.Default["Color_FG"];
-            label1.Text = "Saved! Now click on emotes to copy them as RGB.";
+            label1.Text = "Now click on emotes to copy them as RGB.";
         }
         private void button3_Click(object sender, EventArgs e)
         {
-            option = 2;
+            Properties.Settings.Default["Option"] = 2;
+            Properties.Settings.Default.Save();
+            Option_Button_BG();
+
             label1.ForeColor = (Color)Properties.Settings.Default["Color_FG"];
-            label1.Text = "Saved! Now click on emotes to copy them as Device independent Bitmap.";
+            label1.Text = "Now click on emotes to copy them as Device independent Bitmap.";
         }
         private void button4_Click(object sender, EventArgs e)
         {
-            option = 3;
+            Properties.Settings.Default["Option"] = 3;
+            Properties.Settings.Default.Save();
+            Option_Button_BG();
+
             label1.ForeColor = (Color)Properties.Settings.Default["Color_FG"];
-            label1.Text = "Saved! Now click on emotes to copy them as Links.";
+            label1.Text = "Now click on emotes to copy them as Links.";
+        }
+        private void button10_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default["Option"] = 4;
+            Properties.Settings.Default.Save();
+            Option_Button_BG();
+
+            label1.ForeColor = (Color)Properties.Settings.Default["Color_FG"];
+            label1.Text = "Now click on emotes to copy them as Files.";
+        }
+        private void Option_Button_BG()
+        {
+            int option = (int)Properties.Settings.Default["Option"];
+            Button[] buttons = new Button[] { button2, button3, button4, button10 };
+            for(int i=0;i< buttons.Length;i++)
+            {
+                if(i == (option - 1))
+                {
+                    buttons[i].BackColor = (Color)Properties.Settings.Default["Button_BG"];
+                }
+                else
+                {
+                    buttons[i].BackColor = (Color)Properties.Settings.Default["Color_BG"];
+                }
+            }
         }
         // Links
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -518,6 +585,7 @@ namespace KEE
         {
             TextColor(textBox2, searchEmotes, "", (Color)Properties.Settings.Default["Color_NonText"]);
         }
+
         public void TextColor(TextBox textBox, string text, string reqText, Color color, bool forcedReplace = false)
         {
             if (textBox.Text == reqText || forcedReplace)
@@ -554,6 +622,73 @@ namespace KEE
         private void HandleCloseRequest(object sender, EventArgs e)
         {
             RefreshWindow();
+        }
+        // Quick Save
+        private void button11_Click(object sender, EventArgs e)
+        {
+            label1.Text = "Click an emote to access its quick save option";
+            if (pictureBox1.Name.ToLower() != "picturebox1")
+            {
+                label1.Text = "Quick Saving";
+                if (((string)Properties.Settings.Default["Quick_Save"]).Length < 1)
+                {
+                    using (SaveFileDialog dialog = new SaveFileDialog())
+                    {
+                        dialog.Filter = "All files (*.*)|*.*";
+                        dialog.FilterIndex = 1;
+                        dialog.RestoreDirectory = true;
+
+                        dialog.FileName = pictureBox1.Name;
+                        dialog.Title = pictureBox1.Name;
+
+                        if (dialog.ShowDialog() == DialogResult.OK)
+                        {
+                            DownloadImage(pictureBox1.Name, dialog.FileName);
+                            label1.ForeColor = (Color)Properties.Settings.Default["Copy"];
+                            label1.Text = "Quick Saved: " + dialog.FileName;
+                            Properties.Settings.Default["Quick_Save"] = Path.GetDirectoryName(dialog.FileName);
+                            Properties.Settings.Default.Save();
+                        }
+                    }
+                }
+                else
+                {
+                    string fullpath = Path.Combine((string)Properties.Settings.Default["Quick_Save"], pictureBox1.Name);
+                    label1.Text = "Quick Saved: " + fullpath;
+                    DownloadImage(pictureBox1.Name, fullpath);
+                }
+            }
+            //else
+            //{
+            //    int i = 0;
+
+            //    int counter = 0;
+            //    string emotes = string.Empty;
+            //    foreach (var x in emoteString)
+            //    {
+            //        counter++;
+            //        if (counter == 50)
+            //        {
+            //            emotes += "\n        {\n            \"name\": \"\",\n            \"url\": \"https:\\/\\/kellphy.com\\/emotes\\/" + x + "\"\n        }";
+            //        }
+            //        else
+            //        {
+            //            emotes += "\n        {\n            \"name\": \"\",\n            \"url\": \"https:\\/\\/kellphy.com\\/emotes\\/" + x + "\"\n        },";
+            //        }
+            //        using (StreamWriter sw = new StreamWriter($"GD\\emotes{i}.json"))
+            //        {
+            //            sw.Write("{\n    \"name\": \"kellphy.com/kee\",\n    \"author\": \"Kellphy\",\n    \"emotes\": [");
+            //            sw.Write(emotes);
+            //            sw.Write("\n    ]\n}");
+            //        }
+            //        if (counter >= 50)
+            //        {
+            //            emotes = string.Empty;
+            //            counter = 0;
+            //            i++;
+            //        }
+            //    }
+            //}
         }
         // Borders for textbox, picturebox, flowpanel
         protected override void OnPaint(PaintEventArgs e)

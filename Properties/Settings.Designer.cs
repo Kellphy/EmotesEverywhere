@@ -177,5 +177,41 @@ namespace KEE.Properties {
                 this["Outline"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Quick_Save {
+            get {
+                return ((string)(this["Quick_Save"]));
+            }
+            set {
+                this["Quick_Save"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Cache {
+            get {
+                return ((string)(this["Cache"]));
+            }
+            set {
+                this["Cache"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int Option {
+            get {
+                return ((int)(this["Option"]));
+            }
+            set {
+                this["Option"] = value;
+            }
+        }
     }
 }
