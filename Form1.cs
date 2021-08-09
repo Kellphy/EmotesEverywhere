@@ -22,8 +22,10 @@ namespace KEE
             search_length;
         public string
             searchEmotes = "Emote to Search",
-            firstLabel = "Bottom left corner for info. Drag and Drop with RMB for best results.";
+            firstLabel = "Press \"i\" for info. Drag and Drop with RMB for best results.";
         public bool processStop = false;
+        public bool titleDrag = false;
+
 
         public List<PictureBox> pictureList = new List<PictureBox>();
         public List<string> emoteString;
@@ -51,23 +53,28 @@ namespace KEE
         }
         public void Form1_Load(object sender, EventArgs e)
         {
+            SetVisibleCore(false);
+            Border(false);
             flowPanel = new FlowLayoutPanel();
             flowPanelFav = new FlowLayoutPanel();
             Controls.Add(flowPanel);
             Controls.Add(flowPanelFav);
-
-            Cache_Check();
-
             linkLabel1.LinkBehavior = LinkBehavior.NeverUnderline;
             linkLabel2.LinkBehavior = LinkBehavior.NeverUnderline;
             linkLabel3.LinkBehavior = LinkBehavior.NeverUnderline;
-
             label1.Text = firstLabel;
+            label5.Text = Text;
+            label5.MouseDown += pictureBox2_MouseDown;
+            label5.MouseUp += pictureBox2_MouseUp;
+            label5.MouseMove += pictureBox2_MouseMove;
+
+            Cache_Check();
+
             ImageFirstGetting();
 
             RefreshWindow();
 
-            textBox2.ForeColor = (Color)Properties.Settings.Default["Color_FG"];
+            SetVisibleCore(true);
         }
 
         private void Cache_Check()
@@ -149,6 +156,11 @@ namespace KEE
                     Controls[ix].BackColor = (Color)Properties.Settings.Default["TextBox_BG"];
                 }
             }
+
+            textBox2.ForeColor = (Color)Properties.Settings.Default["Color_FG"];
+            label5.BackColor = (Color)Properties.Settings.Default["Button_BG"];
+            pictureBox2.BackColor = (Color)Properties.Settings.Default["Button_BG"];
+
             Option_Button_BG();
             Invalidate();
         }
@@ -222,7 +234,7 @@ namespace KEE
             flowPanel = new FlowLayoutPanel
             {
                 Size = new Size(558, 272),
-                Location = new Point(14, 103),
+                Location = new Point(14, 126),
                 AutoScroll = true,
             };
             Controls.Add(flowPanel);
@@ -264,9 +276,12 @@ namespace KEE
             pictureList.Add(picture);
             integer++;
         }
-        public Image GetImage(string filename, string prefix = "")
+        public Image GetImage(string filename, string prefix = "", string path = "")
         {
-            string path = Path.Combine(temp_path, prefix + filename);
+            if (path.Length < 1)
+            {
+                path = Path.Combine(temp_path, prefix + filename);
+            }
             try
             {
                 if (!File.Exists(path))
@@ -418,7 +433,7 @@ namespace KEE
                 flowPanelFav = new FlowLayoutPanel
                 {
                     Size = new Size(558, 54),
-                    Location = new Point(14, 321),
+                    Location = new Point(14, 344),
                     AutoScroll = true,
                 };
                 Controls.Add(flowPanelFav);
@@ -600,6 +615,40 @@ namespace KEE
             label1.ForeColor = (Color)Properties.Settings.Default["Error"];
             label1.Text = error;
         }
+
+        Point titleStart;
+        private void pictureBox2_MouseDown(object sender, MouseEventArgs e)
+        {
+            titleStart = e.Location;
+            titleDrag = true;
+        }
+
+        private void pictureBox2_MouseUp(object sender, MouseEventArgs e)
+        {
+            titleDrag = false;
+        }
+
+        private void pictureBox2_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (titleDrag)
+            {
+                Point p1 = new Point(e.X, e.Y);
+                Point p2 = PointToScreen(p1);
+                Point p3 = new Point(p2.X - titleStart.X, p2.Y - titleStart.Y);
+                Location = p3;
+            }
+        }
+
+        private void button12_Click(object sender, EventArgs e)
+        {
+            Dispose();
+        }
+
+        private void button13_Click(object sender, EventArgs e)
+        {
+            WindowState = FormWindowState.Minimized;
+        }
+
         // Info
         private void button1_Click(object sender, EventArgs e)
         {
@@ -643,7 +692,7 @@ namespace KEE
 
                         if (dialog.ShowDialog() == DialogResult.OK)
                         {
-                            DownloadImage(pictureBox1.Name, dialog.FileName);
+                            GetImage(pictureBox1.Name,"", dialog.FileName);
                             label1.ForeColor = (Color)Properties.Settings.Default["Copy"];
                             label1.Text = "Quick Saved: " + dialog.FileName;
                             Properties.Settings.Default["Quick_Save"] = Path.GetDirectoryName(dialog.FileName);
@@ -655,7 +704,7 @@ namespace KEE
                 {
                     string fullpath = Path.Combine((string)Properties.Settings.Default["Quick_Save"], pictureBox1.Name);
                     label1.Text = "Quick Saved: " + fullpath;
-                    DownloadImage(pictureBox1.Name, fullpath);
+                    GetImage(pictureBox1.Name,"", fullpath);
                 }
             }
             //else

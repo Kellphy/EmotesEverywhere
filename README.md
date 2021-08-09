@@ -5,4 +5,6 @@
 
 When wish to have new emotes added, press the **[Request Emotes]** button, join the Discord Server, and contact me.
 
+[Check Releases for lastest updates](https://github.com/Kellphy/KEE/releases)
+
 [Discord Server](https://discord.gg/ycYmMmP/) | [kellphy.com](https://kellphy.com/)
