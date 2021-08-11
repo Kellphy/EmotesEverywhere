@@ -1,4 +1,4 @@
-﻿namespace KEE
+﻿namespace EmotesEverywhere
 {
     partial class Form2
     {
@@ -53,7 +53,7 @@
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button1.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
             this.button1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.button1.Location = new System.Drawing.Point(448, 12);
+            this.button1.Location = new System.Drawing.Point(444, 15);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(24, 24);
             this.button1.TabIndex = 22;
@@ -74,7 +74,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "Form2";
-            this.Text = "Kellphy\'s Emotes Everywhere [kellphy.com/kee]";
+            this.Text = "Kellphy\'s Emotes Everywhere [kellphy.com/EmotesEverywhere]";
             this.TopMost = true;
             this.Load += new System.EventHandler(this.Form2_Load);
             this.ResumeLayout(false);

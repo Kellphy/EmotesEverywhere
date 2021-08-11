@@ -1,4 +1,8 @@
-﻿using System;
+﻿using SixLabors.ImageSharp.Advanced;
+using SixLabors.ImageSharp.Formats.Png;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -8,7 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace KEE
+namespace EmotesEverywhere
 {
     public partial class Form1 : Window
     {
@@ -21,18 +25,15 @@ namespace KEE
             paging_multiplier,
             search_length;
         public string
-            searchEmotes = "Emote to Search",
-            firstLabel = "Press \"i\" for info. Drag and Drop with RMB for best results.";
+            searchEmotes = "Search Emotes",
+            firstLabel = " Drag and Drop with RMB gives best results.";
         public bool processStop = false;
-        public bool titleDrag = false;
-
+        public bool merge = false;
 
         public List<PictureBox> pictureList = new List<PictureBox>();
         public List<string> emoteString;
         public FlowLayoutPanel flowPanel = new FlowLayoutPanel();
         public FlowLayoutPanel flowPanelFav = new FlowLayoutPanel();
-
-        public string temp_path = Path.Combine(Path.GetTempPath(), "KEE");
 
         MatchCollection matches;
         SemaphoreSlim semaphore = new SemaphoreSlim(1);
@@ -54,7 +55,7 @@ namespace KEE
         public void Form1_Load(object sender, EventArgs e)
         {
             SetVisibleCore(false);
-            Border(false);
+            Borderless();
             flowPanel = new FlowLayoutPanel();
             flowPanelFav = new FlowLayoutPanel();
             Controls.Add(flowPanel);
@@ -64,9 +65,12 @@ namespace KEE
             linkLabel3.LinkBehavior = LinkBehavior.NeverUnderline;
             label1.Text = firstLabel;
             label5.Text = Text;
-            label5.MouseDown += pictureBox2_MouseDown;
-            label5.MouseUp += pictureBox2_MouseUp;
-            label5.MouseMove += pictureBox2_MouseMove;
+            label5.MouseDown += title_MouseDown;
+            label5.MouseUp += title_MouseUp;
+            label5.MouseMove += title_MouseMove;
+            pictureBox2.MouseDown += title_MouseDown;
+            pictureBox2.MouseUp += title_MouseUp;
+            pictureBox2.MouseMove += title_MouseMove;
 
             Cache_Check();
 
@@ -225,7 +229,7 @@ namespace KEE
                 }
                 semaphore.Release();
             }
-            catch (Exception ex) { SendErrorMessage("1 " + ex.Message.ToString()); }
+            catch (Exception ex) { SendErrorMessage("1 " +ex.ToString()); }
         }
         public async Task ImageFilter(string keyword = "")
         {
@@ -233,7 +237,7 @@ namespace KEE
             flowPanel.Dispose();
             flowPanel = new FlowLayoutPanel
             {
-                Size = new Size(558, 272),
+                Size = new Size(562, 272),
                 Location = new Point(14, 126),
                 AutoScroll = true,
             };
@@ -276,12 +280,9 @@ namespace KEE
             pictureList.Add(picture);
             integer++;
         }
-        public Image GetImage(string filename, string prefix = "", string path = "")
+        public Image GetImage(string filename, string prefix = "")
         {
-            if (path.Length < 1)
-            {
-                path = Path.Combine(temp_path, prefix + filename);
-            }
+            string path = Path.Combine(temp_path, prefix + filename);
             try
             {
                 if (!File.Exists(path))
@@ -315,10 +316,10 @@ namespace KEE
                     if (match.Success)
                     {
                         temp = match.Groups["name"].ToString();
-                        if (temp.Substring(0, temp.Length - 4) == keyword)
-                        {
-                            Execution(temp);
-                        }
+                        //if (temp.Substring(0, temp.Length - 4) == keyword)
+                        //{
+                        //    Execution(temp);
+                        //}
                         if (temp.Contains(keyword))
                         {
                             emoteString.Add(temp);
@@ -329,63 +330,90 @@ namespace KEE
         }
         public void Execution(string emoteToSearch)
         {
+            pictureBox1.Image = GetImage(emoteToSearch);
+            pictureBox1.Name = emoteToSearch;
+            textBox2.Focus();
+
+            GetFocused();
+        }
+
+        public void GetFocused()
+        {
             try
             {
-                string link = $"{baselink}{emoteToSearch}";
-
-                Stream stream;
-                using (WebClient webClient = new WebClient())
+                if (pictureBox1.Name.ToLower() == "picturebox1")
+            {
+                label1.ForeColor = (Color)Properties.Settings.Default["Color_FG"];
+                switch (Properties.Settings.Default["Option"])
                 {
-                    stream = webClient.OpenRead($"{baselink}{emoteToSearch}");
+                    case 1:
+                        label1.Text = "Now click on emotes to copy them as RGB.";
+                        break;
+                    case 2:
+                        label1.Text = "Now click on emotes to copy them as Device independent Bitmap.";
+                        break;
+                    case 3:
+                        label1.Text = "Now click on emotes to copy them as Links.";
+                        break;
+                    case 4:
+                        label1.Text = "Now click on emotes to copy them as Files.";
+                        break;
+                    default:
+                        break;
                 }
-
-                Image i = Image.FromStream(stream);
-                string labelText = $"{emoteToSearch} - Copied to clipboard";
+            }
+            else
+            {
+                string labelText = $"{pictureBox1.Name} - Copied to clipboard";
 
                 switch (Properties.Settings.Default["Option"])
                 {
                     case 1:
-                        Bitmap blank = new Bitmap(Convert.ToInt32(i.Width), Convert.ToInt32(i.Height));
+                        Bitmap blank = new Bitmap(Convert.ToInt32(pictureBox1.Image.Width), Convert.ToInt32(pictureBox1.Image.Height));
                         Graphics g = Graphics.FromImage(blank);
                         g.Clear(Color.FromArgb(54, 57, 63));
-                        g.DrawImage(i, 0, 0, Convert.ToInt32(i.Width), Convert.ToInt32(i.Height));
+                        g.DrawImage(pictureBox1.Image, 0, 0, Convert.ToInt32(pictureBox1.Image.Width), Convert.ToInt32(pictureBox1.Image.Height));
 
                         Bitmap tempImage = new Bitmap(blank);
                         blank.Dispose();
 
                         Clipboard.SetImage(new Bitmap(tempImage));
                         tempImage.Dispose();
-                        labelText = $"{emoteToSearch} - Copied to clipboard as RGB!";
+                        labelText = $"{pictureBox1.Name} - Copied to clipboard as RGB!";
                         break;
                     case 2:
-                        new Option2().Start(new Bitmap(i));
-                        labelText = $"{emoteToSearch} - Copied to clipboard as DiB!";
+                        new Option2().Start(new Bitmap(pictureBox1.Image));
+                        labelText = $"{pictureBox1.Name} - Copied to clipboard as DiB!";
                         break;
                     case 3:
-                        Clipboard.SetText(link);
-                        labelText = $"{emoteToSearch} - Copied to clipboard as link!";
+                        if (!merge)
+                        {
+                            Clipboard.SetText($"{baselink}{pictureBox1.Name}");
+                            labelText = $"{pictureBox1.Name} - Copied to clipboard as link!";
+                        }
+                        else
+                        {
+                            labelText = "You can't copy the link of a merged image.";
+                        }
                         break;
                     case 4:
-                        string prefix = "t_";
-                        GetImage(emoteToSearch, prefix);
-                        Clipboard.SetData(DataFormats.FileDrop, new string[] { Path.Combine(temp_path, prefix + emoteToSearch) });
-                        labelText = $"{emoteToSearch} - Copied to clipboard as file!";
+                        //string prefix = "t_";
+                        //GetImage(pictureBox1.Name, prefix);
+                        //Clipboard.SetData(DataFormats.FileDrop, new string[] { Path.Combine(temp_path, prefix + pictureBox1.Name) });
+                        Clipboard.SetData(DataFormats.FileDrop, new string[] { Path.Combine(temp_path, pictureBox1.Name) });
+                        labelText = $"{pictureBox1.Name} - Copied to clipboard as file!";
                         break;
                     default:
                         break;
                 }
 
-                i.Dispose();
-
                 label1.ForeColor = (Color)Properties.Settings.Default["Copy"];
                 label1.Text = labelText;
-                pictureBox1.Image = GetImage(emoteToSearch);
-                pictureBox1.Name = emoteToSearch;
-
-                textBox2.Focus();
             }
-            catch (Exception ex) { SendErrorMessage("3 " + ex.Message.ToString()); }
+            }
+            catch (Exception ex) { SendErrorMessage("3 " + ex.ToString()); }
         }
+
         private void textBox2_KeyUp(object sender, KeyEventArgs e)
         {
             if (textBox2.Text.Length != search_length)
@@ -415,7 +443,7 @@ namespace KEE
 
                 }
             }
-            catch (Exception ex) { SendErrorMessage("4 " + ex.Message.ToString()); }
+            catch (Exception ex) { SendErrorMessage("4 " +ex.ToString()); }
         }
         private void FlowFavorite()
         {
@@ -423,16 +451,16 @@ namespace KEE
             if (favorites == null) favorites = new System.Collections.Specialized.StringCollection();
             if (favorites.Count < 1)
             {
-                flowPanelFav.Size = new Size(558, 0);
-                flowPanel.Size = new Size(558, 272);
+                flowPanelFav.Size = new Size(562, 0);
+                flowPanel.Size = new Size(562, 272);
             }
             else
             {
-                flowPanel.Size = new Size(558, 216);
+                flowPanel.Size = new Size(562, 216);
                 flowPanelFav.Dispose();
                 flowPanelFav = new FlowLayoutPanel
                 {
-                    Size = new Size(558, 54),
+                    Size = new Size(562, 54),
                     Location = new Point(14, 344),
                     AutoScroll = true,
                 };
@@ -486,12 +514,16 @@ namespace KEE
                     }
                     FlowFavorite();
                 }
-                else
+                else if (!merge || pictureBox1.Name.ToLower() == "picturebox1")
                 {
                     Execution(filename);
                 }
+                else if (merge)
+                {
+                    Merge(filename);
+                }
             }
-            catch (Exception ex) { SendErrorMessage("5 " + ex.Message.ToString()); }
+            catch (Exception ex) { SendErrorMessage("5 " +ex.ToString()); }
         }
         // Options
         private void button2_Click(object sender, EventArgs e)
@@ -499,44 +531,36 @@ namespace KEE
             Properties.Settings.Default["Option"] = 1;
             Properties.Settings.Default.Save();
             Option_Button_BG();
-
-            label1.ForeColor = (Color)Properties.Settings.Default["Color_FG"];
-            label1.Text = "Now click on emotes to copy them as RGB.";
+            GetFocused();
         }
         private void button3_Click(object sender, EventArgs e)
         {
             Properties.Settings.Default["Option"] = 2;
             Properties.Settings.Default.Save();
             Option_Button_BG();
-
-            label1.ForeColor = (Color)Properties.Settings.Default["Color_FG"];
-            label1.Text = "Now click on emotes to copy them as Device independent Bitmap.";
+            GetFocused();
         }
         private void button4_Click(object sender, EventArgs e)
         {
             Properties.Settings.Default["Option"] = 3;
             Properties.Settings.Default.Save();
             Option_Button_BG();
-
-            label1.ForeColor = (Color)Properties.Settings.Default["Color_FG"];
-            label1.Text = "Now click on emotes to copy them as Links.";
+            GetFocused();
         }
         private void button10_Click(object sender, EventArgs e)
         {
             Properties.Settings.Default["Option"] = 4;
             Properties.Settings.Default.Save();
             Option_Button_BG();
-
-            label1.ForeColor = (Color)Properties.Settings.Default["Color_FG"];
-            label1.Text = "Now click on emotes to copy them as Files.";
+            GetFocused();
         }
         private void Option_Button_BG()
         {
             int option = (int)Properties.Settings.Default["Option"];
             Button[] buttons = new Button[] { button2, button3, button4, button10 };
-            for(int i=0;i< buttons.Length;i++)
+            for (int i = 0; i < buttons.Length; i++)
             {
-                if(i == (option - 1))
+                if (i == (option - 1))
                 {
                     buttons[i].BackColor = (Color)Properties.Settings.Default["Button_BG"];
                 }
@@ -557,7 +581,7 @@ namespace KEE
         }
         private void linkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            VisitLink(linkLabel3, "https://github.com/Kellphy/KEE/releases/");
+            VisitLink(linkLabel3, "https://github.com/Kellphy/EmotesEverywhere/releases/");
         }
         public void VisitLink(LinkLabel label, string link)
         {
@@ -566,7 +590,7 @@ namespace KEE
                 label.LinkVisited = true;
                 System.Diagnostics.Process.Start(link);
             }
-            catch (Exception ex) { SendErrorMessage("0 " + ex.Message.ToString()); }
+            catch (Exception ex) { SendErrorMessage("0 " +ex.ToString()); }
         }
         // Pages & Reset
         private void button6_Click(object sender, EventArgs e)
@@ -612,31 +636,7 @@ namespace KEE
         // Errors
         public void SendErrorMessage(string error)
         {
-            label1.ForeColor = (Color)Properties.Settings.Default["Error"];
-            label1.Text = error;
-        }
-
-        Point titleStart;
-        private void pictureBox2_MouseDown(object sender, MouseEventArgs e)
-        {
-            titleStart = e.Location;
-            titleDrag = true;
-        }
-
-        private void pictureBox2_MouseUp(object sender, MouseEventArgs e)
-        {
-            titleDrag = false;
-        }
-
-        private void pictureBox2_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (titleDrag)
-            {
-                Point p1 = new Point(e.X, e.Y);
-                Point p2 = PointToScreen(p1);
-                Point p3 = new Point(p2.X - titleStart.X, p2.Y - titleStart.Y);
-                Location = p3;
-            }
+            MessageBox.Show(error);
         }
 
         private void button12_Click(object sender, EventArgs e)
@@ -661,6 +661,7 @@ namespace KEE
             Frm.ClosePanel += HandleCloseRequest;
             Frm.Start();
         }
+
         // Settings
         private void button9_Click(object sender, EventArgs e)
         {
@@ -668,18 +669,35 @@ namespace KEE
             Frm.ClosePanel += HandleCloseRequest;
             Frm.Start();
         }
+
+        private void button26_Click(object sender, EventArgs e)
+        {
+            Form5 Frm = new Form5(this);
+            Frm.ClosePanel += HandleCloseRequest;
+            Frm.Start();
+        }
+
         private void HandleCloseRequest(object sender, EventArgs e)
         {
             RefreshWindow();
         }
-        // Quick Save
+
+        // Save
+        private void button15_Click(object sender, EventArgs e)
+        {
+            SaveFocused(true);
+        }
         private void button11_Click(object sender, EventArgs e)
         {
-            label1.Text = "Click an emote to access its quick save option";
+            SaveFocused(false);
+        }
+        void SaveFocused(bool withDialog)
+        {
+            label1.Text = "Click an emote to access its save option";
             if (pictureBox1.Name.ToLower() != "picturebox1")
             {
                 label1.Text = "Quick Saving";
-                if (((string)Properties.Settings.Default["Quick_Save"]).Length < 1)
+                if (((string)Properties.Settings.Default["Quick_Save"]).Length < 1 || withDialog)
                 {
                     using (SaveFileDialog dialog = new SaveFileDialog())
                     {
@@ -692,9 +710,15 @@ namespace KEE
 
                         if (dialog.ShowDialog() == DialogResult.OK)
                         {
-                            GetImage(pictureBox1.Name,"", dialog.FileName);
+                            if (!File.Exists(dialog.FileName))
+                            {
+                                pictureBox1.Image.Save(dialog.FileName);
+                            }
+
                             label1.ForeColor = (Color)Properties.Settings.Default["Copy"];
-                            label1.Text = "Quick Saved: " + dialog.FileName;
+
+                            string quick = withDialog ? string.Empty : "Quick ";
+                            label1.Text = $"{quick}Saved: " + dialog.FileName;
                             Properties.Settings.Default["Quick_Save"] = Path.GetDirectoryName(dialog.FileName);
                             Properties.Settings.Default.Save();
                         }
@@ -704,40 +728,13 @@ namespace KEE
                 {
                     string fullpath = Path.Combine((string)Properties.Settings.Default["Quick_Save"], pictureBox1.Name);
                     label1.Text = "Quick Saved: " + fullpath;
-                    GetImage(pictureBox1.Name,"", fullpath);
+
+                    if (!File.Exists(fullpath))
+                    {
+                        pictureBox1.Image.Save(fullpath);
+                    }
                 }
             }
-            //else
-            //{
-            //    int i = 0;
-
-            //    int counter = 0;
-            //    string emotes = string.Empty;
-            //    foreach (var x in emoteString)
-            //    {
-            //        counter++;
-            //        if (counter == 50)
-            //        {
-            //            emotes += "\n        {\n            \"name\": \"\",\n            \"url\": \"https:\\/\\/kellphy.com\\/emotes\\/" + x + "\"\n        }";
-            //        }
-            //        else
-            //        {
-            //            emotes += "\n        {\n            \"name\": \"\",\n            \"url\": \"https:\\/\\/kellphy.com\\/emotes\\/" + x + "\"\n        },";
-            //        }
-            //        using (StreamWriter sw = new StreamWriter($"GD\\emotes{i}.json"))
-            //        {
-            //            sw.Write("{\n    \"name\": \"kellphy.com/kee\",\n    \"author\": \"Kellphy\",\n    \"emotes\": [");
-            //            sw.Write(emotes);
-            //            sw.Write("\n    ]\n}");
-            //        }
-            //        if (counter >= 50)
-            //        {
-            //            emotes = string.Empty;
-            //            counter = 0;
-            //            i++;
-            //        }
-            //    }
-            //}
         }
         // Borders for textbox, picturebox, flowpanel
         protected override void OnPaint(PaintEventArgs e)
@@ -749,5 +746,114 @@ namespace KEE
             e.Graphics.DrawRectangle(pen, pictureBox1.Location.X, pictureBox1.Location.Y, pictureBox1.Width, pictureBox1.Height);
             e.Graphics.DrawRectangle(pen, textBox2.Location.X, textBox2.Location.Y, textBox2.Width, textBox2.Height);
         }
+
+        void Image_Edit(int option)
+        {
+            if (pictureBox1.Name.ToLower() != "picturebox1")
+            {
+                SixLabors.ImageSharp.Image baseImage = SixLabors.ImageSharp.Image.Load(Path.Combine(temp_path, pictureBox1.Name));
+                SixLabors.ImageSharp.Image newImage = baseImage.Clone(ipc =>
+                {
+                    switch (option)
+                    {
+                        case 1:
+                            ipc.Grayscale();
+                            break;
+                        case 2:
+                            ipc.Brightness(0.9f);
+                            break;
+                        case 3:
+                            ipc.Brightness(1.1f);
+                            break;
+                        case 4:
+                            ipc.Contrast(1.1f);
+                            //ipc.ColorBlindness(ColorBlindnessMode.Achromatomaly);
+                            //ipc.ColorBlindness(ColorBlindnessMode.Achromatopsia);
+                            //ipc.ColorBlindness(ColorBlindnessMode.Deuteranomaly);
+                            //ipc.ColorBlindness(ColorBlindnessMode.Deuteranopia);
+                            //ipc.ColorBlindness(ColorBlindnessMode.Protanomaly);
+                            //ipc.ColorBlindness(ColorBlindnessMode.Protanopia);
+                            //ipc.ColorBlindness(ColorBlindnessMode.Tritanomaly);
+                            //ipc.ColorBlindness(ColorBlindnessMode.Tritanopia);
+                            break;
+                        case 5:
+                            ipc.Contrast(0.9f);
+                            break;
+                        case 6:
+                            ipc.Flip(FlipMode.Horizontal);
+                            break;
+                        case 7:
+                            ipc.Flip(FlipMode.Vertical);
+                            break;
+                        case 8:
+                            ipc.GaussianSharpen();
+                            break;
+                        case 9:
+                            ipc.EntropyCrop();
+                            break;
+                        case 10:
+                            ipc.Dither();
+                            break;
+                        case 11:
+                            ipc.AdaptiveThreshold();
+                            break;
+                    }
+                });
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    SixLabors.ImageSharp.Formats.IImageEncoder imageEncoder = newImage.GetConfiguration().ImageFormatsManager.FindEncoder(PngFormat.Instance);
+
+                    newImage.Save(memoryStream, imageEncoder);
+
+                    (new Bitmap(memoryStream)).Save(Path.Combine(temp_path, "generated.png"));
+                    Merge_Execution(new Bitmap(memoryStream));
+                }
+            }
+        }
+        void Merge(string addImageName)
+        {
+            SixLabors.ImageSharp.Image baseImage = SixLabors.ImageSharp.Image.Load(Path.Combine(temp_path, pictureBox1.Name));
+            SixLabors.ImageSharp.Image addImage = SixLabors.ImageSharp.Image.Load(Path.Combine(temp_path, addImageName));
+
+            SixLabors.ImageSharp.Point toRight = new SixLabors.ImageSharp.Point(x: baseImage.Width, y: 0);
+            SixLabors.ImageSharp.Point topLeft = new SixLabors.ImageSharp.Point(x: 0, y: 0);
+
+            SixLabors.ImageSharp.Image newImage = new SixLabors.ImageSharp.Image<Rgba32>(baseImage.Width + addImage.Width, baseImage.Height);
+
+            newImage = newImage.Clone(ipc =>
+            {
+                ipc.DrawImage(baseImage, topLeft, 1);
+                ipc.DrawImage(addImage, toRight, 1);
+            });
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                SixLabors.ImageSharp.Formats.IImageEncoder imageEncoder = newImage.GetConfiguration().ImageFormatsManager.FindEncoder(PngFormat.Instance);
+
+                newImage.Save(memoryStream, imageEncoder);
+
+                (new Bitmap(memoryStream)).Save(Path.Combine(temp_path, "generated.png"));
+                Merge_Execution(new Bitmap(memoryStream));
+            }
+        }
+
+        public void Merge_Execution(Bitmap bmp)
+        {
+            pictureBox1.Image = bmp;
+            pictureBox1.Name = "generated.png";
+            textBox2.Focus();
+
+            GetFocused();
+        }
+
+        public string PictureBoxName
+        {
+            get { return pictureBox1.Name; }
+        }
+        public bool MergeOnOff
+        {
+            get { return merge; }
+            set { merge = value; }
+        }
     }
+
 }

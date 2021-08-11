@@ -1,4 +1,4 @@
-﻿namespace KEE
+﻿namespace EmotesEverywhere
 {
     partial class Form4
     {
@@ -172,7 +172,7 @@
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button1.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
             this.button1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.button1.Location = new System.Drawing.Point(446, 14);
+            this.button1.Location = new System.Drawing.Point(445, 14);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(24, 24);
             this.button1.TabIndex = 24;
@@ -246,7 +246,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Form4";
-            this.Text = "KEE Themes";
+            this.Text = "EmotesEverywhere Themes";
             this.TopMost = true;
             this.Load += new System.EventHandler(this.Form3_Load);
             this.ResumeLayout(false);

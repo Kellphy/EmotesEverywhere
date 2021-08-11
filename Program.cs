@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace KEE
+namespace EmotesEverywhere
 {
     static class Program
     {

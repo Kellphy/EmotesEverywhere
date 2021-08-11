@@ -5,7 +5,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace KEE
+namespace EmotesEverywhere
 {
     public class Option2
     {

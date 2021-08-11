@@ -1,16 +1,17 @@
 ﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Kellphy's Emotes Everywhere")]
-[assembly: AssemblyDescription("https://kellphy.com/kee")]
+[assembly: AssemblyTitle("EmotesEverywhere")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Kellphy")]
-[assembly: AssemblyProduct("Kellphy's Emotes Everywhere")]
-[assembly: AssemblyCopyright("Copyright © Kellphy 2021")]
-[assembly: AssemblyTrademark("Kellphy")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("EmotesEverywhere")]
+[assembly: AssemblyCopyright("Copyright ©  2021")]
+[assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
@@ -19,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("15fb6657-3447-4059-9d20-9f6ccf28dca4")]
+[assembly: Guid("d6852317-e50b-45b0-a382-f1b5335d35ec")]
 
 // Version information for an assembly consists of the following four values:
 //

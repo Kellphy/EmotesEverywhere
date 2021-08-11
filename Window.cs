@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace KEE
+namespace EmotesEverywhere
 {
     public partial class Window : Form
     {
@@ -17,14 +18,14 @@ namespace KEE
             int nHeightEllipse);
 
         public string baselink = "http://kellphy.com/emotes/";
+        public string temp_path = Path.Combine(Path.GetTempPath(), "EmotesEverywhere");
 
-        public void Border(bool border)
+        Pen pen, penBorder;
+
+        public void Borderless()
         {
-            if (!border)
-            {
-                FormBorderStyle = FormBorderStyle.None;
-                Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
-            }
+            FormBorderStyle = FormBorderStyle.None;
+            Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 15, 15));
         }
         public void RefreshWindow()
         {
@@ -59,13 +60,43 @@ namespace KEE
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            Pen pen = new Pen(new SolidBrush((Color)Properties.Settings.Default["Outline"]), 4);
+            pen = new Pen(new SolidBrush((Color)Properties.Settings.Default["Outline"]), 4);
             for (int ix = Controls.Count - 1; ix >= 0; ix--)
             {
                 if (Controls[ix] is Button)
                 {
                     e.Graphics.DrawRectangle(pen, Controls[ix].Location.X, Controls[ix].Location.Y, Controls[ix].Width, Controls[ix].Height);
                 }
+            }
+
+            penBorder = new Pen(new SolidBrush((Color)Properties.Settings.Default["Button_BG"]), 4);
+            Rectangle border = ClientRectangle;
+            e.Graphics.DrawRectangle(penBorder, 2,2,Width-5,Height-5);
+
+
+        }
+
+        Point titleStart;
+        public bool titleDrag = false;
+        public void title_MouseDown(object sender, MouseEventArgs e)
+        {
+            titleStart = e.Location;
+            titleDrag = true;
+        }
+
+        public void title_MouseUp(object sender, MouseEventArgs e)
+        {
+            titleDrag = false;
+        }
+
+        public void title_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (titleDrag)
+            {
+                Point p1 = new Point(e.X, e.Y);
+                Point p2 = PointToScreen(p1);
+                Point p3 = new Point(p2.X - titleStart.X, p2.Y - titleStart.Y);
+                Location = p3;
             }
         }
     }

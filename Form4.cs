@@ -4,7 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
-namespace KEE
+namespace EmotesEverywhere
 {
     public partial class Form4 : Window
     {
@@ -13,7 +13,7 @@ namespace KEE
         public Form4()
         {
             InitializeComponent();
-            Border(false);
+            Borderless();
         }
         private void Form3_Load(object sender, EventArgs e) { }
         public void Start()
@@ -119,6 +119,5 @@ namespace KEE
             ClosePanel(this, new EventArgs());
             QSLabel_Refresh();
         }
-
     }
 }

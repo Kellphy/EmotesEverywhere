@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace KEE
+namespace EmotesEverywhere
 {
     public partial class Form3 : Window
     {
@@ -15,6 +15,13 @@ namespace KEE
         private void Form3_Load(object sender, EventArgs e) { }
         public void Start()
         {
+            label1.MouseDown += title_MouseDown;
+            label1.MouseUp += title_MouseUp;
+            label1.MouseMove += title_MouseMove;
+            pictureBox2.MouseDown += title_MouseDown;
+            pictureBox2.MouseUp += title_MouseUp;
+            pictureBox2.MouseMove += title_MouseMove;
+            Borderless();
             RefreshWindow();
             StartPosition = FormStartPosition.CenterParent;
             label1.Text = "Select a theme or manually set your colors.";
@@ -31,6 +38,9 @@ namespace KEE
             base.ColorProfiles();
             label4.ForeColor = (Color)Properties.Settings.Default["Copy"];
             label5.ForeColor = (Color)Properties.Settings.Default["Error"];
+
+            pictureBox2.BackColor = (Color)Properties.Settings.Default["Button_BG"];
+            label1.BackColor = (Color)Properties.Settings.Default["Button_BG"];
         }
         private void button4_Click(object sender, EventArgs e)
         {
@@ -201,6 +211,10 @@ namespace KEE
             Properties.Settings.Default["Error"] = Color.FromArgb(210, 105, 0);
 
             SaveColors();
+        }
+        private void button16_Click(object sender, EventArgs e)
+        {
+            Dispose();
         }
     }
 }
