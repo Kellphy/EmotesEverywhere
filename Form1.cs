@@ -4,6 +4,7 @@ using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Net;
@@ -50,6 +51,11 @@ namespace EmotesEverywhere
         // Start
         public Form1()
         {
+            if (Process.GetProcessesByName("EmotesEverywhere").Length> 1)
+            {
+                MessageBox.Show("Emotes Everywhere is already open!");
+                Application.Exit();
+            }
             InitializeComponent();
         }
         public void Form1_Load(object sender, EventArgs e)
@@ -71,6 +77,8 @@ namespace EmotesEverywhere
             pictureBox2.MouseDown += title_MouseDown;
             pictureBox2.MouseUp += title_MouseUp;
             pictureBox2.MouseMove += title_MouseMove;
+            pictureBox1.MouseMove += buttonGenerated_MouseMove;
+            pictureBox1.Click += buttonGenerated_Click;
 
             Cache_Check();
 
@@ -79,13 +87,15 @@ namespace EmotesEverywhere
             RefreshWindow();
 
             SetVisibleCore(true);
+
+            CheckForUpdates();
         }
 
         private void Cache_Check()
         {
             //try
             {
-                using (Stream stream2 = WebRequest.Create($"{baselink}_cache").GetResponse().GetResponseStream())
+                using (Stream stream2 = WebRequest.Create($"{baseLink}downloads/EmotesEverywhere/cache").GetResponse().GetResponseStream())
                 {
                     using (StreamReader reader = new StreamReader(stream2))
                     {
@@ -164,6 +174,7 @@ namespace EmotesEverywhere
             textBox2.ForeColor = (Color)Properties.Settings.Default["Color_FG"];
             label5.BackColor = (Color)Properties.Settings.Default["Button_BG"];
             pictureBox2.BackColor = (Color)Properties.Settings.Default["Button_BG"];
+            button14.ForeColor = (Color)Properties.Settings.Default["Copy"];
 
             Option_Button_BG();
             Invalidate();
@@ -185,20 +196,20 @@ namespace EmotesEverywhere
         public void ImageFirstGetting()
         {
             emoteString = new List<string>();
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(baselink);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(emotesLink);
             using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
             {
                 using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                 {
                     string html = reader.ReadToEnd();
-                    Regex regex = new Regex(GetDirectoryListingRegexForUrl(baselink));
+                    Regex regex = new Regex(GetDirectoryListingRegexForUrl(emotesLink));
                     matches = regex.Matches(html);
                 }
             }
         }
         public string GetDirectoryListingRegexForUrl(string url)
         {
-            if (url.Equals(baselink))
+            if (url.Equals(emotesLink))
             {
                 return "alt=\"\\[IMG\\]\"></td><td><a href=\".*\">(?<name>.*?)</a>";
             }
@@ -299,7 +310,7 @@ namespace EmotesEverywhere
         }
         public Image DownloadImage(string filename, string path)
         {
-            using (Stream stream2 = WebRequest.Create($"{baselink}{filename}").GetResponse().GetResponseStream())
+            using (Stream stream2 = WebRequest.Create($"{emotesLink}{filename}").GetResponse().GetResponseStream())
             using (FileStream fs = File.Create(path))
             {
                 stream2.CopyTo(fs);
@@ -316,10 +327,10 @@ namespace EmotesEverywhere
                     if (match.Success)
                     {
                         temp = match.Groups["name"].ToString();
-                        //if (temp.Substring(0, temp.Length - 4) == keyword)
-                        //{
-                        //    Execution(temp);
-                        //}
+                        if (temp.Substring(0, temp.Length - 4) == keyword && !merge)
+                        {
+                            Execution(temp);
+                        }
                         if (temp.Contains(keyword))
                         {
                             emoteString.Add(temp);
@@ -388,7 +399,7 @@ namespace EmotesEverywhere
                     case 3:
                         if (!merge)
                         {
-                            Clipboard.SetText($"{baselink}{pictureBox1.Name}");
+                            Clipboard.SetText($"{emotesLink}{pictureBox1.Name}");
                             labelText = $"{pictureBox1.Name} - Copied to clipboard as link!";
                         }
                         else
@@ -426,6 +437,7 @@ namespace EmotesEverywhere
         // Generated Events
         private void buttonGenerated_MouseMove(object sender, MouseEventArgs e)
         {
+            if ((sender as PictureBox).Name.ToLower() == "picturebox1") return;
             try
             {
                 string filename = (sender as PictureBox).Name;
@@ -484,6 +496,7 @@ namespace EmotesEverywhere
         }
         private void buttonGenerated_Click(object sender, EventArgs e)
         {
+            if ((sender as PictureBox).Name.ToLower() == "picturebox1") return;
             try
             {
                 string filename = (sender as PictureBox).Name;
@@ -573,15 +586,15 @@ namespace EmotesEverywhere
         // Links
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            VisitLink(linkLabel1, "http://kellphy.com/");
+            VisitLink(linkLabel1, baseLink);
         }
         private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            VisitLink(linkLabel2, "https://kellphy.com/discord");
+            VisitLink(linkLabel2, $"{baseLink}discord");
         }
         private void linkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            VisitLink(linkLabel3, "https://github.com/Kellphy/EmotesEverywhere/releases/");
+            VisitLink(linkLabel3, "https://github.com/Kellphy/KEE/releases/");
         }
         public void VisitLink(LinkLabel label, string link)
         {
@@ -641,7 +654,7 @@ namespace EmotesEverywhere
 
         private void button12_Click(object sender, EventArgs e)
         {
-            Dispose();
+            Application.Exit();
         }
 
         private void button13_Click(object sender, EventArgs e)
@@ -736,6 +749,53 @@ namespace EmotesEverywhere
                 }
             }
         }
+
+        //Update
+        void CheckForUpdates()
+        {
+            string name = "EmotesEverywhere";
+            string webfolder = $"{baseLink}downloads/{name}";
+
+            using (Stream stream2 = WebRequest.Create($"{webfolder}/version").GetResponse().GetResponseStream())
+            {
+                using (StreamReader reader = new StreamReader(stream2))
+                {
+                    string toVer = reader.ReadToEnd();
+                    if (toVer.Length > 0 && toVer != linkLabel3.Text)
+                    {
+                        button14.Visible = true;
+                        button14.Text = $"Update to {toVer}";
+                    }
+                }
+            }
+        }
+
+        private void button14_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                System.Security.Principal.WindowsIdentity identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+                System.Security.Principal.WindowsPrincipal principal = new System.Security.Principal.WindowsPrincipal(identity);
+                if (!principal.IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator))
+                {
+                    Process.Start("explorer.exe", $"{Environment.CurrentDirectory}");
+                    MessageBox.Show("Please run Emotes Everywhere as an Administrator!");
+                }
+                else
+                {
+                    string name = "Updater.exe";
+                    string updaterPath = Path.Combine(Environment.CurrentDirectory, $"{name}");
+                    using (WebClient webClient = new WebClient())
+                    {
+                        webClient.DownloadFile($"{baseLink}downloads/EmotesEverywhere/{name}", updaterPath);
+                    }
+                    Process.Start(updaterPath);
+                }
+                Application.Exit();
+            }
+            catch (Exception ex) { SendErrorMessage("1 " + ex.ToString()); }
+        }
+
         // Borders for textbox, picturebox, flowpanel
         protected override void OnPaint(PaintEventArgs e)
         {

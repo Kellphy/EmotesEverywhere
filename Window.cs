@@ -17,7 +17,8 @@ namespace EmotesEverywhere
             int nWidthEllipse,
             int nHeightEllipse);
 
-        public string baselink = "http://kellphy.com/emotes/";
+        public string emotesLink = "http://kellphy.com/emotes/";
+        public string baseLink = "http://kellphy.com/";
         public string temp_path = Path.Combine(Path.GetTempPath(), "EmotesEverywhere");
 
         Pen pen, penBorder;

@@ -82,7 +82,7 @@ namespace EmotesEverywhere
         {
             try
             {
-                Process.Start("explorer.exe", $"{Path.Combine(Environment.GetEnvironmentVariable("LocalAppData"), "Kellphy")}");
+                Process.Start("explorer.exe", $"{Path.Combine(Environment.GetEnvironmentVariable("LocalAppData"), "EmotesEverywhere")}");
             }
             catch
             {

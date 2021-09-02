@@ -55,6 +55,7 @@
             this.button13 = new System.Windows.Forms.Button();
             this.button26 = new System.Windows.Forms.Button();
             this.button15 = new System.Windows.Forms.Button();
+            this.button14 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -144,7 +145,7 @@
             this.linkLabel3.Size = new System.Drawing.Size(35, 22);
             this.linkLabel3.TabIndex = 11;
             this.linkLabel3.TabStop = true;
-            this.linkLabel3.Text = "2.0.0";
+            this.linkLabel3.Text = "2.1.6";
             this.linkLabel3.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.linkLabel3.UseCompatibleTextRendering = true;
             this.linkLabel3.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel3_LinkClicked);
@@ -363,9 +364,9 @@
             this.label5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
             this.label5.Location = new System.Drawing.Point(12, 2);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(123, 22);
+            this.label5.Size = new System.Drawing.Size(245, 22);
             this.label5.TabIndex = 24;
-            this.label5.Text = "EmotesEverywhere";
+            this.label5.Text = "Emotes Everywhere (kellphy.com/kee)";
             this.label5.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             this.label5.UseCompatibleTextRendering = true;
             // 
@@ -376,7 +377,7 @@
             this.button12.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button12.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
             this.button12.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.button12.Location = new System.Drawing.Point(550, 2);
+            this.button12.Location = new System.Drawing.Point(562, 2);
             this.button12.Name = "button12";
             this.button12.Size = new System.Drawing.Size(22, 22);
             this.button12.TabIndex = 25;
@@ -401,7 +402,7 @@
             this.button13.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button13.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button13.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.button13.Location = new System.Drawing.Point(522, 2);
+            this.button13.Location = new System.Drawing.Point(534, 2);
             this.button13.Name = "button13";
             this.button13.Size = new System.Drawing.Size(22, 22);
             this.button13.TabIndex = 27;
@@ -442,12 +443,30 @@
             this.button15.UseVisualStyleBackColor = false;
             this.button15.Click += new System.EventHandler(this.button15_Click);
             // 
+            // button14
+            // 
+            this.button14.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(113)))), ((int)(((byte)(122)))), ((int)(((byte)(142)))));
+            this.button14.FlatAppearance.BorderSize = 0;
+            this.button14.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button14.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button14.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
+            this.button14.Location = new System.Drawing.Point(263, 2);
+            this.button14.Name = "button14";
+            this.button14.Size = new System.Drawing.Size(265, 22);
+            this.button14.TabIndex = 43;
+            this.button14.Text = "Update";
+            this.button14.UseCompatibleTextRendering = true;
+            this.button14.UseVisualStyleBackColor = false;
+            this.button14.Visible = false;
+            this.button14.Click += new System.EventHandler(this.button14_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(125)))), ((int)(((byte)(133)))), ((int)(((byte)(151)))));
             this.ClientSize = new System.Drawing.Size(589, 445);
+            this.Controls.Add(this.button14);
             this.Controls.Add(this.button15);
             this.Controls.Add(this.button26);
             this.Controls.Add(this.button13);
@@ -514,6 +533,7 @@
         private System.Windows.Forms.Button button13;
         private System.Windows.Forms.Button button26;
         private System.Windows.Forms.Button button15;
+        private System.Windows.Forms.Button button14;
     }
 }
 

@@ -343,7 +343,7 @@
             this.button16.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button16.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
             this.button16.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.button16.Location = new System.Drawing.Point(472, 2);
+            this.button16.Location = new System.Drawing.Point(484, 2);
             this.button16.Name = "button16";
             this.button16.Size = new System.Drawing.Size(22, 22);
             this.button16.TabIndex = 45;
