@@ -36,6 +36,8 @@ namespace EmotesEverywhere
         public FlowLayoutPanel flowPanel = new FlowLayoutPanel();
         public FlowLayoutPanel flowPanelFav = new FlowLayoutPanel();
 
+        System.Windows.Forms.ToolTip ToolTip1 = new System.Windows.Forms.ToolTip();
+
         MatchCollection matches;
         SemaphoreSlim semaphore = new SemaphoreSlim(1);
         // PreStart
@@ -79,6 +81,7 @@ namespace EmotesEverywhere
             pictureBox2.MouseMove += title_MouseMove;
             pictureBox1.MouseMove += buttonGenerated_MouseMove;
             pictureBox1.Click += buttonGenerated_Click;
+            toolTip_Settings();
 
             Cache_Check();
 
@@ -87,6 +90,8 @@ namespace EmotesEverywhere
             RefreshWindow();
 
             SetVisibleCore(true);
+
+            textBox2.Focus();
 
             CheckForUpdates();
         }
@@ -175,6 +180,7 @@ namespace EmotesEverywhere
             label5.BackColor = (Color)Properties.Settings.Default["Button_BG"];
             pictureBox2.BackColor = (Color)Properties.Settings.Default["Button_BG"];
             button14.ForeColor = (Color)Properties.Settings.Default["Copy"];
+            ToolTip1.BackColor = (Color)Properties.Settings.Default["Button_BG"];
 
             Option_Button_BG();
             Invalidate();
@@ -287,6 +293,7 @@ namespace EmotesEverywhere
             picture.SizeMode = PictureBoxSizeMode.Zoom;
             picture.Click += buttonGenerated_Click;
             picture.MouseMove += buttonGenerated_MouseMove;
+            ToolTip1.SetToolTip(picture, picture.Name.Substring(0,picture.Name.Length-4));
 
             pictureList.Add(picture);
             integer++;
@@ -778,8 +785,8 @@ namespace EmotesEverywhere
                 System.Security.Principal.WindowsPrincipal principal = new System.Security.Principal.WindowsPrincipal(identity);
                 if (!principal.IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator))
                 {
-                    Process.Start("explorer.exe", $"{Environment.CurrentDirectory}");
                     MessageBox.Show("Please run Emotes Everywhere as an Administrator!");
+                    Process.Start("explorer.exe", $"{Environment.CurrentDirectory}");
                 }
                 else
                 {
@@ -914,6 +921,57 @@ namespace EmotesEverywhere
             get { return merge; }
             set { merge = value; }
         }
-    }
 
+
+        private void toolTip_Settings()
+        {
+            ToolTip1.ShowAlways = true;
+            ToolTip1.AutomaticDelay = 0;
+            ToolTip1.AutoPopDelay = 0;
+            ToolTip1.OwnerDraw = true;
+            ToolTip1.InitialDelay = 0;
+            ToolTip1.ReshowDelay = 0;
+            ToolTip1.UseFading = true;
+            ToolTip1.UseAnimation = false;
+            ToolTip1.Draw += toolTip_Draw;
+            ToolTip1.Popup += toolTip_Popup;
+        }
+        private void toolTip_Draw(object sender, DrawToolTipEventArgs e)
+        {
+            e.DrawBackground();
+            //e.DrawBorder();
+            //e.Graphics.DrawLines(new Pen(new SolidBrush((Color)Properties.Settings.Default["Outline"]), 4), new Point[] {
+            //        new Point (0, e.Bounds.Height - 1),
+            //        new Point (0, 0),
+            //        new Point (e.Bounds.Width - 1, 0)
+            //    });
+            //e.Graphics.DrawLines(new Pen(new SolidBrush((Color)Properties.Settings.Default["Outline"]), 3), new Point[] {
+            //        new Point (0, e.Bounds.Height - 1),
+            //        new Point (e.Bounds.Width - 1, e.Bounds.Height - 1),
+            //        new Point (e.Bounds.Width - 1, 0)
+            //    });
+
+            //e.DrawText();
+            using (StringFormat sf = new StringFormat())
+            {
+                sf.Alignment = StringAlignment.Center;
+                sf.LineAlignment = StringAlignment.Center;
+                sf.HotkeyPrefix = System.Drawing.Text.HotkeyPrefix.None;
+                sf.FormatFlags = StringFormatFlags.NoWrap;
+                using (Font f = new Font("Segoe", 10f, FontStyle.Bold))
+                {
+                    e.Graphics.DrawString(e.ToolTipText, f,
+                        new SolidBrush((Color)Properties.Settings.Default["Color_FG"]), e.Bounds, sf);
+                }
+            }
+        }
+        private void toolTip_Popup(object sender, PopupEventArgs e)
+        {
+            using (Font f = new Font("Segoe", 10f, FontStyle.Bold))
+            {
+                e.ToolTipSize = TextRenderer.MeasureText(
+                    ToolTip1.GetToolTip(e.AssociatedControl), f) + new Size(0, 8);
+            }
+        }
+    }
 }

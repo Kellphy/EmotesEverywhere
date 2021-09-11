@@ -145,7 +145,7 @@
             this.linkLabel3.Size = new System.Drawing.Size(35, 22);
             this.linkLabel3.TabIndex = 11;
             this.linkLabel3.TabStop = true;
-            this.linkLabel3.Text = "2.1.6";
+            this.linkLabel3.Text = "2.2.0";
             this.linkLabel3.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.linkLabel3.UseCompatibleTextRendering = true;
             this.linkLabel3.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel3_LinkClicked);
