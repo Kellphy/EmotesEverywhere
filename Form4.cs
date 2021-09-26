@@ -98,16 +98,23 @@ namespace EmotesEverywhere
             ClosePanel(this, new EventArgs());
         }
 
-        private void button6_Click(object sender, EventArgs e)
+        private void button7_Click(object sender, EventArgs e)
         {
-            Properties.Settings.Default["Paging"] = 100;
+            Properties.Settings.Default["Paging"] = 500;
             Properties.Settings.Default.Save();
             ClosePanel(this, new EventArgs());
         }
 
-        private void button7_Click(object sender, EventArgs e)
+        private void button6_Click(object sender, EventArgs e)
         {
-            Properties.Settings.Default["Paging"] = 500;
+            Properties.Settings.Default["Paging"] = 4;
+            Properties.Settings.Default.Save();
+            ClosePanel(this, new EventArgs());
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default["Paging"] = 5;
             Properties.Settings.Default.Save();
             ClosePanel(this, new EventArgs());
         }

@@ -33,7 +33,6 @@
             this.button8 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
-            this.button6 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
@@ -41,6 +40,8 @@
             this.button2 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.button6 = new System.Windows.Forms.Button();
+            this.button10 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label3
@@ -48,7 +49,7 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
             this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.label3.Location = new System.Drawing.Point(14, 82);
+            this.label3.Location = new System.Drawing.Point(12, 107);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(106, 22);
             this.label3.TabIndex = 32;
@@ -63,7 +64,7 @@
             this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button8.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
             this.button8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.button8.Location = new System.Drawing.Point(14, 107);
+            this.button8.Location = new System.Drawing.Point(14, 132);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(176, 24);
             this.button8.TabIndex = 31;
@@ -79,7 +80,7 @@
             this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button7.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
             this.button7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.button7.Location = new System.Drawing.Point(138, 48);
+            this.button7.Location = new System.Drawing.Point(198, 73);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(52, 24);
             this.button7.TabIndex = 30;
@@ -93,29 +94,13 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
             this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.label2.Location = new System.Drawing.Point(198, 48);
+            this.label2.Location = new System.Drawing.Point(12, 48);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(95, 22);
+            this.label2.Size = new System.Drawing.Size(271, 22);
             this.label2.TabIndex = 29;
-            this.label2.Text = "Emotes / Page";
+            this.label2.Text = "Emotes / Page (Use 5000 for preload only)";
             this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             this.label2.UseCompatibleTextRendering = true;
-            // 
-            // button6
-            // 
-            this.button6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(110)))), ((int)(((byte)(127)))));
-            this.button6.FlatAppearance.BorderSize = 0;
-            this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button6.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
-            this.button6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.button6.Location = new System.Drawing.Point(76, 48);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(52, 24);
-            this.button6.TabIndex = 28;
-            this.button6.Text = "1000";
-            this.button6.UseCompatibleTextRendering = true;
-            this.button6.UseVisualStyleBackColor = false;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // button5
             // 
@@ -124,7 +109,7 @@
             this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button5.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
             this.button5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
-            this.button5.Location = new System.Drawing.Point(14, 48);
+            this.button5.Location = new System.Drawing.Point(136, 73);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(52, 24);
             this.button5.TabIndex = 27;
@@ -223,18 +208,51 @@
             this.label4.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             this.label4.UseCompatibleTextRendering = true;
             // 
+            // button6
+            // 
+            this.button6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(110)))), ((int)(((byte)(127)))));
+            this.button6.FlatAppearance.BorderSize = 0;
+            this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button6.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
+            this.button6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
+            this.button6.Location = new System.Drawing.Point(12, 73);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(52, 24);
+            this.button6.TabIndex = 35;
+            this.button6.Text = "40";
+            this.button6.UseCompatibleTextRendering = true;
+            this.button6.UseVisualStyleBackColor = false;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
+            // button10
+            // 
+            this.button10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(110)))), ((int)(((byte)(127)))));
+            this.button10.FlatAppearance.BorderSize = 0;
+            this.button10.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button10.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
+            this.button10.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(102)))));
+            this.button10.Location = new System.Drawing.Point(74, 73);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(52, 24);
+            this.button10.TabIndex = 36;
+            this.button10.Text = "50";
+            this.button10.UseCompatibleTextRendering = true;
+            this.button10.UseVisualStyleBackColor = false;
+            this.button10.Click += new System.EventHandler(this.button10_Click);
+            // 
             // Form4
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(110)))), ((int)(((byte)(127)))));
             this.ClientSize = new System.Drawing.Size(484, 261);
+            this.Controls.Add(this.button10);
+            this.Controls.Add(this.button6);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.button8);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.button6);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
@@ -261,12 +279,13 @@
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.Button button10;
     }
 }
 

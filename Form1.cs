@@ -27,7 +27,7 @@ namespace EmotesEverywhere
             search_length;
         public string
             searchEmotes = "Search Emotes",
-            firstLabel = " Drag and Drop with RMB gives best results.";
+            firstLabel = "Drag and Drop with RMB gives best results.";
         public bool processStop = false;
         public bool merge = false;
 
@@ -453,7 +453,10 @@ namespace EmotesEverywhere
 
                     label1.ForeColor = (Color)Properties.Settings.Default["Copy"];
                     label1.Text = $"{filename} - Drag and Drop!";
-                    pictureBox1.Image = GetImage(filename);
+                    if (filename != "generated.png")
+                    {
+                        pictureBox1.Image = GetImage(filename);
+                    }
                     pictureBox1.Name = filename;
 
                     string path = Path.Combine(temp_path, filename);
