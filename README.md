@@ -1,4 +1,8 @@
 # Kellphy's Emotes Everywhere
+
+![image](https://user-images.githubusercontent.com/46824693/198877060-c5215384-9fe6-459f-80aa-2aeed21e43d5.png)
+****
+
 1. Search, browse and edit emotes. Capitalization does **NOT** matter.\
 (Ex: POGGERS = poggers = Poggers)
 2. Get the emote as a **RGB** / **DiB** / **Link** / **File** on your clipboard OR **Drag & Drop** it (best).
