@@ -1,6 +1,6 @@
 # Kellphy's Emotes Everywhere
 
-## Because of compatibility and performance issues with new Windows versions, the project will be slowly moved to web: https://new.kellphy.com/emotes
+## Because of compatibility and performance issues with new Windows versions, the project will be slowly moved to web: https://kellphy.com/
 
 ![image](https://user-images.githubusercontent.com/46824693/198877060-c5215384-9fe6-459f-80aa-2aeed21e43d5.png)
 ****
