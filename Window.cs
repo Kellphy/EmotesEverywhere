@@ -72,7 +72,7 @@ namespace EmotesEverywhere
 
             penBorder = new Pen(new SolidBrush((Color)Properties.Settings.Default["Button_BG"]), 4);
             Rectangle border = ClientRectangle;
-            e.Graphics.DrawRectangle(penBorder, 2,2,Width-5,Height-5);
+            e.Graphics.DrawRectangle(penBorder, 2, 2, Width - 5, Height - 5);
 
 
         }

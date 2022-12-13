@@ -53,7 +53,7 @@ namespace EmotesEverywhere
         // Start
         public Form1()
         {
-            if (Process.GetProcessesByName("EmotesEverywhere").Length> 1)
+            if (Process.GetProcessesByName("EmotesEverywhere").Length > 1)
             {
                 MessageBox.Show("Emotes Everywhere is already open!");
                 Application.Exit();
@@ -63,6 +63,7 @@ namespace EmotesEverywhere
         public void Form1_Load(object sender, EventArgs e)
         {
             SetVisibleCore(false);
+            if (!Directory.Exists(temp_path)) Directory.CreateDirectory(temp_path);
             Borderless();
             flowPanel = new FlowLayoutPanel();
             flowPanelFav = new FlowLayoutPanel();
@@ -217,7 +218,8 @@ namespace EmotesEverywhere
         {
             if (url.Equals(emotesLink))
             {
-                return "alt=\"\\[IMG\\]\"></td><td><a href=\".*\">(?<name>.*?)</a>";
+                //return "alt=\"\\[IMG\\]\"></td><td><a href=\".*\">(?<name>.*?)</a>";
+                return "<a href=\"(?<name>.*?)\">.*</a>";
             }
             throw new NotSupportedException();
         }
@@ -246,7 +248,7 @@ namespace EmotesEverywhere
                 }
                 semaphore.Release();
             }
-            catch (Exception ex) { SendErrorMessage("1 " +ex.ToString()); }
+            catch (Exception ex) { SendErrorMessage("1 " + ex.ToString()); }
         }
         public async Task ImageFilter(string keyword = "")
         {
@@ -280,6 +282,7 @@ namespace EmotesEverywhere
                 flowPanel.Controls.Add(pictureList[x]);
                 label4.Text = $"{integer} / {emotesOnPage} Loaded";
             }
+            label4.Text = $"{integer} / {emotesOnPage} Loaded";
         }
         public void ImageLoading(int y)
         {
@@ -293,7 +296,7 @@ namespace EmotesEverywhere
             picture.SizeMode = PictureBoxSizeMode.Zoom;
             picture.Click += buttonGenerated_Click;
             picture.MouseMove += buttonGenerated_MouseMove;
-            ToolTip1.SetToolTip(picture, picture.Name.Substring(0,picture.Name.Length-4));
+            ToolTip1.SetToolTip(picture, picture.Name.Substring(0, picture.Name.Length - 4));
 
             pictureList.Add(picture);
             integer++;
@@ -329,11 +332,11 @@ namespace EmotesEverywhere
             if (matches.Count > 0)
             {
                 string temp;
-                foreach (Match match in matches)
+                for (int i = 1; i < matches.Count; i++)
                 {
-                    if (match.Success)
+                    if (matches[i].Success)
                     {
-                        temp = match.Groups["name"].ToString();
+                        temp = matches[i].Groups["name"].ToString();
                         if (temp.Substring(0, temp.Length - 4) == keyword && !merge)
                         {
                             Execution(temp);
@@ -360,74 +363,74 @@ namespace EmotesEverywhere
             try
             {
                 if (pictureBox1.Name.ToLower() == "picturebox1")
-            {
-                label1.ForeColor = (Color)Properties.Settings.Default["Color_FG"];
-                switch (Properties.Settings.Default["Option"])
                 {
-                    case 1:
-                        label1.Text = "Now click on emotes to copy them as RGB.";
-                        break;
-                    case 2:
-                        label1.Text = "Now click on emotes to copy them as Device independent Bitmap.";
-                        break;
-                    case 3:
-                        label1.Text = "Now click on emotes to copy them as Links.";
-                        break;
-                    case 4:
-                        label1.Text = "Now click on emotes to copy them as Files.";
-                        break;
-                    default:
-                        break;
+                    label1.ForeColor = (Color)Properties.Settings.Default["Color_FG"];
+                    switch (Properties.Settings.Default["Option"])
+                    {
+                        case 1:
+                            label1.Text = "Now click on emotes to copy them as RGB.";
+                            break;
+                        case 2:
+                            label1.Text = "Now click on emotes to copy them as Device independent Bitmap.";
+                            break;
+                        case 3:
+                            label1.Text = "Now click on emotes to copy them as Links.";
+                            break;
+                        case 4:
+                            label1.Text = "Now click on emotes to copy them as Files.";
+                            break;
+                        default:
+                            break;
+                    }
                 }
-            }
-            else
-            {
-                string labelText = $"{pictureBox1.Name} - Copied to clipboard";
-
-                switch (Properties.Settings.Default["Option"])
+                else
                 {
-                    case 1:
-                        Bitmap blank = new Bitmap(Convert.ToInt32(pictureBox1.Image.Width), Convert.ToInt32(pictureBox1.Image.Height));
-                        Graphics g = Graphics.FromImage(blank);
-                        g.Clear(Color.FromArgb(54, 57, 63));
-                        g.DrawImage(pictureBox1.Image, 0, 0, Convert.ToInt32(pictureBox1.Image.Width), Convert.ToInt32(pictureBox1.Image.Height));
+                    string labelText = $"{pictureBox1.Name} - Copied to clipboard";
 
-                        Bitmap tempImage = new Bitmap(blank);
-                        blank.Dispose();
+                    switch (Properties.Settings.Default["Option"])
+                    {
+                        case 1:
+                            Bitmap blank = new Bitmap(Convert.ToInt32(pictureBox1.Image.Width), Convert.ToInt32(pictureBox1.Image.Height));
+                            Graphics g = Graphics.FromImage(blank);
+                            g.Clear(Color.FromArgb(54, 57, 63));
+                            g.DrawImage(pictureBox1.Image, 0, 0, Convert.ToInt32(pictureBox1.Image.Width), Convert.ToInt32(pictureBox1.Image.Height));
 
-                        Clipboard.SetImage(new Bitmap(tempImage));
-                        tempImage.Dispose();
-                        labelText = $"{pictureBox1.Name} - Copied to clipboard as RGB!";
-                        break;
-                    case 2:
-                        new Option2().Start(new Bitmap(pictureBox1.Image));
-                        labelText = $"{pictureBox1.Name} - Copied to clipboard as DiB!";
-                        break;
-                    case 3:
-                        if (!merge)
-                        {
-                            Clipboard.SetText($"{emotesLink}{pictureBox1.Name}");
-                            labelText = $"{pictureBox1.Name} - Copied to clipboard as link!";
-                        }
-                        else
-                        {
-                            labelText = "You can't copy the link of a merged image.";
-                        }
-                        break;
-                    case 4:
-                        //string prefix = "t_";
-                        //GetImage(pictureBox1.Name, prefix);
-                        //Clipboard.SetData(DataFormats.FileDrop, new string[] { Path.Combine(temp_path, prefix + pictureBox1.Name) });
-                        Clipboard.SetData(DataFormats.FileDrop, new string[] { Path.Combine(temp_path, pictureBox1.Name) });
-                        labelText = $"{pictureBox1.Name} - Copied to clipboard as file!";
-                        break;
-                    default:
-                        break;
+                            Bitmap tempImage = new Bitmap(blank);
+                            blank.Dispose();
+
+                            Clipboard.SetImage(new Bitmap(tempImage));
+                            tempImage.Dispose();
+                            labelText = $"{pictureBox1.Name} - Copied to clipboard as RGB!";
+                            break;
+                        case 2:
+                            new Option2().Start(new Bitmap(pictureBox1.Image));
+                            labelText = $"{pictureBox1.Name} - Copied to clipboard as DiB!";
+                            break;
+                        case 3:
+                            if (!merge)
+                            {
+                                Clipboard.SetText($"{emotesLink}{pictureBox1.Name}");
+                                labelText = $"{pictureBox1.Name} - Copied to clipboard as link!";
+                            }
+                            else
+                            {
+                                labelText = "You can't copy the link of a merged image.";
+                            }
+                            break;
+                        case 4:
+                            //string prefix = "t_";
+                            //GetImage(pictureBox1.Name, prefix);
+                            //Clipboard.SetData(DataFormats.FileDrop, new string[] { Path.Combine(temp_path, prefix + pictureBox1.Name) });
+                            Clipboard.SetData(DataFormats.FileDrop, new string[] { Path.Combine(temp_path, pictureBox1.Name) });
+                            labelText = $"{pictureBox1.Name} - Copied to clipboard as file!";
+                            break;
+                        default:
+                            break;
+                    }
+
+                    label1.ForeColor = (Color)Properties.Settings.Default["Copy"];
+                    label1.Text = labelText;
                 }
-
-                label1.ForeColor = (Color)Properties.Settings.Default["Copy"];
-                label1.Text = labelText;
-            }
             }
             catch (Exception ex) { SendErrorMessage("3 " + ex.ToString()); }
         }
@@ -465,7 +468,7 @@ namespace EmotesEverywhere
 
                 }
             }
-            catch (Exception ex) { SendErrorMessage("4 " +ex.ToString()); }
+            catch (Exception ex) { SendErrorMessage("4 " + ex.ToString()); }
         }
         private void FlowFavorite()
         {
@@ -546,7 +549,7 @@ namespace EmotesEverywhere
                     Merge(filename);
                 }
             }
-            catch (Exception ex) { SendErrorMessage("5 " +ex.ToString()); }
+            catch (Exception ex) { SendErrorMessage("5 " + ex.ToString()); }
         }
         // Options
         private void button2_Click(object sender, EventArgs e)
@@ -613,7 +616,7 @@ namespace EmotesEverywhere
                 label.LinkVisited = true;
                 System.Diagnostics.Process.Start(link);
             }
-            catch (Exception ex) { SendErrorMessage("0 " +ex.ToString()); }
+            catch (Exception ex) { SendErrorMessage("0 " + ex.ToString()); }
         }
         // Pages & Reset
         private void button6_Click(object sender, EventArgs e)
